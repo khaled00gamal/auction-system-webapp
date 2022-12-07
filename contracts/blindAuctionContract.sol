@@ -8,7 +8,7 @@ contract BlindAuction {
         uint256 deposit;
     }
 
-    address payable public beneficiary;
+    address payable public beneficiary; //person offering the product
     uint256 public biddingEnd;
     uint256 public revealEnd;
     uint256 public highestBid;
@@ -34,7 +34,7 @@ contract BlindAuction {
 
     //events are used to store arguments in the transaction logs
     //to use them later in the calling application
-    event AuctionEnd(address winner, uint256 highestBid);
+    event AuctionEnd(address highestBidder, uint256 highestBid);
 
     //to ensure bids are only before the bidding end time
     modifier onlyBefore(uint256 _time) {
@@ -47,6 +47,25 @@ contract BlindAuction {
         _;
     }
 
+    function placeBid(address bidder, uint256 value)
+        internal
+        returns (bool success)
+    {
+        if (value <= highestBid) {
+            return false;
+        }
+        if (highestBidder != address(0)) {
+            // Refund the previously highest bidder.
+            pendingReturns[highestBidder] += highestBid;
+        }
+
+        highestBid = value;
+        highestBidder = bidder;
+
+        return true;
+    }
+
+    //start the bidding
     function bid(bytes32 _blindedBid) public payable onlyBefore(biddingEnd) {
         bids[msg.sender].push(
             Bid({blindedBid: _blindedBid, deposit: msg.value})
@@ -108,5 +127,12 @@ contract BlindAuction {
             pendingReturns[msg.sender] = 0;
             payable(msg.sender).transfer(amount);
         }
+    }
+
+    function auctionEnd() public onlyAfter(revealEnd) {
+        require(!ended);
+        emit AuctionEnd(highestBidder, highestBid);
+        ended = true;
+        beneficiary.transfer(highestBid);
     }
 }
