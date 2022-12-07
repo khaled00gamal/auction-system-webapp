@@ -52,4 +52,49 @@ contract BlindAuction {
             Bid({blindedBid: _blindedBid, deposit: msg.value})
         );
     }
+
+    //input value : bid must be at least the value
+    //input fake : to be valid fake must not be true
+    function reveal(
+        uint256[] memory _values,
+        bool[] memory _fake,
+        bytes32[] memory _secret
+    ) public onlyAfter(biddingEnd) onlyBefore(revealEnd) {
+        uint256 length = bids[msg.sender].length;
+
+        require(_values.length == length);
+        require(_fake.length == length);
+        require(_secret.length == length);
+
+        uint256 refund;
+        //need to check all the stored bids of the msg sender
+        for (uint256 i = 0; i < length; i++) {
+            Bid storage bidToCheck = bids[msg.sender][i];
+            (uint256 value, bool fake, bytes32 secret) = (
+                _values[i],
+                _fake[i],
+                _secret[i]
+            );
+
+            if (
+                bidToCheck.blindedBid !=
+                keccak256(abi.encodePacked(value, fake, secret))
+            ) {
+                //bid wasnt revealed, dont refund
+                continue;
+            }
+            refund += bidToCheck.deposit;
+
+            if (!fake && bidToCheck.deposit >= value) {
+                if (placeBid(msg.sender, value)) {
+                    refund -= value;
+                }
+            }
+
+            //stop sender from reclaiminjg the same deposit
+            bidToCheck.blindedBid = bytes32(0);
+        }
+        //transfer refend to msg sender
+        payable(msg.sender).transfer(refund);
+    }
 }
