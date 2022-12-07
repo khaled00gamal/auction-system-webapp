@@ -97,4 +97,16 @@ contract BlindAuction {
         //transfer refend to msg sender
         payable(msg.sender).transfer(refund);
     }
+
+    /// Withdraw a bid that was overbid.
+
+    function withdraw() public {
+        uint256 amount = pendingReturns[msg.sender];
+        // It is important to set this to zero because the recipient can call
+        //this function again as part of the receiving call before "transfer" returns.
+        if (amount > 0) {
+            pendingReturns[msg.sender] = 0;
+            payable(msg.sender).transfer(amount);
+        }
+    }
 }
