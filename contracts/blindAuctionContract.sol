@@ -2,7 +2,7 @@
 pragma solidity ^0.9.0;
 
 contract blindAuction {
-    struct bid {
+    struct Bid {
         bytes32 bidHash; //bid hashed using public key
         uint256 deposit; //security deposit
     }
@@ -188,7 +188,7 @@ contract blindAuction {
         emit BiddingStarted(auctionId, biddingEnd);
     }
 
-    function getallauctions()
+    function getAllAuctions()
         external
         view
         returns (allListings[] memory)
@@ -250,4 +250,47 @@ contract blindAuction {
         }
         return activeAuctions;
     }
+
+   
+
+    //function to bid in an auction
+    function bid(bytes32 blindedBid,uint256 auctionId,string calldata pubkey)
+    external payable 
+    onlyBefore(Auctions[auctionId].biddingEnd)
+    validBidder(auctionId)
+    newBidder(auctionId)
+    validAuctionId(auctionId)
+    {
+        Auctions[auctionId].bids[msg.sender] = Bid(blindedBid,msg.value);
+        Auctions[auctionId].placeBid[msg.sender] = true;
+        Auctions[auctionId].pubkey[msg.sender] = pubkey;
+        emit BidIsMade(msg.sender);
+    }
+
+
+    //TODO::
+    //function to reveal blinded bids
+    //get a refund for failed bids
+    function reveal(){}
+    //this will be an internal function
+    //seller will use it to accept bids
+    function placeBid() internal returns (bool success){}
+
+    //function to withdraw overbid or non winning bids
+    function withdraw() internal AuctionEnded(auctionId){}
+
+    //end the auction
+    //send highest bid to seller
+    function endAuction(auctionId) external
+     onlyAfter(Auctions[auctionId].revealEnd)
+     onlyOwner(auctionId)
+     auctionActive(auctionId){}
+
+    //assume the seller is fair and will provide the right item
+    //transaction from the seller
+     function sellItem(){} 
+
+    //Transaction from the winner
+     function confirmDelivery(){}
+     
 }
