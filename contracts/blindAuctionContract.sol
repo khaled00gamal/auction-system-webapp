@@ -37,7 +37,7 @@ contract blindAuction {
 
     //to display all auction listings
     struct allListings {
-        uint256 auction_id;
+        uint256 auctionId;
         address payable seller;
         address payable winner;
         uint256 biddingEnd;
@@ -186,5 +186,35 @@ contract blindAuction {
         );
         emit AuctionStarted(auctionId, itemName, itemDesc);
         emit BiddingStarted(auctionId, biddingEnd);
+    }
+
+    function getActiveAuctions()
+        external
+        view
+        returns (activeListing[] memory)
+    {
+        uint256 index = 0;
+        //get auctions from memory
+        activeListing[] memory activeAuctions = new activeListing[](
+            activeAuctions
+        );
+        for (uint256 i = 0; i < currentAuctionId; i++) {
+            if (Auctions[i].ended == false) {
+                auction storage currentAuction = Auctions[i];
+                activeAuctions[index] = activeListing(
+                    currentAuction.itemName,
+                    currentAuction.itemDesc,
+                    currentAuction.auctionId,
+                    currentAuction.seller,
+                    currentAuction.biddingEnd,
+                    currentAuction.revealEnd,
+                    currentAuction.ended,
+                    currentAuction.revealed[msg.sender],
+                    currentAuction.bidPlaced[msg.sender]
+                );
+                index++;
+            }
+        }
+        return activeAuctions;
     }
 }
