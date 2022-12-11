@@ -1,138 +1,190 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.9.0;
 
-contract BlindAuction {
-    //a bid consists of a safety deposity and a blindBid value
-    struct Bid {
-        bytes32 blindedBid;
-        uint256 deposit;
+contract blindAuction {
+    struct bid {
+        bytes32 bidHash; //bid hashed using public key
+        uint256 deposit; //security deposit
     }
 
-    address payable public beneficiary; //person offering the product
-    uint256 public biddingEnd;
-    uint256 public revealEnd;
-    uint256 public highestBid;
-    address public highestBidder;
-    bool public ended;
-
-    //map of each address to an array of its bids
-    mapping(address => Bid[]) public bids;
-
-    //map of each address and their allowed returns
-    mapping(address => uint256) pendingReturns;
-
-    constructor(
-        uint256 _biddingTime,
-        uint256 _revealTime,
-        address payable _beneficiary
-    ) {
-        //block.timestamp returns the exact time the block was generated
-        biddingEnd = block.timestamp + _biddingTime;
-        revealEnd = biddingEnd + _revealTime;
-        beneficiary = _beneficiary;
+    struct auction {
+        string itemName;
+        string itemDesc;
+        string H; //secret string to sell item encrypted with buyer's public key
+        uint256 auctionId;
+        uint256 biddingEnd;
+        uint256 revealEnd;
+        uint256 highestBid;
+        uint256 winningBid;
+        address payable seller;
+        address payable highestBidder;
+        address payable winner;
+        address payable[] revealedBidders; //revealed bidders after auction end
+        bool ended;
+        bool sold;
+        mapping(address => bid) bids;
+        mapping(address => bool) revealed;
+        mapping(address => bool) placedBid; //map of addresses that placed a bid
+        mapping(address => uint256) pendingReturns; // Allowed withdrawals of previous bids
+        mapping(address => string) pubkey;
     }
 
-    //events are used to store arguments in the transaction logs
-    //to use them later in the calling application
-    event AuctionEnd(address highestBidder, uint256 highestBid);
+    mapping(uint256 => auction) private Auctions; //list of all auctions
 
-    //to ensure bids are only before the bidding end time
+    //variables to track the running auction
+    uint256 currentAuctionId = 0;
+    uint256 activeAuctions = 0;
+
+    //to display all auction listings
+    struct allListings {
+        uint256 auction_id;
+        address payable seller;
+        address payable winner;
+        uint256 biddingEnd;
+        uint256 revealEnd;
+        bool ended;
+        bool sold;
+        string itemName;
+        string itemDesc;
+        bool bidplaced;
+        bool revealed;
+        uint256 finalBid;
+        string pubkey;
+        string H;
+    }
+    //to display each active listing in the auction
+    struct activeListing {
+        string itemName;
+        string itemDesc;
+        uint256 auctionId;
+        address payable seller;
+        uint256 biddingEnd;
+        uint256 revealEnd;
+        bool ended;
+        bool revealed;
+        bool bidPlaced;
+    }
+    event AuctionStarted(uint256 auctionId, string itemName, string itemDesc);
+    event AuctionEnded(
+        uint256 auctionId,
+        uint256 highestBid,
+        address highestBidder
+    );
+    event ItemUnsold(uint256 auctionId);
+    event BiddingStarted(uint256 auctionId, uint256 biddingEnd);
+    event BiddingEnded(uint256 auctionId);
+    event BidIsMade(address bidder);
+    event RevealStarted(uint256 auctionId, uint256 revealEnd);
+    event RevealEnded(uint256 auctionId);
+    event WinnerSelected(
+        uint256 auctionId,
+        address winner,
+        uint256 winningBid,
+        string pubKey
+    );
+    event BidRevealed(uint256 auctionId, address bidder);
+    event BidRevealFail(uint256 auctionId, address bidder);
+    event BidderRefunded(uint256 auctionId, address bidder, uint256 bidValue);
+    event BalanceRefunded(uint256 auctionId, address bidder, uint256 balance);
+    event DepositLow(uint256 auctionId, address bidder);
+    event NewHighestBid(uint256 auctionId, address bidder, uint256 bidValue);
+    event encryptedKey(uint256 auction_id, string H); //event to send the hashed item
+    event itemSent(uint256 auctionId);
+
+    //modifiers
+    //_; will be replaced with the function body of the function that calls the modifier
     modifier onlyBefore(uint256 _time) {
-        require(block.timestamp < _time);
+        require(block.timestamp < _time, "must be after time");
         _;
     }
 
     modifier onlyAfter(uint256 _time) {
-        require(block.timestamp > _time);
+        require(block.timestamp > _time, "must be before time");
         _;
     }
 
-    function placeBid(address bidder, uint256 value)
-        internal
-        returns (bool success)
-    {
-        if (value <= highestBid) {
-            return false;
-        }
-        if (highestBidder != address(0)) {
-            // Refund the previously highest bidder.
-            pendingReturns[highestBidder] += highestBid;
-        }
-
-        highestBid = value;
-        highestBidder = bidder;
-
-        return true;
-    }
-
-    //start the bidding
-    function bid(bytes32 _blindedBid) public payable onlyBefore(biddingEnd) {
-        bids[msg.sender].push(
-            Bid({blindedBid: _blindedBid, deposit: msg.value})
+    //ensure bidder cant re-Bid
+    modifier newBidder(uint256 auction_id) {
+        require(
+            !Auctions[auction_id].bidded[msg.sender],
+            "Bidder Already placed their bid"
         );
+        _;
     }
 
-    //input value : bid must be at least the value
-    //input fake : to be valid fake must not be true
-    function reveal(
-        uint256[] memory _values,
-        bool[] memory _fake,
-        bytes32[] memory _secret
-    ) public onlyAfter(biddingEnd) onlyBefore(revealEnd) {
-        uint256 length = bids[msg.sender].length;
-
-        require(_values.length == length);
-        require(_fake.length == length);
-        require(_secret.length == length);
-
-        uint256 refund;
-        //need to check all the stored bids of the msg sender
-        for (uint256 i = 0; i < length; i++) {
-            Bid storage bidToCheck = bids[msg.sender][i];
-            (uint256 value, bool fake, bytes32 secret) = (
-                _values[i],
-                _fake[i],
-                _secret[i]
-            );
-
-            if (
-                bidToCheck.blindedBid !=
-                keccak256(abi.encodePacked(value, fake, secret))
-            ) {
-                //bid wasnt revealed, dont refund
-                continue;
-            }
-            refund += bidToCheck.deposit;
-
-            if (!fake && bidToCheck.deposit >= value) {
-                if (placeBid(msg.sender, value)) {
-                    refund -= value;
-                }
-            }
-
-            //stop sender from reclaiminjg the same deposit
-            bidToCheck.blindedBid = bytes32(0);
-        }
-        //transfer refend to msg sender
-        payable(msg.sender).transfer(refund);
+    //ensure seller doesnt bid
+    modifier validBidder(uint256 auction_id) {
+        require(msg.sender != Auctions[auction_id].seller, "seller cannot bid");
+        _;
     }
 
-    /// Withdraw a bid that was overbid.
-
-    function withdraw() public {
-        uint256 amount = pendingReturns[msg.sender];
-        // It is important to set this to zero because the recipient can call
-        //this function again as part of the receiving call before "transfer" returns.
-        if (amount > 0) {
-            pendingReturns[msg.sender] = 0;
-            payable(msg.sender).transfer(amount);
-        }
+    modifier onlyOwner(uint256 auctionId) {
+        require(
+            msg.sender == Auctions[auctionId].seller,
+            "only seller can call this function"
+        );
+        _;
     }
 
-    function auctionEnd() public onlyAfter(revealEnd) {
-        require(!ended);
-        emit AuctionEnd(highestBidder, highestBid);
-        ended = true;
-        beneficiary.transfer(highestBid);
+    modifier auctionActive(uint256 auction_id) {
+        require(Auctions[auctionId].ended == false, "Auction already ended");
+        _;
+    }
+
+    modifier auctionEnded(uint256 auction_id) {
+        require(
+            Auctions[auctionId].ended == true,
+            "Cant Ask refund,auction not ended"
+        );
+        _;
+    }
+
+    modifier onlyWinner(uint256 auction_id) {
+        require(
+            msg.sender == Auctions[auction_id].winner,
+            "Only Winner can confirm purchase"
+        );
+        _;
+    }
+
+    modifier validAuctionId(uint256 auction_id) {
+        require(
+            auction_id < current_auction_id,
+            "Auction Id provided doesn't exist"
+        );
+        _;
+    }
+
+    //functions
+    //function to list auction of a new item
+    function listAuctionItem(
+        string calldata itemName,
+        string calldata itemDesc,
+        uint256 biddingTime,
+        uint256 revealTime
+    ) external payable {
+        uint256 auctionId = currentAuctionId;
+        currentAuctionId += 1;
+        activeAuctions += 1;
+        uint256 biddingEnd = block.timestamp + biddingTime;
+        uint256 revealEnd = biddingEnd + revealTime;
+
+        //construct the auction
+        Auctions[auctionId] = auction(
+            itemName, //itemName
+            itemDesc, //itemDesc
+            0, //H
+            auctionId, //auctionId
+            biddingEnd, // biddingEnd
+            revealEnd, //revealEnd
+            0, //highestBid
+            address(0), //winningBid
+            msg.sender, //seller
+            address(0), //highestBidder
+            new address payable[](0), //winner
+            ""
+        );
+        emit AuctionStarted(auctionId, itemName, itemDesc);
+        emit BiddingStarted(auctionId, biddingEnd);
     }
 }
