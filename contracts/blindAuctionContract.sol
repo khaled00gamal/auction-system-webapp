@@ -188,6 +188,39 @@ contract blindAuction {
         emit BiddingStarted(auctionId, biddingEnd);
     }
 
+    function getallauctions()
+        external
+        view
+        returns (allListings[] memory)
+    {
+        allListings[] memory allAuctions = new allListings[](
+           currentAuctionId;
+        );
+        for (uint256 i = 0; i < currentAuctionId; i++) {
+            auction storage currentAuction = Auctions[i];
+            string memory pubkey = "";
+            if (currentAuction.highestBidder != address(0))
+                pubkey = currentAuction.pubkey[currentAuction.highestBidder];
+            allAuctions[i] = allListings(
+                currentAuction.auctionId,
+                currentAuction.seller,
+                currentAuction.highestBidder,
+                currentAuction.biddingEnd,
+                currentAuction.revealEnd,
+                currentAuction.ended,
+                currentAuction.sold,
+                currentAuction.itemName,
+                currentAuction.itemDesc,
+                currentAuction.bidPlaced[msg.sender],
+                currentAuction.revealed[msg.sender],
+                currentAuction.highestBid,
+                pubkey,
+                currentAuction.H
+            );
+        }
+        return allAuctions;
+    }
+
     function getActiveAuctions()
         external
         view
