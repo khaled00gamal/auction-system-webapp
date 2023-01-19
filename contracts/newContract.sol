@@ -91,6 +91,8 @@ contract blindAuction {
      * time-aware modifiers
      */
 
+    // FIXME: use error types instead of strings!
+
     modifier onlyBefore(string calldata whatisit, uint256 _time) {
         require(block.timestamp < _time, string.concat(whatisit, " too late!"));
         _;
@@ -153,7 +155,6 @@ contract blindAuction {
         emit BidMade(msg.sender);
         return false;
     }
-
 
     function reveal() internal {}
     function endAuction(uint256 auctionId) external
