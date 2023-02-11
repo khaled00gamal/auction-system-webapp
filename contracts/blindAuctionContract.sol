@@ -10,7 +10,7 @@ contract blindAuction {
     struct auction {
         string itemName;
         string itemDesc;
-        string H; //secret string to sell item encrypted with buyer's public key
+        string H; //item hash encrypted with buyer's public key
         uint256 auctionId;
         uint256 biddingEnd;
         uint256 revealEnd;
@@ -23,7 +23,7 @@ contract blindAuction {
         bool ended;
         bool sold;
         mapping(address => bid) bids;
-        mapping(address => bool) revealed;
+        mapping(address => bool) revealed; // track which addresses have revealed.
         mapping(address => bool) placedBid; //map of addresses that placed a bid
         mapping(address => uint256) pendingReturns; // Allowed withdrawals of previous bids
         mapping(address => string) pubkey;
@@ -52,7 +52,7 @@ contract blindAuction {
         string pubkey;
         string H;
     }
-    //to display each active listing in the auction
+    //to display  active  auctions
     struct activeListing {
         string itemName;
         string itemDesc;
@@ -106,7 +106,7 @@ contract blindAuction {
     //ensure bidder cant re-Bid
     modifier newBidder(uint256 auction_id) {
         require(
-            !Auctions[auction_id].bidded[msg.sender],
+            !Auctions[auction_id].placedBid[msg.sender],
             "Bidder Already placed their bid"
         );
         _;
@@ -186,6 +186,14 @@ contract blindAuction {
         );
         emit AuctionStarted(auctionId, itemName, itemDesc);
         emit BiddingStarted(auctionId, biddingEnd);
+    }
+
+     function getAccountBalance(address account)
+        public
+        view
+        returns (uint256 accountBalance)
+    {
+        accountBalance = account.balance;
     }
 
     function getAllAuctions()
