@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/khaled00gamal/auction-system-webapp#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6"
   }
 }
