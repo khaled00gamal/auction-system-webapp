@@ -8,15 +8,6 @@
     width: 100%;
   }
 
-  /* .container{
-    display: flex;
-    flex-direction:column;
-    min-height: 100vh;
-  }
-
-  .content-wrap{
-    flex:1;
-  } */
   .row {
     display: flex;
     flex-wrap: nowrap;
@@ -46,7 +37,15 @@
 
   }
 
-  hr{
-    margin-top: 10px;
+  .footer-hr{
+    border: none;
+    height: 1px;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffff;
+    margin: auto;
+    margin-top: 15px;
     margin-bottom: 30px;
+    width: 50%;
+    
   }

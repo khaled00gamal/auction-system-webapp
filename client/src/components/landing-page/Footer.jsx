@@ -1,5 +1,6 @@
 import "../../styles/Footer.css"
 
+
 function Footer() {
     return (
         <div className="main-footer">
@@ -25,16 +26,18 @@ function Footer() {
                     <div className="col">
                         <ul className="li-style">
                             <li>Contact Us</li>
-                            <li>email</li>
-                            <li>phone number</li>
+                            <li>example@example.com</li>
+                            <li>+20 xxxxxxx</li>
                         </ul>
                     </div>
 
                     <div className="website-img">
-                        <img src="../../resources/chainAuction-logo.png" alt="lol"></img>
+                        {/*add logo*/}
+                        <img src="images/chainAuction-logo.jpg" alt="" />
                     </div>
                 </div>
-                <hr />
+
+                <hr className="footer-hr" />
 
                 <ul className="ul-row">
                     <li>PRIVACY POLICY</li>
