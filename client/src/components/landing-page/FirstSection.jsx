@@ -15,8 +15,8 @@ function FirstSection() {
                     <button className="heading-button">Browse Auctions</button>
                 </div>
 
-                <div className="header-img">
-                    <img src="images/header.png" alt="header-img" />
+                <div >
+                    <img className="header-img" src={require("./images/header.png")} alt="header-img" />
                 </div>
             </div>
 
