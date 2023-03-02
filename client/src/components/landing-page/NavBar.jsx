@@ -4,7 +4,7 @@ function NavBar() {
     return (
         <nav className="navbar">
             <div className="navbar-logo">
-                <img src="images/logo.jpg" alt="Logo" />
+                <img src={require("./images/logo.png")} alt="Logo" />
             </div>
             <div className="navbar-buttons">
                 <button className="navbar-button login">Login</button>

@@ -16,28 +16,28 @@
   }
 
   .heading{
-    margin-left: 50px;
-    font-size: 50px;
+    margin-left: 10%;
+    font-size: 3.5rem;
     font-weight: bold;
     color: #fff;
   }
 
   .sub-heading{
-    margin-left: 50px;
+    margin-left: 10%;
     color: #fff;
   }
 
   .heading-button{
     border-radius: 12px;
     border: none;
-    margin: 5% 3% 5% 3%;
+    margin: 5% 10% 5% 10%;
     background-color: #FF0055;
     font-size: 24px;
     color: #fff;
-    padding-left: 70px;
-    padding-right: 70px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
   }
 
   .heading-button:hover{
@@ -52,38 +52,19 @@
   }
 
   .header-img{
-    width: 900px; 
+    max-width: 100%; 
+    width: 900px;
     position: absolute;
     left: 50%; 
     top: 10%;
+    height: auto;
 }
 
 @media (max-width: 768px) {
     /* Apply these styles when the screen size is less than or equal to 768px */
-    .row {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .col {
-      margin-top: 1rem;
-      text-align: center;
-    }
-  
-    .heading {
-      font-size: 2rem;
-    }
-  
-    .sub-heading {
-      font-size: 1.2rem;
-    }
-  
-    .heading-button {
-      font-size: 1.2rem;
-    }
-  
+   
     .header-img {
-      width: 100%;
+      width: 500px;
     }
   }
   

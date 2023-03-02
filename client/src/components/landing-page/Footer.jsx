@@ -33,7 +33,7 @@ function Footer() {
 
                     <div className="website-img">
                         {/*add logo*/}
-                        <img src="images/chainAuction-logo.jpg" alt="" />
+                        <img src={require("./images/logo.png")} alt="logo" />
                     </div>
                 </div>
 
