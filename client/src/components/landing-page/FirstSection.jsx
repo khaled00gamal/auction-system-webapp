@@ -1,7 +1,11 @@
 import NavBar from "./NavBar";
 import "../../styles/FirstSection.css";
+import "./LastSection";
+
 
 function FirstSection() {
+
+
     return <div>
 
         <section id="first-section">

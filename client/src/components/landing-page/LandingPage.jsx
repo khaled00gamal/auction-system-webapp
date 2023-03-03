@@ -4,7 +4,9 @@ import HowItWorksSection from "./HowItWorksSection";
 import LastSection from "./LastSection";
 
 
+
 function LandingPage() {
+
     return <div>
         <FirstSection />
         <HowItWorksSection />

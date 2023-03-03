@@ -1,0 +1,32 @@
+#last-section{
+    margin-bottom: 2%;
+    margin-top: 4%;
+}
+
+.last-section-ul{
+    margin-left: 10%;
+}
+
+.bold{
+    font-weight: bold;
+    font-size: 26px;
+    color: black;
+}
+
+.bold-li{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.last-section-button{
+    border-radius: 16px;
+    border: none;
+    /* margin: 5% 10% 5% 10%; */
+    background-color: #FF0055;
+    font-size: 24px;
+    color: #fff;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
