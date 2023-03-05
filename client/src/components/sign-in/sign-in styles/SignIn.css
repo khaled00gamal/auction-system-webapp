@@ -1,0 +1,43 @@
+
+body{
+    margin: 0;
+    padding: 0;
+}
+.sign-in{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 100vh;
+}
+
+
+.left-part {
+    background-color: #0074E6 ; 
+    height: 100vh;
+}
+
+.right-part{
+    background-color: red;
+    height: 100vh;
+}
+
+
+.left-part h1{
+    margin-top: 10%;
+    margin-left: 10%;
+    color: white;
+    font-size: 3em;
+    font-weight: bolder;
+}
+
+
+
+.logo {
+    width: 300px;
+  }
+  
+  .logo img {
+    margin-top: 10%;
+    margin-left: 10%;
+    width: 100%;
+  }
+  

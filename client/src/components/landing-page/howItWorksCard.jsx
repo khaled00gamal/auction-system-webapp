@@ -1,4 +1,4 @@
-import "../../styles/HowItWorksCard.css";
+import "../styles/HowItWorksCard.css";
 
 function HowItWorksCard() {
     return <div className="col">

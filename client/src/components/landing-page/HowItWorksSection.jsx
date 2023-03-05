@@ -1,5 +1,5 @@
 import HowItWorksCard from "./howItWorksCard";
-import "../../styles/HowItWorksSection.css";
+import "../styles/HowItWorksSection.css";
 
 function HowItWorksSection() {
     return <div>

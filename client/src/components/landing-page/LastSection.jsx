@@ -1,4 +1,4 @@
-import "../../styles/LastSection.css";
+import "../styles/LastSection.css";
 
 
 function LastSection() {
