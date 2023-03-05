@@ -5,15 +5,16 @@ import SignIn from "./sign-in/SignIn";
 
 function App() {
   return (
-    <div>
-      <h1>a7a</h1>
-      <Router>
-        <Routes>
-          <Route exact path="/" component={LandingPage} />
-          <Route path="/signin" component={SignIn} />
-        </Routes>
-      </Router>
-    </div>
+
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signin" element={<SignIn />} />
+      </Routes>
+
+    </Router>
+
+
   );
 }
 
