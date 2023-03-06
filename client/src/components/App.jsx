@@ -2,6 +2,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./landing-page/LandingPage";
 import SignIn from "./sign-in/SignIn";
+import Faq from "../components/Footer-pages/FAQ";
+import Support from "../components/Footer-pages/Support";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/FAQ" element={<Faq />} />
+        <Route path="/support" element={<Support />}></Route>
       </Routes>
 
     </Router>

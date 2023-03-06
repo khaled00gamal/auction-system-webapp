@@ -1,4 +1,5 @@
 import "../styles/LastSection.css";
+import { Link } from "react-router-dom";
 
 
 function LastSection() {
@@ -12,7 +13,7 @@ function LastSection() {
                     <li className="bold-li" >SAVE TO FAVORITES</li>
                     <li className="bold-li">SELL GOODS</li>
                 </ul>
-                <button className="last-section-button">Create an account</button>
+                <Link to="signi"><button className="last-section-button">Create an account</button></Link>
             </div>
             <div className="last-section-img">
                 <img src={require("./images/placeholder.png")} alt="placeholder-img" />

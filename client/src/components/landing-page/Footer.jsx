@@ -1,4 +1,5 @@
 import "../styles/Footer.css";
+import { Link } from "react-router-dom";
 
 
 function Footer() {
@@ -10,15 +11,15 @@ function Footer() {
                     <div className="col">
                         <ul className="li-style">
                             <li>about</li>
-                            <li>News</li>
+                            <Link target="_blank" to="https://cryptoslate.com/web3/"><li>News</li></Link>
                         </ul>
                     </div>
 
                     {/*col2*/}
                     <div className="col">
                         <ul className="li-style">
-                            <li>Support</li>
-                            <li>FAQ</li>
+                            <Link to="support"><li>Support</li></Link>
+                            <Link to="FAQ"><li>FAQ</li></Link>
                         </ul>
                     </div>
 

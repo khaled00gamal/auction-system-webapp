@@ -30,3 +30,7 @@
     padding-top: 3%;
     padding-bottom: 3%;
 }
+
+.last-section-button:hover{
+    background-color: #c9577dfe;
+}

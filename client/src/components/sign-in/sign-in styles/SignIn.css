@@ -16,7 +16,7 @@ body{
 }
 
 .right-part{
-    background-color: red;
+    background-color: white;
     height: 100vh;
 }
 
@@ -40,4 +40,27 @@ body{
     margin-left: 10%;
     width: 100%;
   }
+
+.connect-metaMask-button{
+    margin: 0;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  border: none;
+  /* margin: 5% 10% 5% 10%; */
+  background-color:  #0074E6;
+  font-size: 24px;
+  color: #fff;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 3%;
+  padding-bottom: 3%;
+} 
+
+.connect-metaMask-button:hover{
+    background-color:  #6c9bc9;
+}
   
