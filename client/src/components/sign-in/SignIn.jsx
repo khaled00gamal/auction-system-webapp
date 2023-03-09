@@ -1,42 +1,8 @@
 import "./sign-in styles/SignIn.css";
-import { useState, useEffect } from "react";
 
 
 
 function SignIn() {
-
-    // const [walletAddress, setWalletAddress] = useState("");
-
-
-    // async function requestAccount() {
-    //     console.log("requesting account");
-
-    //     //check if metamask exists
-    //     if (window.ethereum) {
-    //         console.log("detected");
-    //         try {
-    //             const accounts = await window.ethereum.request({
-    //                 method: "eth_requestAccounts"
-    //             });
-    //             setWalletAddress(accounts[0]);
-    //         } catch (e) {
-    //             console.log("error while connecting" + { e });
-    //         }
-    //     } else {
-    //         alert("please Download MetaMask Extension");
-    //     }
-    // }
-
-    // async function connectWallet(){
-    //     if(typeof window.ethereum !== "undefined"){
-    //         await requestAccount();
-
-    //         const provider = new ethers.providers.Web3Provider(window.ethereum);
-    //     }
-    // }
-
-
-
 
     return (
         <div className="row sign-in">
