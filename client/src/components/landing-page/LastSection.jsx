@@ -13,7 +13,7 @@ function LastSection() {
                     <li className="bold-li" >SAVE TO FAVORITES</li>
                     <li className="bold-li">SELL GOODS</li>
                 </ul>
-                <Link to="signi"><button className="last-section-button">Create an account</button></Link>
+                <Link to="signin"><button className="last-section-button">Create an account</button></Link>
             </div>
             <div className="last-section-img">
                 <img src={require("./images/placeholder.png")} alt="placeholder-img" />

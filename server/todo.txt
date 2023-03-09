@@ -1,0 +1,15 @@
+In order for us to authenticate a user, we need to make sure the user owns an address.
+We can do that by letting them sign a message using MetaMask and then sending 
+this message to our server. Therefore we will need 2 endpoints:
+
+1-An endpoint that generates a message that needs to be signed by the user.
+This message will need to be different for each wallet address and authentication request.
+The message will be saved in our database for later use.
+
+2-An endpoint that receives a signature and checks what wallet address was used to sign
+the message. If the wallet address and message match the one in step 1,
+then we will return a JWT to the client (our react website),
+and then use it for authentication.
+
+
+We’ll be using firebase for authentication and database
