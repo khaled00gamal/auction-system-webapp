@@ -5,6 +5,7 @@ import SignIn from "./sign-in/SignIn";
 import FAQ from "../components/Footer-pages/FAQ";
 import Support from "../components/Footer-pages/Support";
 import NavBar from "./essentials/NavBar";
+import Card from "./essentials/Card";
 
 /*
 function App() {
@@ -27,7 +28,7 @@ function App() {
 */
 
 function App() {
-  return <NavBar />
+  return <Card />
 }
 
 
