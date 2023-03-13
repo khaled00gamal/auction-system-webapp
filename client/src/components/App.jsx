@@ -4,7 +4,9 @@ import LandingPage from "./landing-page/LandingPage";
 import SignIn from "./sign-in/SignIn";
 import FAQ from "../components/Footer-pages/FAQ";
 import Support from "../components/Footer-pages/Support";
+import NavBar from "./essentials/NavBar";
 
+/*
 function App() {
   return (
 
@@ -22,5 +24,11 @@ function App() {
 
   );
 }
+*/
+
+function App() {
+  return <NavBar />
+}
+
 
 export default App;
