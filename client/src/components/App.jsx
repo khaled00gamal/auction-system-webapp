@@ -6,6 +6,8 @@ import FAQ from "../components/Footer-pages/FAQ";
 import Support from "../components/Footer-pages/Support";
 import NavBar from "./essentials/NavBar";
 import Card from "./essentials/Card";
+import Dashboard from "./dashboard/Dashboard";
+import Carousel from "./essentials/Carousel";
 
 /*
 function App() {
@@ -28,7 +30,7 @@ function App() {
 */
 
 function App() {
-  return <Card />
+  return <Dashboard />
 }
 
 
