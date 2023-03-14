@@ -1,0 +1,21 @@
+.carousel-wrapper .title-and-view-all-wrapper,
+.cards-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.title {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+}
+
+.view-all {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 35px;
+    align-items: center;
+}
