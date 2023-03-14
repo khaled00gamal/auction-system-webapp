@@ -5,7 +5,7 @@ import "./YourBidsSection.css"
 function YourBidsSection() {
     return (
         <div className="your-bids-wrapper" style={{ maxWidth: "1283px" }}>
-            <Carousel />
+            <Carousel title="Your Bids"/>
         </div>
     );
 }

@@ -6,7 +6,7 @@ function Carousel(props) {
     return (
         <div className="carousel-wrapper">
             <div className="title-and-view-all-wrapper">
-                <div className="title"><h3>Title</h3></div>
+                <div className="title"><h3>{props.title}</h3></div>
                 <div className="view-all"><p>View All</p></div>
             </div>
             <div className="cards-wrapper">
