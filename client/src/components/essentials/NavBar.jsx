@@ -14,7 +14,7 @@ function NavBar() {
         <SearchBar />
       </div>
       <ul className="navigation">
-        <Button size="medium" text="Sell Items" link="/" />
+        <Button size="medium" text="Sell Items" style="regular" link="/" />
         <img src={notification} alt="notifications" />
         <img src={profile} alt="notifications" />
       </ul>
