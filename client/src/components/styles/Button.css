@@ -1,12 +1,24 @@
-.button-medium {
-    background-color: #0080ff;
-    border: none;
-    color: white;
-    padding: 12px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    line-height: 24px;
-    border-radius: 16.8px;
-  }
+.button-medium-regular {
+  background-color: #0080ff;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 24px;
+  border-radius: 16.8px;
+}
+
+.button-medium-text {
+  border: none;
+  color: #0080ff;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 24px;
+  border-radius: 16.8px;
+}
