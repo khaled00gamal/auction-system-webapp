@@ -11,8 +11,8 @@ function NavBar() {
                 <img src={require("./images/logo.png")} alt="Logo" />
             </div>
             <div className="navbar-buttons">
-                <Link to="signin"><button className="navbar-button login">Sign In</button></Link>
-                <button className="navbar-button sign-up">Sign up</button>
+                <Link to="signin"><button className="navbar-button login">Connect</button></Link>
+
             </div>
         </nav>
     );

@@ -7,6 +7,7 @@ import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import axios from "axios";
 
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyAmUJ4vSaWAfUV6xxyT9O5jvBdrmYtBSCA",
     authDomain: "chainauction.firebaseapp.com",
@@ -79,27 +80,28 @@ function SignIn() {
     };
 
     return (
-        <div className="row sign-in">
-
-            <div className="col left-part">
-                <div className="logo">
-                    <img src={require("../landing-page/images/logo.png")} alt="logo" />
-                </div>
-                <h1>Welcome Back !</h1>
-                <div className="laptop-img">
-                    <img src={require("./images/laptop.png")} alt="laptop" />
-                </div>
-            </div>
-
-            <div className="right-part">
+        <div className="connect-page">
+            {/* <div className="connect-page__logo">
+                <img src="../" alt="" />
+            </div> */}
+            <div className="col">
+                <h1>Connect Now</h1>
+                <p>Connect your MetaMask wallet to place bids,set up Auctions and more.</p>
                 <ConnectWalletButton
                     onPressConnect={onPressConnect}
                     onPressLogout={onPressLogout}
                     loading={loading}
                     address={address}
                 />
+
             </div>
+
+
         </div>
+
+
+
+
     )
 }
 

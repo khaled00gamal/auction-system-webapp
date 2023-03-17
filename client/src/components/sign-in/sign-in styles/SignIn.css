@@ -3,32 +3,13 @@ body{
     margin: 0;
     padding: 0;
 }
-.sign-in{
-    display: grid;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: 100vh;
+
+
+
+.connect-page{
+    background-color: #0074E6 ;
+    height: 100vh; 
 }
-
-
-.left-part {
-    background-color: #0074E6 ; 
-    height: 100vh;
-}
-
-.right-part{
-    background-color: white;
-    height: 100vh;
-}
-
-
-.left-part h1{
-    margin-top: 10%;
-    margin-left: 10%;
-    color: white;
-    font-size: 3em;
-    font-weight: bolder;
-}
-
 
 
 .logo {
