@@ -12,7 +12,7 @@ import ViewItem from "./dashboard/view item/ViewItem";
 import NewAuction from "./dashboard/new auction/NewAuction";
 import logo from "./icons/logo-navbar-white.svg"
 
-/*
+
 function App() {
   return (
 
@@ -30,13 +30,8 @@ function App() {
 
   );
 }
-*/
 
-function App() {
-  return (
-  <NewAuction />
-  );
-}
+
 
 
 export default App;

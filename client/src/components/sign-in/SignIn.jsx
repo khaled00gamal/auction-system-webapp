@@ -5,6 +5,12 @@ import Web3 from "web3";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import axios from "axios";
+import logo from "../icons/logo-navbar-white.svg";
+
+
+
+
+
 
 
 const firebaseConfig = {
@@ -79,19 +85,13 @@ function SignIn() {
     };
 
     return (
-        <div className="row sign-in">
-
-            <div className="col left-part">
-                <div className="logo">
-                    <img src={require("../landing-page/images/logo.png")} alt="logo" />
-                </div>
-                <h1>Welcome Back !</h1>
-                <div className="laptop-img">
-                    <img src={require("./images/laptop.png")} alt="laptop" />
-                </div>
+        <div className="connect-page">
+            <div className="connect-page__logo">
+                <img src={logo} alt="" />
             </div>
-
-            <div className="right-part">
+            <div className="col text-center">
+                <h1>Connect Now</h1>
+                <p>Connect your MetaMask wallet to place bids,set <br />up Auctions and more.</p>
                 <ConnectWalletButton
                     onPressConnect={onPressConnect}
                     onPressLogout={onPressLogout}
