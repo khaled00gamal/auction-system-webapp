@@ -8,6 +8,9 @@ import NavBar from "./essentials/NavBar";
 import Card from "./essentials/Card";
 import Dashboard from "./dashboard/Dashboard";
 import Carousel from "./essentials/Carousel";
+import ViewItem from "./dashboard/view item/ViewItem";
+import NewAuction from "./dashboard/new auction/NewAuction";
+import logo from "./icons/logo-navbar-white.svg"
 
 /*
 function App() {
@@ -30,7 +33,9 @@ function App() {
 */
 
 function App() {
-  return <Dashboard />
+  return (
+  <NewAuction />
+  );
 }
 
 

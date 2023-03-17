@@ -8,6 +8,7 @@ import Button from "../../essentials/Button";
 function NewAuction() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [image, setImage] = useState(null);
 
@@ -17,6 +18,10 @@ function NewAuction() {
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
+    };
+
+    const handleStartDateChange = (e) => {
+        setStartDate(e.target.value);
     };
 
     const handleEndDateChange = (e) => {
@@ -55,6 +60,12 @@ function NewAuction() {
                                 placeholder="Description"
                                 value={description}
                                 onChange={handleDescriptionChange}
+                            />
+                            <input
+                                type="datetime-local"
+                                placeholder="End Date"
+                                value={startDate}
+                                onChange={handleStartDateChange}
                             />
                             <input
                                 type="datetime-local"
