@@ -9,7 +9,7 @@ import Card from "./essentials/Card";
 import Dashboard from "./dashboard/Dashboard";
 import Carousel from "./essentials/Carousel";
 
-/*
+
 function App() {
   return (
 
@@ -27,11 +27,8 @@ function App() {
 
   );
 }
-*/
 
-function App() {
-  return <Dashboard />
-}
+
 
 
 export default App;
