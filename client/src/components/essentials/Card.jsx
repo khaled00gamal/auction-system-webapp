@@ -12,7 +12,7 @@ function Card(props) {
                 </div>
                 <p>{props.itemName}</p>
             </div>
-            <Button text="View" width="276px" size="medium" link="/"/>
+            <Button text="View" width="276px" size="medium" style="regular" link="/"/>
         </div>
     );
 
