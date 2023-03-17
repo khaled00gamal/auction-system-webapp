@@ -12,7 +12,6 @@ function NavBar() {
             </div>
             <div className="navbar-buttons">
                 <Link to="signin"><button className="navbar-button login">Connect</button></Link>
-
             </div>
         </nav>
     );

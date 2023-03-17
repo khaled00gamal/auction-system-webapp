@@ -1,0 +1,51 @@
+input {
+    font-family: "Montserrat";
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: rgba(0,0,0,0.08);
+    border-radius: 16.8px;
+}
+
+.search_box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search_box .search_btn {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.search_box .input_search {
+    outline: none;
+    border: 0;
+    background: none;
+    border-radius: 50px;
+    width: 545px;
+    height: 24px;
+    color: #000000;
+}
+
+::placeholder {
+    color: rgba(0,0,0,0.4);
+}
+
+::-webkit-input-placeholder {
+    color: rgba(0,0,0,0.4);
+}
+
+:-ms-input-placeholder {
+    color: rgba(0,0,0,0.4);
+}
