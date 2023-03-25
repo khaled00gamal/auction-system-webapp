@@ -63,7 +63,7 @@ function NewAuction() {
                             />
                             <input
                                 type="datetime-local"
-                                placeholder="End Date"
+                                placeholder="Start Date"
                                 value={startDate}
                                 onChange={handleStartDateChange}
                             />
