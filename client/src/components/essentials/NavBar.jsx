@@ -8,7 +8,7 @@ import "../styles/NavBarComponent.css";
 
 function NavBar() {
   return (
-    <nav class="nav-bar">
+    <nav className="nav-bar">
       <div className="logo-and-search-wrapper">
         <img src={logo} alt="logo" />
         <SearchBar />

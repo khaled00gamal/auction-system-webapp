@@ -3,20 +3,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 55px 55px 20px 55px;
+  padding: 1rem 3.4375rem;
   overflow: hidden;
 }
 
-.nav-bar .logo-and-search-wrapper {
+.nav-bar>.logo-and-search-wrapper {
   display: grid;
   grid-auto-flow: column;
-  grid-column-gap: 90px;
+  grid-column-gap: 50px;
   align-items: center;
 }
 
-.nav-bar .navigation {
+.nav-bar .logo-and-search-wrapper img {
+  max-width: 100%;
+  height: auto;
+}
+
+.nav-bar>.navigation {
   display: grid;
   grid-auto-flow: column;
-  grid-column-gap: 35px;
+  grid-column-gap: 2rem;
   align-items: center;
+}
+
+.nav-bar>.navigation>.button {
+  margin-right: 0;
+}
+
+.nav-bar>.navigation>img {
+  margin-right: 0;
+}
+
+.nav-bar>.navigation>img:last-of-type {
+  margin-right: 0px;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .nav-bar {
+    padding: 40px 30px;
+  }
+
+  .nav-bar .logo-and-search-wrapper {
+    column-gap: 40px;
+  }
+
+  .nav-bar .navigation {
+    column-gap: 20px;
+  }
+
+  .nav-bar .navigation button {
+    font-size: 14px;
+  }
 }
