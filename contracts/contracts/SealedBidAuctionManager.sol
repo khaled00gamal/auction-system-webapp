@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-// NOTE: All currenct is wei
+// NOTE: All currency is wei
 
 contract SealedBidAuctionManager {
     /**
      * types
      */
 
-    struct PublicAuctionInfo {
-        uint256 auctionId;
+    struct UserSetAuctionInfo {
         address payable seller;
         uint256 securityDeposit;
         // dates
@@ -21,13 +20,19 @@ contract SealedBidAuctionManager {
         string itemDesc;
     }
 
+    struct PublicAuctionInfo {
+        uint256 auctionId;
+        UserSetAuctionInfo userSet;
+    }
+
     struct Auction {
         PublicAuctionInfo info;
-        // protocol
-        uint32 highestBid; // redundant, but convenient
+        // protocol; redundant, but convenient
+        uint32 highestBid;
         address payable highestBidder; // keys into bids
         // participants
         mapping(address => uint32) bids;
+
         // bids are hashed using the bidder's public key.
         // this is hiding, and binding: committed.
     }
@@ -39,24 +44,11 @@ contract SealedBidAuctionManager {
     Auction[] private auctions;
 
     /**
-     * time-aware modifiers
+     * events
      */
 
-    /**
-     * error types
-     */
-
-    /// Bidding has ended!
-    error NotDuringBiddingPeriod();
-
-    /// Auction ID is invalid!
-    error InvalidAuctionId();
-
-    /// Desposit is not equal to required security deposit!
-    error InvalidDeposit();
-
-    /// Auction is still active!
-    error AuctionHasNotEnded();
+    event NewAuction(uint256 auctionId);
+    event NewBid(address by);
 
     /**
      * modifiers
@@ -64,52 +56,41 @@ contract SealedBidAuctionManager {
 
     modifier duringBiddingPeriod(uint256 auctionId) {
         if (
-            !(block.timestamp >= auctions[auctionId].info.biddingStart &&
-                block.timestamp < auctions[auctionId].info.revealStart)
-        ) revert NotDuringBiddingPeriod();
+            !(block.timestamp >=
+                auctions[auctionId].info.userSet.biddingStart &&
+                block.timestamp < auctions[auctionId].info.userSet.revealStart)
+        ) revert("Bidding period has ended!");
         _;
     }
 
     modifier afterAuctionEnded(uint256 auctionId) {
-        if (!(block.timestamp >= auctions[auctionId].info.revealEnd))
-            revert AuctionHasNotEnded();
+        if (!(block.timestamp >= auctions[auctionId].info.userSet.revealEnd))
+            revert("Auction has not ended yet!");
         _;
     }
 
     modifier newBidder(uint256 auctionId) {
-        require(
-            auctions[auctionId].bids[msg.sender] == 0,
-            "bidder already exists!"
-        );
+        if (
+            auctions[auctionId].info.userSet.seller == msg.sender ||
+            auctions[auctionId].bids[msg.sender] != 0
+        ) revert("Sender is either the seller or has already placed a bid!");
         _;
     }
 
     modifier existingBidder(uint256 auctionId) {
-        require(
-            auctions[auctionId].bids[msg.sender] != 0,
-            "bidder already exists!"
-        );
+        if (auctions[auctionId].bids[msg.sender] == 0)
+            revert("Sender has not placed a bid!");
         _;
     }
 
-    modifier onlyBidder(uint256 auctionId) {
-        require(
-            msg.sender != auctions[auctionId].info.seller,
-            "seller cannot bid!"
-        );
-        _;
-    }
-
-    modifier onlyOwner(uint256 auctionId) {
-        require(
-            msg.sender == auctions[auctionId].info.seller,
-            "you must be the seller to do this!"
-        );
+    modifier onlySeller(uint256 auctionId) {
+        if (msg.sender != auctions[auctionId].info.userSet.seller)
+            revert("Sender is not the seller!");
         _;
     }
 
     modifier validAuctionId(uint256 auctionId) {
-        if (auctionId >= auctions.length) revert InvalidAuctionId();
+        if (auctionId >= auctions.length) revert("Invalid auction ID!");
         _;
     }
 
@@ -124,13 +105,16 @@ contract SealedBidAuctionManager {
     }
 
     function createAuction(
-        PublicAuctionInfo memory auctionInfo
-    ) external returns (uint256) {
+        UserSetAuctionInfo memory auctionInfo
+    ) external returns (uint256 auctionId) {
         // create an auctionId, then add to table
+        auctionId = auctions.length;
         Auction storage auction = auctions.push();
-        auction.info = auctionInfo;
-
-        return auctions.length - 1;
+        auction.info = PublicAuctionInfo({
+            auctionId: auctionId,
+            userSet: auctionInfo
+        });
+        emit NewAuction(auctionId);
     }
 
     function getAuctionData(
@@ -153,16 +137,16 @@ contract SealedBidAuctionManager {
         external
         payable
         validAuctionId(auctionId)
-        onlyBidder(auctionId)
         newBidder(auctionId)
         duringBiddingPeriod(auctionId)
     {
         // transfer security deposit to contract
-        if (msg.value != auctions[auctionId].info.securityDeposit)
-            revert InvalidDeposit();
+        if (msg.value != auctions[auctionId].info.userSet.securityDeposit)
+            revert("Sent deposit is not equal to required deposit!");
         // hash bid by address (FIXME: ??)
         // bytes32 b = hash(bid);
         auctions[auctionId].bids[msg.sender] = bid;
+        emit NewBid(msg.sender);
     }
 
     // functions to be called after auction ends
@@ -173,11 +157,12 @@ contract SealedBidAuctionManager {
         external
         validAuctionId(auctionId)
         afterAuctionEnded(auctionId)
-        onlyBidder(auctionId)
         existingBidder(auctionId)
     {
         auctions[auctionId].bids[msg.sender] = 0;
-        payable(msg.sender).transfer(auctions[auctionId].info.securityDeposit);
+        payable(msg.sender).transfer(
+            auctions[auctionId].info.userSet.securityDeposit
+        );
     }
 
     function transferWinningBidToOwner(
@@ -186,7 +171,7 @@ contract SealedBidAuctionManager {
         external
         validAuctionId(auctionId)
         afterAuctionEnded(auctionId)
-        onlyOwner(auctionId)
+        onlySeller(auctionId)
     {
         // FIXME: "unhash" the bid
         auctions[auctionId].highestBidder.transfer(
