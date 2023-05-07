@@ -4,7 +4,19 @@
 }
 
 .last-section-ul{
-    margin-left: 10%;
+    margin-left: 2%;
+    display: flex;
+  flex-direction: column;
+}
+
+.last-section-all{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 .bold{
@@ -19,16 +31,16 @@
 }
 
 .last-section-button{
-    border-radius: 16px;
+    border-radius: 12px;
     border: none;
-    /* margin: 5% 10% 5% 10%; */
+    margin: 5% 10% 5% 0%;
     background-color: #FF0055;
     font-size: 24px;
     color: #fff;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 3%;
-    padding-bottom: 3%;
+    padding-left: 60%;
+    padding-right: 60%;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }
 
 .last-section-button:hover{

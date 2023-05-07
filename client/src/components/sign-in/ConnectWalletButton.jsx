@@ -1,5 +1,4 @@
 import "../sign-in/sign-in styles/SignIn.css";
-import metamaskLogo from "../icons/MetaMask_Fox.svg";
 
 const ConnectWalletButton = ({
     onPressLogout,
@@ -9,8 +8,8 @@ const ConnectWalletButton = ({
 }) => {
     return (
         <div className="row">
-            <div className="connect-metaMask-button metamask-logo">
-                <img src={metamaskLogo} alt="" />
+            <div className="connect-metaMask-button">
+                {/* <img src={metamaskLogo} alt="" /> */}
                 {address && !loading ? (
                     <button onClick={onPressLogout} className="connect-metaMask-button">Disconnect</button>
                 ) : loading ? (
