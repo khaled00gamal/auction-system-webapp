@@ -1,16 +1,32 @@
 import "./sign-in styles/SignIn.css";
 import ConnectWalletButton from "./ConnectWalletButton";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import axios from "axios";
 import logo from "../icons/logo-navbar-white.svg";
+import contractAbi from "../../SealedBidAuctionManager.json";
 
 
 
 
+const web3 = new Web3('http://localhost:7545');
+const contractAddress = "0xDd03c35051D6BBfCa3fD737B03DAa23ab0F2E0db";
+const contract = new web3.eth.Contract(contractAbi.abi, contractAddress);
 
+async function testContractFunction() {
+    try {
+        const res = await contract.methods.getNumberOfRegisteredAuctions().call();
+        console.log('result:', res);
+    } catch (e) {
+        console.error('error:', e);
+    }
+}
+
+
+testContractFunction();
 
 
 const firebaseConfig = {
@@ -27,6 +43,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 function SignIn() {
+
+    const [isConnected, setIsConnected] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleLogin = async (address) => {
         const baseUrl = "http://localhost:3000";
@@ -52,10 +72,13 @@ function SignIn() {
 
         await signInWithCustomToken(auth, customToken);
         setAddress(address);
+        setIsConnected(true);
+
     };
 
     const [loading, setLoading] = useState(false);
     const [address, setAddress] = useState("");
+
 
     const onPressConnect = async () => {
         setLoading(true);
@@ -98,6 +121,9 @@ function SignIn() {
                     loading={loading}
                     address={address}
                 />
+                {isConnected ? (
+                    <button onClick={() => navigate(`/dashboard/${address}`)}>Go to Dashboard</button>
+                ) : null}
             </div>
         </div>
     )

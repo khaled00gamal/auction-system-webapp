@@ -16,13 +16,13 @@ import logo from "./icons/logo-navbar-white.svg"
 function App() {
   return (
 
-
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/FAQ" element={<FAQ />} />
         <Route path="/support" element={<Support />}></Route>
+        <Route path="/dashboard/:userAddress" element={<Dashboard />}></Route>
       </Routes>
 
     </Router>
