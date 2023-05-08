@@ -69,13 +69,26 @@ body{
     text-align: center;
 }
 
-.metamask-logo {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-  }
+
 .connect-metaMask-button:hover{
     background-color:  #6c9bc9;
+}
+
+.go-to-dashboard-button{
+  margin-top: 15%;
+    border: none;
+    color: #0080ff;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    line-height: 24px;
+    border-radius: 16.8px;
+    position: relative;
+}
+
+.go-to-dashboard-button:hover{
+  background-color:  #6c9bc9;
 }
   

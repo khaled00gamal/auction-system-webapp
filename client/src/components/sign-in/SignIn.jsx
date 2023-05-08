@@ -7,14 +7,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import axios from "axios";
 import logo from "../icons/logo-navbar-white.svg";
-import contractAbi from "../../SealedBidAuctionManager.json";
+import { contract } from "../../contractInfo";
 
 
 
 
-const web3 = new Web3('http://localhost:7545');
-const contractAddress = "0xDd03c35051D6BBfCa3fD737B03DAa23ab0F2E0db";
-const contract = new web3.eth.Contract(contractAbi.abi, contractAddress);
+
 
 async function testContractFunction() {
     try {
@@ -122,7 +120,7 @@ function SignIn() {
                     address={address}
                 />
                 {isConnected ? (
-                    <button onClick={() => navigate(`/dashboard/${address}`)}>Go to Dashboard</button>
+                    <button className="go-to-dashboard-button" onClick={() => navigate(`/dashboard/${address}`)}>Go to Dashboard</button>
                 ) : null}
             </div>
         </div>

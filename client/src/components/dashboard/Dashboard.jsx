@@ -4,6 +4,8 @@ import NavBar from "../essentials/NavBar";
 import YourBidsSection from "./YourBidsSection";
 import TrendingAuctionsSection from "./TrendingAuctionsSection";
 import "./Dashboard.css"
+import { contract } from "../../contractInfo";
+
 
 function Dashboard() {
     return (
@@ -12,7 +14,7 @@ function Dashboard() {
             <div className="dashboard-content">
                 <h2>Welcome Back, Khaled</h2>
                 <div className="YourBidsSection"><YourBidsSection /></div>
-                <div className="TrendingAuctionsSection"><TrendingAuctionsSection /></div>        
+                <div className="TrendingAuctionsSection"><TrendingAuctionsSection /></div>
             </div>
             <Footer />
         </div>
