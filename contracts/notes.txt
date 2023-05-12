@@ -1,0 +1,37 @@
+Notes on auction phases relative to the paper:
+
+    First, make sure to view figure 2 in the paper.
+
+    1. Register Phase:
+        We don't implement the register phase.
+        The blockchain public-key infrastructure provides identity automatically, and the crypto-wallet connects us.
+
+    2. Publish Phase:
+        - We don't need to verify user ID. The crypto-wallet connection takes care of that.
+        - HACK We add a property not present in the paper: minimum security deposit. This is because later, both the owner and the winner will have to sign a message saying they either fail the auction or proceed. As long as this message is not signed, the contract keeps the security deposit. Should the owner pay a deposit too? Note that this mechanism would be the only way to cancel any payment.
+        - FIXME User specifies three dates: bidding start, bidding end, reveal end. Why?
+
+    3. Bid Phase:
+        - Again, we don't verify user ID.
+        - Contract receives security deposit m.
+            NOTE MONEY TRANSFER
+        - TODO Contract function takes a string of the pedersen-committed bid price p along with a random r.
+            NOTE The paper says to send p and r "encrypted by the smart contract's public key" to the contract, then have the contract generate G and H, and create the commitment itself. This is infeasible because the smart contract is simply public code... it has no private key! In our solution, this will be implemented by the UI, and the contract will use Bulletproof to make sure it receives a well-formed commitment.
+        - TODO Contract stores the commitment.
+
+    4. Open Phase:
+        - TODO Make sure at least one bid is higher than the reserve price. If not, close the auction as failed.
+        - TODO Bids are sorted. The winning commitment is announced in a message to the owner and to all bidders.
+        - TODO Send a message to each losing bidder with his commitment, the winning commitment, and differential commitment.
+        - TODO Send a message to the winning bidder that he won, and...
+            HACK ask him to sign the closing message... ? or...
+            TODO ask him to send the remaining money to the contract...
+                BUG but how to prove it?
+
+    5. Verify Phase:
+        This is superfluous.
+        The contract is the proof.
+
+    6. Finish Phase:
+        - HACK Have a two-party signature on the closing message, or...
+            TODO just send the full price to the owner... ?

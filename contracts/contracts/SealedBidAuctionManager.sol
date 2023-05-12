@@ -4,16 +4,23 @@ pragma solidity ^0.8.13;
 // NOTE: All currency is wei
 
 contract SealedBidAuctionManager {
+    // Q
+    // H
+
     /**
      * types
      */
 
+    enum AuctionState {Active, Success, Failure}
+
     struct UserSetAuctionInfo {
         address payable seller;
+        // auction rules
         uint256 securityDeposit;
+        uint256 reservePrice;
         // dates
         uint256 biddingStart; // or auctionStart
-        uint256 revealStart; // or biddingEnd
+        uint256 revealStart; // or biddingEnd (???)
         uint256 revealEnd;
         // item
         string itemName;
@@ -23,6 +30,12 @@ contract SealedBidAuctionManager {
     struct PublicAuctionInfo {
         uint256 auctionId;
         UserSetAuctionInfo userSet;
+        AuctionState state;
+    }
+
+    struct Bid {
+        // encrypted p || r
+        // c
     }
 
     struct Auction {
@@ -112,7 +125,8 @@ contract SealedBidAuctionManager {
         Auction storage auction = auctions.push();
         auction.info = PublicAuctionInfo({
             auctionId: auctionId,
-            userSet: auctionInfo
+            userSet: auctionInfo,
+            state: Ongoing
         });
         emit NewAuction(auctionId);
     }
@@ -159,6 +173,7 @@ contract SealedBidAuctionManager {
         afterAuctionEnded(auctionId)
         existingBidder(auctionId)
     {
+        // no re-entrancy attacks!
         auctions[auctionId].bids[msg.sender] = 0;
         payable(msg.sender).transfer(
             auctions[auctionId].info.userSet.securityDeposit
