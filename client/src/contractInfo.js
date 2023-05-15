@@ -5,4 +5,13 @@ const web3 = new Web3("http://localhost:7545");
 const contractAddress = "0x13B8819E8D32E078D7A70447FF535b67A708e749";
 const contract = new web3.eth.Contract(contractAbi.abi, contractAddress);
 
+contract.getNumberOfRegisteredAuctions = function () {
+  // try {
+  return contract.methods.getNumberOfRegisteredAuctions().call();
+  // console.log('result:', res);
+  // } catch (e) {
+  //     console.error('error:', e);
+  // }
+};
+
 export { contract };

@@ -15,12 +15,13 @@ import { contract } from "../../contractInfo";
 
 
 async function testContractFunction() {
-    try {
-        const res = await contract.methods.getNumberOfRegisteredAuctions().call();
-        console.log('result:', res);
-    } catch (e) {
-        console.error('error:', e);
-    }
+    console.log(await contract.getNumberOfRegisteredAuctions());
+    // try {
+    //     const res = await contract.methods.getNumberOfRegisteredAuctions().call();
+    //     console.log('result:', res);
+    // } catch (e) {
+    //     console.error('error:', e);
+    // }
 }
 
 

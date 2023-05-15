@@ -4,13 +4,8 @@ import LandingPage from "./landing-page/LandingPage";
 import SignIn from "./sign-in/SignIn";
 import FAQ from "../components/Footer-pages/FAQ";
 import Support from "../components/Footer-pages/Support";
-import NavBar from "./essentials/NavBar";
-import Card from "./essentials/Card";
 import Dashboard from "./dashboard/Dashboard";
-import Carousel from "./essentials/Carousel";
-import ViewItem from "./dashboard/view item/ViewItem";
-import NewAuction from "./dashboard/new auction/NewAuction";
-import logo from "./icons/logo-navbar-white.svg"
+
 
 
 function App() {
