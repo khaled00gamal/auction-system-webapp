@@ -2,16 +2,14 @@ Notes on auction phases relative to the paper:
 
     First, make sure to view figure 2 in the paper.
 
-    1. Register Phase:
+    1. Register Phase:  [Done??]
         We don't implement the register phase.
         The blockchain public-key infrastructure provides identity automatically, and the crypto-wallet connects us.
 
-    2. Publish Phase:
+    2. Publish Phase:   [Done!]
         - We don't need to verify user ID. The crypto-wallet connection takes care of that.
-        - HACK We add a property not present in the paper: minimum security deposit. This is because later, both the owner and the winner will have to sign a message saying they either fail the auction or proceed. As long as this message is not signed, the contract keeps the security deposit. Should the owner pay a deposit too? Note that this mechanism would be the only way to cancel any payment.
-        - FIXME User specifies three dates: bidding start, bidding end, reveal end. Why?
 
-    3. Bid Phase:
+    3. Bid Phase:       [In-progress]
         - Again, we don't verify user ID.
         - Contract receives security deposit m.
             NOTE MONEY TRANSFER
