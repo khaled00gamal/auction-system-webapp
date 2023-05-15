@@ -1,0 +1,24 @@
+Contract Interface:
+
+    (1)- Keep track of all active auctions:
+!        -- List all ids                             --> getNumberOfRegisteredAuctions (by anyone)
+!        -- Get specific auction's data              --> getAuctionData (by anyone)
+
+    (2)- For each active auction:
+        [During Bidding Period]
+!!        -- Place a bid                              --> placeBid (by anyone other than the seller)
+
+        [During Reveal Period]
+        -- Proof of integrity                       --> ???
+
+        [After Auction Ends]
+!        -- Withdraw deposit                         --> withdrawDeposit (triggered by a non-winner bidder)
+        -- Transfer winning bid to owner            --> transferWinningBidToOwner (triggerd by seller)
+    
+!    (3)- Register a new auction                    --> createAuction (by anyone, becomes seller)
+
+Website Interface:
+
+    - Call (1) for listing active auctions
+
+    - Provide user-friendly controls for (2)
