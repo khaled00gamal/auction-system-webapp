@@ -4,7 +4,7 @@ import NavBar from "../essentials/NavBar";
 import YourBidsSection from "./YourBidsSection";
 import TrendingAuctionsSection from "./TrendingAuctionsSection";
 import "./Dashboard.css"
-import { contract } from "../../contractInfo";
+import { contract } from "../../contract";
 
 
 function Dashboard() {

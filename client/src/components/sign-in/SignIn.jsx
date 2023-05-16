@@ -7,7 +7,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken, signOut } from "firebase/auth";
 import axios from "axios";
 import logo from "../icons/logo-navbar-white.svg";
-import { contract } from "../../contractInfo";
+import { contract } from "../../contract";
 
 
 
