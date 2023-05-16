@@ -5,6 +5,7 @@ import SignIn from "./sign-in/SignIn";
 import FAQ from "../components/Footer-pages/FAQ";
 import Support from "../components/Footer-pages/Support";
 import Dashboard from "./dashboard/Dashboard";
+import NewAuction from "./dashboard/new auction/NewAuction";
 
 
 
@@ -18,6 +19,8 @@ function App() {
         <Route path="/FAQ" element={<FAQ />} />
         <Route path="/support" element={<Support />}></Route>
         <Route path="/dashboard/:userAddress" element={<Dashboard />}></Route>
+        <Route path="/dashboard/:userAddress/newauction" element={<NewAuction />}></Route>
+
       </Routes>
 
     </Router>
