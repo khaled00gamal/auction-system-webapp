@@ -2,9 +2,9 @@ import React from 'react';
 import NavBar from '../../essentials/NavBar';
 import Footer from '../../landing-page/Footer';
 import Button from '../../essentials/Button';
-import './ViewItem.css';
+import './ViewAuction.css';
 
-function ViewItem() {
+function ViewAuction() {
   return (
     <div>
       <NavBar />
@@ -47,4 +47,4 @@ function ViewItem() {
   );
 }
 
-export default ViewItem;
+export default ViewAuction;

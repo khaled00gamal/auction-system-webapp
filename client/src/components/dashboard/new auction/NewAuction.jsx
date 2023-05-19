@@ -6,16 +6,40 @@ import './NewAuction.css';
 import Button from '../../essentials/Button';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
 
-// import { contract } from "../../../contract";
 
 function NewAuction() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [image, setImage] = useState(null);
+  const [signPeriod, setSignPeriod] = useState('');
 
   const web3Context = useWeb3();
+
+  const DropdownMenu = () => {
+    const [selectedValue, setSelectedValue] = useState('');
+
+    const handleChange = (event) => {
+      setSelectedValue(event.target.value);
+    };
+
+    return (
+      <div>
+        <label htmlFor="dropdown">Select a number:</label>
+        <select id="dropdown" value={selectedValue} onChange={handleChange}>
+          <option value="">Select</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+        {selectedValue && <p>You selected: {selectedValue}</p>}
+      </div>
+    );
+  };
 
 
   const handleTitleChange = (e) => {
@@ -36,6 +60,12 @@ function NewAuction() {
     setEndDate(val);
   };
 
+  const handleSignPeriodChange = (e) => {
+    setSignPeriod(e.target.value);
+    console.log(signPeriod);
+  }
+
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -49,7 +79,8 @@ function NewAuction() {
     //     minimumPrice: 2,
     //     endDate: 1683669600,
     //     itemName: title,
-    //     itemDesc: description
+    //     itemDesc: description,
+    //     signPeriod: selectedValue
     // };
 
     const info = {
@@ -60,8 +91,9 @@ function NewAuction() {
       revealEnd: 1683669600,
       itemName: title,
       itemDesc: description,
+
     };
-    await web3Context.contract.methods.createAuction(info).call();
+    await web3Context.contract.methods.createAuction(info).send({ from: address });
     console.log("lol");
   };
 
@@ -75,7 +107,7 @@ function NewAuction() {
               {image ? (
                 <img src={URL.createObjectURL(image)} alt='item' />
               ) : (
-                <p>Upload an image</p>
+                <p>add an image</p>
               )}
               <input type='file' onChange={handleImageChange} />
             </div>
@@ -95,16 +127,12 @@ function NewAuction() {
               />
               <input
                 type='datetime-local'
-                placeholder='Start Date'
-                value={startDate}
-                onChange={handleStartDateChange}
-              />
-              <input
-                type='datetime-local'
                 placeholder='End Date'
                 value={endDate}
                 onChange={handleEndDateChange}
               />
+              <DropdownMenu />
+
             </div>
           </div>
         </div>

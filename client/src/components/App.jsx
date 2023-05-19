@@ -7,6 +7,7 @@ import Support from '../components/Footer-pages/Support';
 import Dashboard from './dashboard/Dashboard';
 import NewAuction from './dashboard/new auction/NewAuction';
 import Web3Provider from '../high-order components/Web3Provider';
+import ViewAuction from './dashboard/view auction/ViewAuction';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path='/Support' element={<Support />}></Route>
           <Route path='/Dashboard/' element={<Dashboard />}></Route>
           <Route path='/Dashboard/NewAuction' element={<NewAuction />}></Route>
+          <Route path='/Dashboard/ViewAuction' element={<ViewAuction />}></Route>
         </Routes>
       </Router>
     </Web3Provider>
