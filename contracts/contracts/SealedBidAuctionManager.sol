@@ -10,11 +10,11 @@ contract SealedBidAuctionManager {
 
     struct UserSetAuctionInfo {
         address payable seller;
-        // auction rules
         uint256 securityDeposit;
-        uint256 minimumPrice;
         // dates
-        uint256 endDate;
+        uint256 biddingStart; // or auctionStart
+        uint256 revealStart; // or biddingEnd
+        uint256 revealEnd;
         // item
         string itemName;
         string itemDesc;
@@ -23,7 +23,6 @@ contract SealedBidAuctionManager {
     struct PublicAuctionInfo {
         uint256 auctionId;
         UserSetAuctionInfo userSet;
-        AuctionState state;
     }
 
     struct Auction {
@@ -32,9 +31,10 @@ contract SealedBidAuctionManager {
         uint32 highestBid;
         address payable highestBidder; // keys into bids
         // participants
-        mapping(address => string) bids;
+        mapping(address => uint32) bids;
 
-        // bids maps bidder to their pederson-commited bid.
+        // bids are hashed using the bidder's public key.
+        // this is hiding, and binding: committed.
     }
 
     /**
@@ -47,27 +47,25 @@ contract SealedBidAuctionManager {
      * events
      */
 
-    // for logging
     event NewAuction(uint256 auctionId);
     event NewBid(address by);
-
-    // for subscription
-    event AuctionEnds(bool success);
-    event AuctionWasWon(address winner);
 
     /**
      * modifiers
      */
 
     modifier duringBiddingPeriod(uint256 auctionId) {
-        if (block.timestamp >= auctions[auctionId].info.userSet.endDate)
-            revert("Bidding period has ended!");
+        if (
+            !(block.timestamp >=
+                auctions[auctionId].info.userSet.biddingStart &&
+                block.timestamp < auctions[auctionId].info.userSet.revealStart)
+        ) revert("Bidding period has ended!");
         _;
     }
 
     modifier afterAuctionEnded(uint256 auctionId) {
-        if (block.timestamp < auctions[auctionId].info.userSet.endDate)
-            revert("Auction is still active!");
+        if (!(block.timestamp >= auctions[auctionId].info.userSet.revealEnd))
+            revert("Auction has not ended yet!");
         _;
     }
 
@@ -97,14 +95,6 @@ contract SealedBidAuctionManager {
     }
 
     /**
-     * private functions
-     */
-
-    function checkThatCommitmentIsPositive(
-        string commitment
-    ) internal pure returns (bool) {}
-
-    /**
      * external functions
      */
 
@@ -122,8 +112,7 @@ contract SealedBidAuctionManager {
         Auction storage auction = auctions.push();
         auction.info = PublicAuctionInfo({
             auctionId: auctionId,
-            userSet: auctionInfo,
-            state: Ongoing
+            userSet: auctionInfo
         });
         emit NewAuction(auctionId);
     }
@@ -170,7 +159,6 @@ contract SealedBidAuctionManager {
         afterAuctionEnded(auctionId)
         existingBidder(auctionId)
     {
-        // no re-entrancy attacks!
         auctions[auctionId].bids[msg.sender] = 0;
         payable(msg.sender).transfer(
             auctions[auctionId].info.userSet.securityDeposit

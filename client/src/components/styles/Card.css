@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+}
+
+.card-wrapper {
+  padding: 32px 40px 32px 40px;
+}
+
+.card-wrapper .image-and-caption-wrapper {
+  padding-bottom: 16px;
+}
+
+.card-wrapper .image-and-caption-wrapper p {
+  font-size: 18px;
+  line-height: 24px;
+  color: #001a33;
+}
+
+.card-wrapper .image-and-caption-wrapper .image-container {
+  background-color: white;
+  padding-bottom: 8px;
+}
+
+.card-wrapper .image-and-caption-wrapper .image-container .image {
+  border-radius: 10px;
+  width: 313px;
+  height: auto;
+}

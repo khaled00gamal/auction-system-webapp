@@ -1,0 +1,71 @@
+.container-fluid {
+  padding: 3% 15% 7%;
+}
+
+@font-face {
+  font-family: 'Lucida Console';
+  src: url('../landing-page/Fonts/Lucida\ Console\ Regular.ttf')
+    format('truetype');
+}
+
+.brand-name {
+  font-family: 'Lucida Console', monospace;
+}
+
+#first-section {
+  background-color: #3298ff;
+}
+
+.heading {
+  margin-left: -40%;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.sub-heading {
+  margin-left: 5%;
+  color: #fff;
+  font-size: 2rem;
+}
+
+.heading-button {
+  border-radius: 12px;
+  border: none;
+  margin: 5% 30% 5% 0%;
+  background-color: #ff0055;
+  font-size: 24px;
+  color: #fff;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 3%;
+  padding-bottom: 3%;
+}
+
+.heading-button:hover {
+  background-color: #d36489;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-img {
+  max-width: 100%;
+  width: 800px;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  /* Apply these styles when the screen size is less than or equal to 768px */
+
+  .header-img {
+    width: 500px;
+  }
+}

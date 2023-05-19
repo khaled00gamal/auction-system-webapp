@@ -1,0 +1,11 @@
+.how-it-works-section {
+  display: 'flex';
+  justify-content: 'center';
+  margin-bottom: 5%;
+}
+
+.arrow {
+  width: 10%;
+  max-width: 10vw;
+  margin-left: 0rem;
+}
