@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 
-.nav-bar>.logo-and-search-wrapper {
+.nav-bar > .logo-and-search-wrapper {
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 50px;
@@ -19,25 +19,24 @@
   height: auto;
 }
 
-.nav-bar>.navigation {
+.nav-bar > .navigation {
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 2rem;
   align-items: center;
 }
 
-.nav-bar>.navigation>.button {
+.nav-bar > .navigation > .button {
   margin-right: 0;
 }
 
-.nav-bar>.navigation>img {
+.nav-bar > .navigation > img {
   margin-right: 0;
 }
 
-.nav-bar>.navigation>img:last-of-type {
+.nav-bar > .navigation > img:last-of-type {
   margin-right: 0px;
 }
-
 
 @media only screen and (max-width: 768px) {
   .nav-bar {

@@ -9343,9 +9343,7 @@
   "ast": {
     "absolutePath": "project:/contracts/SealedBidAuctionManager.sol",
     "exportedSymbols": {
-      "SealedBidAuctionManager": [
-        361
-      ]
+      "SealedBidAuctionManager": [361]
     },
     "id": 362,
     "license": "MIT",
@@ -9353,12 +9351,7 @@
     "nodes": [
       {
         "id": 1,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".13"
-        ],
+        "literals": ["solidity", "^", "0.8", ".13"],
         "nodeType": "PragmaDirective",
         "src": "32:24:0"
       },
@@ -9370,9 +9363,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 361,
-        "linearizedBaseContracts": [
-          361
-        ],
+        "linearizedBaseContracts": [361],
         "name": "SealedBidAuctionManager",
         "nameLocation": "97:23:0",
         "nodeType": "ContractDefinition",
@@ -10284,10 +10275,7 @@
                         "id": 74,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "1394:6:0",
                         "typeDescriptions": {
@@ -10567,10 +10555,7 @@
                         "id": 96,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "1591:6:0",
                         "typeDescriptions": {
@@ -10956,10 +10941,7 @@
                         "id": 126,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "1837:6:0",
                         "typeDescriptions": {
@@ -11201,10 +11183,7 @@
                         "id": 146,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "2039:6:0",
                         "typeDescriptions": {
@@ -11447,10 +11426,7 @@
                         "id": 166,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "2221:6:0",
                         "typeDescriptions": {
@@ -11623,10 +11599,7 @@
                         "id": 181,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "2367:6:0",
                         "typeDescriptions": {
@@ -11867,9 +11840,7 @@
                   "src": "2797:27:0"
                 },
                 {
-                  "assignments": [
-                    213
-                  ],
+                  "assignments": [213],
                   "declarations": [
                     {
                       "constant": false,
@@ -12045,10 +12016,7 @@
                       "isPure": false,
                       "kind": "structConstructorCall",
                       "lValueRequested": false,
-                      "names": [
-                        "auctionId",
-                        "userSet"
-                      ],
+                      "names": ["auctionId", "userSet"],
                       "nodeType": "FunctionCall",
                       "src": "2900:97:0",
                       "tryCall": false,
@@ -12560,10 +12528,7 @@
                         "id": 274,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "3669:6:0",
                         "typeDescriptions": {

@@ -1,5 +1,5 @@
-import React from "react";
-import "../styles/Button.css";
+import React from 'react';
+import '../styles/Button.css';
 
 /*
 the way a button style is selected is through this naming convention:
@@ -9,19 +9,24 @@ size and style are necessary conditions when using this component
 */
 
 function Button(props) {
-  let variant = "button";
+  let variant = 'button';
 
   if (props.size) {
-    variant = variant + "-" + props.size;
+    variant = variant + '-' + props.size;
   }
 
   if (props.style) {
-    variant = variant + "-" + props.style;
+    variant = variant + '-' + props.style;
   }
 
   //let variant = "button-" + props.size + "-" + props.style;
   return (
-    <a className={variant} onClick={props.onclick} href={props.link} style={{ minWidth: props.width }}>
+    <a
+      className={variant}
+      onClick={props.onclick}
+      href={props.link}
+      style={{ minWidth: props.width }}
+    >
       {props.text}
     </a>
   );

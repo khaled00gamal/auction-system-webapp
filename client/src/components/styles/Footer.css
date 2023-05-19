@@ -94,7 +94,6 @@ footer .bottom-details .bottom_text a {
   transition: all 0.3s ease-in-out;
 }
 
-
 @media (max-width: 900px) {
   footer .content .link-boxes {
     flex-wrap: wrap;
