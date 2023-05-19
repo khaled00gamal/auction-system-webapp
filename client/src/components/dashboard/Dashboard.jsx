@@ -8,6 +8,7 @@ import { contract } from "../../contract";
 
 
 function Dashboard() {
+    // FIXME Create a provider
     return (
         <div>
             <NavBar />

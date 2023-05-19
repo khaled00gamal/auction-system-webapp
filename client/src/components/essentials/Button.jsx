@@ -21,7 +21,7 @@ function Button(props) {
 
   //let variant = "button-" + props.size + "-" + props.style;
   return (
-    <a className={variant} href={props.link} style={{ minWidth: props.width }}>
+    <a className={variant} onClick={props.onclick} href={props.link} style={{ minWidth: props.width }}>
       {props.text}
     </a>
   );

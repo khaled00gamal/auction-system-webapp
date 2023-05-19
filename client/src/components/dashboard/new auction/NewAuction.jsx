@@ -4,6 +4,7 @@ import Footer from "../../landing-page/Footer";
 import { useState } from "react";
 import "./NewAuction.css"
 import Button from "../../essentials/Button";
+import { contract } from "../../../contract";
 
 function NewAuction() {
     const [title, setTitle] = useState("");
@@ -25,13 +26,38 @@ function NewAuction() {
     };
 
     const handleEndDateChange = (e) => {
-        setEndDate(e.target.value);
+        const val = new Date(e.target.value).getTime() * 1000;
+        console.log(val);
+        setEndDate(val);
     };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
     };
+
+    const createAuction = (e) => {
+        console.log('creating!!!');
+        const address = "0x66cD0Cc5Ea1e2002F221528e2ed4a099f44ba56D";
+        // const info = {
+        //     seller: address,
+        //     minimumPrice: 2,
+        //     endDate: 1683669600,
+        //     itemName: title,
+        //     itemDesc: description
+        // };
+
+        const info = {
+            seller: address,
+            securityDeposit: 1,
+            biddingStart: 1680904800,
+            revealStart: 1683583200,
+            revealEnd: 1683669600,
+            itemName: title,
+            itemDesc: description
+        }
+        contract.createAuction(info);
+    }
 
     return (
         <div>
@@ -82,7 +108,7 @@ function NewAuction() {
                             <Button size="medium" text="Back" style="text" link="#" />
                         </li>
                         <li>
-                            <Button size="medium" text="Confirm and place item for auction" style="regular" link="#" />
+                            <Button onclick={createAuction} size="medium" text="Confirm and place item for auction" style="regular" link="#" />
                         </li>
                     </ul>
                 </div>

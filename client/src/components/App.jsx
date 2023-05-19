@@ -6,12 +6,13 @@ import FAQ from "../components/Footer-pages/FAQ";
 import Support from "../components/Footer-pages/Support";
 import Dashboard from "./dashboard/Dashboard";
 import NewAuction from "./dashboard/new auction/NewAuction";
-
+import Web3Provider from "../high-order components/Web3Provider";
 
 
 function App() {
   return (
 
+    <Web3Provider>
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -24,6 +25,7 @@ function App() {
       </Routes>
 
     </Router>
+    </Web3Provider>
 
 
   );
