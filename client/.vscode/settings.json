@@ -1,0 +1,73 @@
+{
+  "editor.fontLigatures": true,
+  "[javascript]": {
+    // "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "explorer.confirmDragAndDrop": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "foreground": "black"
+    },
+    "BUG": {
+      "icon": "bug"
+    },
+    "HACK": {
+      "icon": "tools"
+    },
+    "FIXME": {
+      "icon": "flame",
+      "background": "red"
+      // "foreground": "white"
+    },
+    "XXX": {
+      "icon": "x"
+    },
+    "TEST": {
+      "background": "green",
+      "foreground": "white"
+    },
+    "NOTE": {
+      "background": "white",
+      "foreground": "black",
+      // "type": "text",
+      "icon": "log",
+      "iconColour": "white"
+    },
+    "[ ]": {
+      "icon": "issue-draft"
+    },
+    "[x]": {
+      "icon": "issue-closed"
+    }
+  },
+  "todo-tree.highlights.defaultHighlight": {},
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]",
+    "NOTE",
+    "TEST"
+  ],
+  "todo-tree.general.tagGroups": {},
+  "editor.formatOnSave": true
+}
