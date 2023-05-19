@@ -4,6 +4,8 @@ import Footer from '../../landing-page/Footer';
 import { useState } from 'react';
 import './NewAuction.css';
 import Button from '../../essentials/Button';
+import { useWeb3 } from '../../../high-order components/Web3Provider';
+
 // import { contract } from "../../../contract";
 
 function NewAuction() {
@@ -12,6 +14,9 @@ function NewAuction() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [image, setImage] = useState(null);
+
+  const web3Context = useWeb3();
+
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -36,9 +41,9 @@ function NewAuction() {
     setImage(file);
   };
 
-  const createAuction = (e) => {
-    console.log('creating!!!');
-    const address = '0x66cD0Cc5Ea1e2002F221528e2ed4a099f44ba56D';
+  const createAuction = async (e) => {
+    const address = await web3Context.hooks.getAccount();
+    console.log(address);
     // const info = {
     //     seller: address,
     //     minimumPrice: 2,
@@ -56,7 +61,8 @@ function NewAuction() {
       itemName: title,
       itemDesc: description,
     };
-    // FIXME contract.createAuction(info);
+    await web3Context.contract.methods.createAuction(info).call();
+    console.log("lol");
   };
 
   return (
