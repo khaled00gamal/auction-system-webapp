@@ -3,6 +3,9 @@ pragma solidity ^0.8.13;
 
 // NOTE: All currency is wei
 
+// BUG (Hide bidders) or bids?
+// (TODO Use mixing to blind bidders)
+
 contract SealedBidAuctionManager {
     /**
      * types
@@ -10,19 +13,29 @@ contract SealedBidAuctionManager {
 
     struct UserSetAuctionInfo {
         address payable seller;
+        // auction rules
         uint256 securityDeposit;
+        uint256 minimumPrice;
         // dates
-        uint256 biddingStart; // or auctionStart
-        uint256 revealStart; // or biddingEnd
-        uint256 revealEnd;
+        uint256 biddingEndDate;
+        uint256 confirmationEndDate;
         // item
         string itemName;
         string itemDesc;
+        string itemPicture; // FIXME
+    }
+
+    enum AuctionState {
+        Active,
+        Failure,
+        Success,
+        InConfirmation
     }
 
     struct PublicAuctionInfo {
         uint256 auctionId;
         UserSetAuctionInfo userSet;
+        AuctionState state;
     }
 
     struct Auction {
@@ -33,8 +46,7 @@ contract SealedBidAuctionManager {
         // participants
         mapping(address => uint32) bids;
 
-        // bids are hashed using the bidder's public key.
-        // this is hiding, and binding: committed.
+        // bids maps bidder to their pedersen-commited bid.
     }
 
     /**
@@ -47,27 +59,17 @@ contract SealedBidAuctionManager {
      * events
      */
 
+    // for logging
     event NewAuction(uint256 auctionId);
     event NewBid(address by);
+
+    // for subscription
+    event AuctionEnds(bool success);
+    event AuctionWasWon(address winner);
 
     /**
      * modifiers
      */
-
-    modifier duringBiddingPeriod(uint256 auctionId) {
-        if (
-            !(block.timestamp >=
-                auctions[auctionId].info.userSet.biddingStart &&
-                block.timestamp < auctions[auctionId].info.userSet.revealStart)
-        ) revert("Bidding period has ended!");
-        _;
-    }
-
-    modifier afterAuctionEnded(uint256 auctionId) {
-        if (!(block.timestamp >= auctions[auctionId].info.userSet.revealEnd))
-            revert("Auction has not ended yet!");
-        _;
-    }
 
     modifier newBidder(uint256 auctionId) {
         if (
@@ -94,6 +96,55 @@ contract SealedBidAuctionManager {
         _;
     }
 
+    modifier setAuctionState(uint256 auctionId) {
+        if (block.timestamp < auctions[auctionId].info.userSet.biddingEndDate)
+            auctions[auctionId].info.state = AuctionState.Active;
+        else if (!minimumPriceRequirementMet(auctionId))
+            auctions[auctionId].info.state = AuctionState.Failure;
+        else if (
+            block.timestamp <
+            auctions[auctionId].info.userSet.confirmationEndDate
+        ) auctions[auctionId].info.state = AuctionState.InConfirmation;
+        else if (auctions[auctionId].info.state != AuctionState.Success)
+            auctions[auctionId].info.state = AuctionState.Failure;
+        else auctions[auctionId].info.state = AuctionState.Success;
+        _;
+    }
+
+    // make sure auction is active or in confirmation
+    modifier checkAuctionStateIs(uint256 auctionId, AuctionState state) {
+        if (state != auctions[auctionId].info.state) {
+            if (state == AuctionState.Active)
+                revert("Bidding period has ended!");
+            if (state == AuctionState.InConfirmation)
+                revert("Not in confirmation period!");
+        }
+        _;
+    }
+
+    // make sure auction is not active
+    modifier checkAuctionStateIsNot(uint256 auctionId, AuctionState state) {
+        if (state == auctions[auctionId].info.state) {
+            if (state == AuctionState.Active)
+                revert("Auction is still active!");
+        }
+        _;
+    }
+
+    /**
+     * private functions
+     */
+
+    function checkThatCommitmentIsPositive(
+        string memory commitment
+    ) internal pure returns (bool) {}
+
+    function minimumPriceRequirementMet(
+        uint256 auctionId
+    ) internal pure returns (bool) {
+        return true; // FIXME
+    }
+
     /**
      * external functions
      */
@@ -112,7 +163,8 @@ contract SealedBidAuctionManager {
         Auction storage auction = auctions.push();
         auction.info = PublicAuctionInfo({
             auctionId: auctionId,
-            userSet: auctionInfo
+            userSet: auctionInfo,
+            state: AuctionState.Active
         });
         emit NewAuction(auctionId);
     }
@@ -138,7 +190,8 @@ contract SealedBidAuctionManager {
         payable
         validAuctionId(auctionId)
         newBidder(auctionId)
-        duringBiddingPeriod(auctionId)
+        setAuctionState(auctionId)
+        checkAuctionStateIs(auctionId, AuctionState.Active)
     {
         // transfer security deposit to contract
         if (msg.value != auctions[auctionId].info.userSet.securityDeposit)
@@ -151,28 +204,33 @@ contract SealedBidAuctionManager {
 
     // functions to be called after auction ends
 
-    function withdrawDeposit(
+    function returnDeposit(
         uint256 auctionId
     )
         external
         validAuctionId(auctionId)
-        afterAuctionEnded(auctionId)
         existingBidder(auctionId)
+        setAuctionState(auctionId)
+        checkAuctionStateIsNot(auctionId, AuctionState.Active)
     {
+        // no re-entrancy attacks!
         auctions[auctionId].bids[msg.sender] = 0;
         payable(msg.sender).transfer(
             auctions[auctionId].info.userSet.securityDeposit
         );
     }
 
+    // TODO two-sign
     function transferWinningBidToOwner(
         uint256 auctionId
     )
         external
         validAuctionId(auctionId)
-        afterAuctionEnded(auctionId)
         onlySeller(auctionId)
+        setAuctionState(auctionId)
+        checkAuctionStateIs(auctionId, AuctionState.InConfirmation)
     {
+        auctions[auctionId].info.state = AuctionState.Success;
         // FIXME: "unhash" the bid
         auctions[auctionId].highestBidder.transfer(
             auctions[auctionId].highestBid
