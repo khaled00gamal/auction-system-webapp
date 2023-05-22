@@ -17,7 +17,7 @@ function Card(props) {
         width='276px'
         size='medium'
         style='regular'
-        link='/'
+        link={`/item/${props.itemId}`}
       />
     </div>
   );

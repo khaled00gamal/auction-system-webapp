@@ -1,7 +1,7 @@
 import React from 'react';
 import './Item.css';
 
-function Item() {
+function Item(props) {
   return (
     <div className='item'>
       <div className='item-picture-and-info-wrapper'>
@@ -13,10 +13,10 @@ function Item() {
         </div>
         <div className='item-info-wrapper'>
           <div className='item-name'>
-            <h3>Item Name</h3>
+            <h3>{props.itemName}</h3>
           </div>
-          <p>description</p>
-          <p>Auction ends in: time</p>
+          <p>{props.itemDescription}</p>
+          <p>Auction ends on: {props.endDate}</p>
         </div>
       </div>
     </div>

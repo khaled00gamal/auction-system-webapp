@@ -8,6 +8,7 @@ import Dashboard from './dashboard/Dashboard';
 import NewAuction from './dashboard/new auction/NewAuction';
 import Web3Provider from '../high-order components/Web3Provider';
 import ViewAuction from './dashboard/view auction/ViewAuction';
+import Bidding from './dashboard/bidding/Bidding';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/Dashboard/' element={<Dashboard />}></Route>
           <Route path='/Dashboard/NewAuction' element={<NewAuction />}></Route>
           <Route path='/Dashboard/ViewAuction' element={<ViewAuction />}></Route>
+          <Route path='/Bidding' element={<Bidding />}></Route>
         </Routes>
       </Router>
     </Web3Provider>

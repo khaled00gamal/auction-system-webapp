@@ -15,33 +15,29 @@ function NewAuction() {
   const [description, setDescription] = useState('');
   const [endDate, setEndDate] = useState('');
   const [signPeriod, setSignPeriod] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  //let [securityDeposit, setSecurityDeposit] = useState('');
+  let securityDeposit = minPrice / 2;
 
   const [imageUrl, setImageUrl] = useState('');
-  const [isValidUrl, setIsValidUrl] = useState(true);
+  // const [isValidUrl, setIsValidUrl] = useState(true);
 
-  const handleImageUrlChange = (event) => {
-    const url = event.target.value;
-    setImageUrl(url);
-    // Regex pattern to match image URLs
-    const pattern = /\.(jpeg|jpg|gif|png|svg)$/i;
-    const isValidUrl = url && pattern.test(url); // Check for url existence before validating
-    setIsValidUrl(isValidUrl);
-  }
+
 
 
   const web3Context = useWeb3();
 
   const DropdownMenu = () => {
-    const [selectedValue, setSelectedValue] = useState('');
 
-    const handleChange = (event) => {
-      setSelectedValue(event.target.value);
-    };
+    const handleSignPeriodChange = (e) => {
+      setSignPeriod(e.target.value);
+      //console.log(signPeriod);
+    }
 
     return (
       <div className='dropdown'>
         <label htmlFor="dropdown">Select confirmation deadline:    </label>
-        <select id="dropdown" value={selectedValue} onChange={handleChange}>
+        <select id="dropdown" value={signPeriod} onChange={handleSignPeriodChange}>
           <option value="">Select</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -51,15 +47,13 @@ function NewAuction() {
           <option value="6">6</option>
           <option value="7">7</option>
         </select>
-        {selectedValue && <p>confirmation deadline: {selectedValue} day</p>}
+        {signPeriod && <p>confirmation deadline: {signPeriod} day/s</p>}
       </div>
     );
   };
 
 
-  const handleImgURLChange = (e) => {
-    setImgURL(e.target.value);
-  }
+
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -69,9 +63,7 @@ function NewAuction() {
     setDescription(e.target.value);
   };
 
-  const handleStartDateChange = (e) => {
-    setStartDate(e.target.value);
-  };
+
 
   // const handleEndDateChange = (e) => {
   //   const val = new Date(e.target.value).getTime() * 1000;
@@ -82,40 +74,47 @@ function NewAuction() {
     setEndDate(date);
   };
 
-  const handleSignPeriodChange = (e) => {
-    setSignPeriod(e.target.value);
-    console.log(signPeriod);
+  //initializing security deposit
+  // securityDeposit = minPrice / 2;
+  // setSecurityDeposit(securityDeposit);
+  // console.log("this is the security deposit");
+  // console.log(securityDeposit);
+
+
+  const handleMinPriceChange = (e) => {
+    setMinPrice(e.target.value);
+  };
+
+  const handleImageUrlChange = (event) => {
+    const url = event.target.value;
+    setImageUrl(url);
+    // Regex pattern to match image URLs
+    // const pattern = /\.(jpeg|jpg|gif|png|svg)$/i;
+    // const isValidUrl = url && pattern.test(url); // Check for url existence before validating
+    // setIsValidUrl(isValidUrl);
   }
 
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-  };
+
+
 
   const createAuction = async (e) => {
     const address = await web3Context.hooks.getAccount();
-    console.log(address);
-    // const info = {
-    //     seller: address,
-    //     minimumPrice: 2,
-    //     endDate: 1683669600,
-    //     itemName: title,
-    //     itemDesc: description,
-    //     signPeriod: selectedValue
-    // };
 
     const info = {
+      //todo: add auction id
       seller: address,
-      securityDeposit: 1,
-      biddingStart: 1680904800,
-      revealStart: 1683583200,
-      revealEnd: 1683669600,
+      endDate: endDate,
       itemName: title,
       itemDesc: description,
-
+      signPeriod: signPeriod,
+      minPrice: minPrice,
+      imageUrl: imageUrl,
+      securityDeposit: securityDeposit
     };
-    await web3Context.contract.methods.createAuction(info).send({ from: address });
+
+    console.log(info);
+    //await web3Context.contract.methods.createAuction(info).send({ from: address });
     console.log("lol");
   };
 
@@ -132,12 +131,8 @@ function NewAuction() {
                 onChange={handleImageUrlChange}
                 placeholder="Enter Image URL"
               />
-              {!isValidUrl && (
-                <p style={{ color: 'red' }}>
-                  Invalid image URL. Please provide a valid image link.
-                </p>
-              )}
-              {imageUrl && isValidUrl && (
+
+              {imageUrl && (
                 <div>
                   <h3>Image Preview:</h3>
                   <img src={imageUrl} alt="Preview" />
@@ -178,6 +173,15 @@ function NewAuction() {
                 {endDate && (
                   <p>Selected Date and Time: {endDate.toString()}</p>
                 )}
+              </div>
+              <div className='min-price-input'>
+
+                <input
+                  type='number'
+                  placeholder='Minimum Price'
+                  value={minPrice}
+                  onChange={handleMinPriceChange}
+                />
               </div>
 
               <DropdownMenu />
