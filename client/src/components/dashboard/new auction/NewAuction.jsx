@@ -5,14 +5,29 @@ import { useState } from 'react';
 import './NewAuction.css';
 import Button from '../../essentials/Button';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function NewAuction() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [image, setImage] = useState(null);
   const [signPeriod, setSignPeriod] = useState('');
+
+  const [imageUrl, setImageUrl] = useState('');
+  const [isValidUrl, setIsValidUrl] = useState(true);
+
+  const handleImageUrlChange = (event) => {
+    const url = event.target.value;
+    setImageUrl(url);
+    // Regex pattern to match image URLs
+    const pattern = /\.(jpeg|jpg|gif|png|svg)$/i;
+    const isValidUrl = url && pattern.test(url); // Check for url existence before validating
+    setIsValidUrl(isValidUrl);
+  }
+
 
   const web3Context = useWeb3();
 
@@ -24,8 +39,8 @@ function NewAuction() {
     };
 
     return (
-      <div>
-        <label htmlFor="dropdown">Select a number:</label>
+      <div className='dropdown'>
+        <label htmlFor="dropdown">Select confirmation deadline:    </label>
         <select id="dropdown" value={selectedValue} onChange={handleChange}>
           <option value="">Select</option>
           <option value="1">1</option>
@@ -36,11 +51,15 @@ function NewAuction() {
           <option value="6">6</option>
           <option value="7">7</option>
         </select>
-        {selectedValue && <p>You selected: {selectedValue}</p>}
+        {selectedValue && <p>confirmation deadline: {selectedValue} day</p>}
       </div>
     );
   };
 
+
+  const handleImgURLChange = (e) => {
+    setImgURL(e.target.value);
+  }
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -54,10 +73,13 @@ function NewAuction() {
     setStartDate(e.target.value);
   };
 
-  const handleEndDateChange = (e) => {
-    const val = new Date(e.target.value).getTime() * 1000;
-    console.log(val);
-    setEndDate(val);
+  // const handleEndDateChange = (e) => {
+  //   const val = new Date(e.target.value).getTime() * 1000;
+  //   console.log(val);
+  //   setEndDate(val);
+  // };
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
   };
 
   const handleSignPeriodChange = (e) => {
@@ -98,18 +120,30 @@ function NewAuction() {
   };
 
   return (
-    <div>
+    <div className="page-container">
       <NavBar />
       <div className='new-auction-content'>
         <div className='item'>
           <div className='item-picture-and-info-wrapper'>
             <div className='item-picture'>
-              {image ? (
-                <img src={URL.createObjectURL(image)} alt='item' />
-              ) : (
-                <p>add an image</p>
+              <input
+                type="text"
+                value={imageUrl}
+                onChange={handleImageUrlChange}
+                placeholder="Enter Image URL"
+              />
+              {!isValidUrl && (
+                <p style={{ color: 'red' }}>
+                  Invalid image URL. Please provide a valid image link.
+                </p>
               )}
-              <input type='file' onChange={handleImageChange} />
+              {imageUrl && isValidUrl && (
+                <div>
+                  <h3>Image Preview:</h3>
+                  <img src={imageUrl} alt="Preview" />
+                </div>
+              )}
+
             </div>
             <div className='item-info-wrapper'>
               <div className='item-name'>
@@ -118,19 +152,34 @@ function NewAuction() {
                   placeholder='Title'
                   value={title}
                   onChange={handleTitleChange}
+
                 />
               </div>
-              <textarea
-                placeholder='Description'
-                value={description}
-                onChange={handleDescriptionChange}
-              />
-              <input
-                type='datetime-local'
-                placeholder='End Date'
-                value={endDate}
-                onChange={handleEndDateChange}
-              />
+              <div className='description'>
+
+                <textarea
+                  placeholder='Description'
+                  value={description}
+                  onChange={handleDescriptionChange}
+
+                />
+              </div>
+
+              <div className='date-picker'>
+
+                <DatePicker
+                  selected={endDate}
+                  onChange={handleEndDateChange}
+                  dateFormat="Pp"
+                  placeholderText="Select date"
+                  minDate={new Date()}
+                  className="custom-datepicker"
+                />
+                {endDate && (
+                  <p>Selected Date and Time: {endDate.toString()}</p>
+                )}
+              </div>
+
               <DropdownMenu />
 
             </div>

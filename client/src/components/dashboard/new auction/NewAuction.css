@@ -6,6 +6,12 @@
   margin-top: 0;
 }
 
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .new-auction-content .item {
   width: 100%;
   background-color: #f5f5f5;
@@ -13,6 +19,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   align-self: flex-start;
 }
+
 
 .new-auction-content .item-picture-and-info-wrapper {
   padding: 1.5rem;
@@ -101,3 +108,45 @@
   color: #007bff;
   font-weight: bold;
 }
+
+.end-date{
+  margin-right: 5%;
+}
+
+.dropdown{
+  margin-top: 5%;
+}
+
+.end-date input[type=datetime-local]{
+  border: 2px solid black;
+  border-radius: 4px;
+}
+.item-name input[type=text]{
+  border: 2px solid black;
+  border-radius: 4px;
+} 
+.item-info-wrapper textarea{
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+.date-picker{
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+.custom-datepicker::placeholder {
+  color: #999;
+  font-size: 17px ;  /* Add any other styles you want to apply */
+}
+
+.item-picture input[type=text]{
+  border: 2px solid black;
+  border-radius: 4px;
+}
+.img-url-box::placeholder {
+  color: #999;
+  font-size: 17px ;  /* Add any other styles you want to apply */
+}
+
+
