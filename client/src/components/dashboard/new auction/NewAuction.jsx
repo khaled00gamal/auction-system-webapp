@@ -6,8 +6,13 @@ import './NewAuction.css';
 import Button from '../../essentials/Button';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
 import DatePicker from "react-datepicker";
+import ImageUploader from './ImageUploader';
+import './dropDown.css';
 
 import "react-datepicker/dist/react-datepicker.css";
+
+//TODO: add validation for minimum price field
+//TODO: add style for date picker
 
 
 function NewAuction() {
@@ -16,14 +21,8 @@ function NewAuction() {
   const [endDate, setEndDate] = useState('');
   const [signPeriod, setSignPeriod] = useState('');
   const [minPrice, setMinPrice] = useState('');
-  //let [securityDeposit, setSecurityDeposit] = useState('');
+  const [image, setImage] = useState('');
   let securityDeposit = minPrice / 2;
-
-  const [imageUrl, setImageUrl] = useState('');
-  // const [isValidUrl, setIsValidUrl] = useState(true);
-
-
-
 
   const web3Context = useWeb3();
 
@@ -31,13 +30,15 @@ function NewAuction() {
 
     const handleSignPeriodChange = (e) => {
       setSignPeriod(e.target.value);
-      //console.log(signPeriod);
     }
 
     return (
       <div className='dropdown'>
-        <label htmlFor="dropdown">Select confirmation deadline:    </label>
-        <select id="dropdown" value={signPeriod} onChange={handleSignPeriodChange}>
+        <label htmlFor="dropdown" className="dropdown-label">Select confirmation deadline:    </label>
+        <select id="dropdown"
+          value={signPeriod}
+          onChange={handleSignPeriodChange}
+          className='dropdown-select'>
           <option value="">Select</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -53,8 +54,6 @@ function NewAuction() {
   };
 
 
-
-
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -63,40 +62,17 @@ function NewAuction() {
     setDescription(e.target.value);
   };
 
-
-
-  // const handleEndDateChange = (e) => {
-  //   const val = new Date(e.target.value).getTime() * 1000;
-  //   console.log(val);
-  //   setEndDate(val);
-  // };
   const handleEndDateChange = (date) => {
     setEndDate(date);
   };
-
-  //initializing security deposit
-  // securityDeposit = minPrice / 2;
-  // setSecurityDeposit(securityDeposit);
-  // console.log("this is the security deposit");
-  // console.log(securityDeposit);
-
 
   const handleMinPriceChange = (e) => {
     setMinPrice(e.target.value);
   };
 
-  const handleImageUrlChange = (event) => {
-    const url = event.target.value;
-    setImageUrl(url);
-    // Regex pattern to match image URLs
-    // const pattern = /\.(jpeg|jpg|gif|png|svg)$/i;
-    // const isValidUrl = url && pattern.test(url); // Check for url existence before validating
-    // setIsValidUrl(isValidUrl);
-  }
-
-
-
-
+  const handleImageChange = (imageData) => {
+    setImage(imageData);
+  };
 
   const createAuction = async (e) => {
     const address = await web3Context.hooks.getAccount();
@@ -104,13 +80,13 @@ function NewAuction() {
     const info = {
       //todo: add auction id
       seller: address,
+      securityDeposit: securityDeposit,
+      minPrice: minPrice,
       endDate: endDate,
+      signPeriod: signPeriod,
       itemName: title,
       itemDesc: description,
-      signPeriod: signPeriod,
-      minPrice: minPrice,
-      imageUrl: imageUrl,
-      securityDeposit: securityDeposit
+      image: image
     };
 
     console.log(info);
@@ -124,22 +100,18 @@ function NewAuction() {
       <div className='new-auction-content'>
         <div className='item'>
           <div className='item-picture-and-info-wrapper'>
-            <div className='item-picture'>
-              <input
-                type="text"
-                value={imageUrl}
-                onChange={handleImageUrlChange}
-                placeholder="Enter Image URL"
-              />
 
-              {imageUrl && (
+            <div className="item-picture">
+              <ImageUploader onImageChange={handleImageChange} />
+              {image && (
                 <div>
-                  <h3>Image Preview:</h3>
-                  <img src={imageUrl} alt="Preview" />
+                  <p className='image-text'>Image Preview :</p>
+                  <img src={image} alt="Selected" />
                 </div>
               )}
-
             </div>
+
+
             <div className='item-info-wrapper'>
               <div className='item-name'>
                 <input
@@ -175,12 +147,14 @@ function NewAuction() {
                 )}
               </div>
               <div className='min-price-input'>
-
                 <input
-                  type='number'
+                  type='text'
                   placeholder='Minimum Price'
                   value={minPrice}
                   onChange={handleMinPriceChange}
+                  style={{
+                    fontSize: '2rem', // Adjust the font size as desired
+                  }}
                 />
               </div>
 

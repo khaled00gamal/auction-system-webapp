@@ -3,6 +3,7 @@ import NavBar from '../../essentials/NavBar';
 import Footer from '../../landing-page/Footer';
 import Item from '../Item';
 import { useState } from 'react';
+//import './Bidding.css';
 
 function Bidding() {
   const [bid, setBid] = useState('');

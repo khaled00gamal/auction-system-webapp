@@ -1,0 +1,17 @@
+.custom-file-upload {
+   
+    background-color: #0080ff;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    line-height: 24px;
+    border-radius: 16.8px;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #4280be;
+  }

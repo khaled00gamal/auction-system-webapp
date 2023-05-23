@@ -130,9 +130,10 @@
   border-radius: 4px;
 }
 
-.date-picker{
+.date-picker {
   border: 2px solid black;
   border-radius: 4px;
+  padding-top: -5%;
 }
 
 .custom-datepicker::placeholder {
@@ -144,9 +145,28 @@
   border: 2px solid black;
   border-radius: 4px;
 }
+
+.min-price-input{
+  border: 2px solid black;
+  border-radius: 4px;
+  margin-top: 3%;
+}
+
 .img-url-box::placeholder {
   color: #999;
   font-size: 17px ;  /* Add any other styles you want to apply */
+}
+
+.min-price-input input::placeholder {
+  color: #999999; /* Placeholder text color */
+  font-size: large;/* Additional styles as needed */
+}
+
+.image-text{
+  margin-left: 5%;
+  margin-top: 5%;
+  font-size: 17px;
+  font-weight: bold;
 }
 
 
