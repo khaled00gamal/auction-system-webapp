@@ -10,7 +10,7 @@ const ConnectWalletButton = ({
   console.log('loading', loading);
   return (
     <div className='row'>
-      <div className='connect-metaMask-button'>
+      <div >
         {/* <img src={metamaskLogo} alt="" /> */}
         {connected ? (
           <button onClick={onPressLogout} className='connect-metaMask-button'>

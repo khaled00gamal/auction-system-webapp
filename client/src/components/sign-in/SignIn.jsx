@@ -28,10 +28,16 @@ function SignIn() {
 
   const onPressLogout = async () => {
     // TEST
-    console.log(
-      'num',
-      await web3Context.contract.methods.getNumberOfRegisteredAuctions().call(),
-    );
+    // console.log(
+    //   'num',
+    //   await web3Context.contract.methods.getNumberOfRegisteredAuctions().call(),
+    // );
+    try {
+      // Inform the user that they need to disconnect manually from Metamask
+      console.log('Please disconnect from Metamask manually.');
+    } catch (error) {
+      console.error('Error opening Metamask:', error);
+    }
   };
 
   return (

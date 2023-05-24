@@ -23,6 +23,7 @@ function App() {
           <Route path='/Dashboard/NewAuction' element={<NewAuction />}></Route>
           <Route path='/Dashboard/ViewAuction' element={<ViewAuction />}></Route>
           <Route path='/Bidding' element={<Bidding />}></Route>
+          <Route path='/ViewAuction' element={<ViewAuction />}></Route>
         </Routes>
       </Router>
     </Web3Provider>

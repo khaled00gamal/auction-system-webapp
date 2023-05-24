@@ -72,8 +72,3 @@ li {
   margin: 0 1rem;
 }
 
-li p {
-  cursor: pointer;
-  color: #007bff;
-  font-weight: bold;
-}
