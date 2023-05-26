@@ -3,16 +3,16 @@ import './ImageUploader.css';
 import fileInputRef from 'react';
 
 const ImageUploader = ({ onImageChange }) => {
-    const [previewImage, setPreviewImage] = useState(null);
+    const [imageData, setImageData] = useState('');
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         const reader = new FileReader();
 
         reader.onload = () => {
-            const imageData = reader.result;
-            setPreviewImage(imageData);
-            onImageChange(imageData);//pass to parent component
+            const imageDataURL = reader.result;
+            setImageData(imageDataURL);
+            onImageChange(imageDataURL);//pass to parent component
         };
 
         if (file) {
@@ -30,6 +30,7 @@ const ImageUploader = ({ onImageChange }) => {
                 Upload Image
             </div>
             <input type="file"
+                accept='image/*'
                 onChange={handleImageUpload}
                 ref={fileInputRef}
                 style={{ display: 'none' }} />

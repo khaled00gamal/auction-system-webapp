@@ -169,4 +169,10 @@
   font-weight: bold;
 }
 
+.error-message {
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
 
