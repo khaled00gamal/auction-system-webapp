@@ -18,7 +18,7 @@ function FirstSection() {
               <span className='brand-name'>chainAuction</span> is a place where
               you can create auctions,<br />place bids, and win securely thanks to using blockchain<br />technology.
             </h3>
-            <button className='heading-button-landing'>Browse Auctions</button>
+            <button className='heading-button-landing'><h4>Browse Auctions</h4></button>
           </div>
 
           <div>

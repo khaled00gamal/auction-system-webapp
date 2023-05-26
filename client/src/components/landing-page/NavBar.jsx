@@ -10,11 +10,11 @@ function NavBar() {
       </div>
       <div className='navbar-buttons'>
         <Link to='signin'>
-        <Button
-        text='Connect'
-        size='medium'
-        style='regular'
-      />
+          <Button
+            text='Connect'
+            size='medium'
+            style='regular'
+          />
         </Link>
       </div>
     </nav>
