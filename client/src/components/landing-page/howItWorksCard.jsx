@@ -1,14 +1,15 @@
 import '../styles/HowItWorksCard.css';
 
-function HowItWorksCard() {
+function HowItWorksCard(props) {
+
   return (
-    <div className='col'>
+    <div className='col-how-it-works'>
       <img
         className='placeholder-img'
-        src={require('./images/placeholder.png')}
+        src={props.image}
         alt='placeholder-img'
       />
-      <p className='introduction-text'>lorem epsum lorem epsum loren epum</p>
+      <p className='introduction-text'>{props.text}</p>
     </div>
   );
 }

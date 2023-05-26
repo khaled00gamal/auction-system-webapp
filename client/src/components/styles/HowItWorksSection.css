@@ -1,3 +1,15 @@
+.col-how-it-works-1 {
+  margin-right: 5px;
+}
+
+.col-how-it-works-2 {
+  margin-right: 5px;
+}
+
+.col-how-it-works-3 {
+  margin-right: 5px;
+}
+
 .how-it-works-section {
   display: 'flex';
   justify-content: 'center';
@@ -8,4 +20,8 @@
   width: 10%;
   max-width: 10vw;
   margin-left: 0rem;
+}
+
+.how-it-works-div {
+  margin-top: 2.5%;
 }

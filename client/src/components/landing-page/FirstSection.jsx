@@ -10,7 +10,7 @@ function FirstSection() {
         <NavBar />
         <div className='row-landing'>
           <div className='col-landing'>
-            <h1 className='heading-landing'>Buy and sell Securely</h1>
+            <h1 className='heading-landing'>Buy and Sell Securely</h1>
             <h1 className='heading-landing'>
               with <span className='brand-name'>chainAuction</span>
             </h1>
