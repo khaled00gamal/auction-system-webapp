@@ -1,6 +1,17 @@
 #last-section {
-  margin-bottom: 2%;
-  margin-top: 4%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem 0;
+  /* Adjust the padding as needed */
+  box-sizing: border-box;
+}
+
+.row-last-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .last-section-ul {
@@ -45,4 +56,10 @@
 
 .last-section-button:hover {
   background-color: #c9577dfe;
+}
+
+.last-section-img {
+  flex: 1;
+  margin-left: 2rem;
+  /* Adjust the margin as needed */
 }

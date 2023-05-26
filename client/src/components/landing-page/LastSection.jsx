@@ -6,7 +6,7 @@ function LastSection() {
   return (
     <div id='last-section'>
       <div className='row-last-section'>
-        <div className='last-section-all'>
+        <div className='last-section-text'>
           <h1>With an account you can:</h1>
           <ul className='last-section-ul'>
             <li className='bold-li'>TRACK YOUR ACTIVE BIDS</li>
@@ -20,7 +20,6 @@ function LastSection() {
               style='regular'
               color='pink'
             />
-            {/* <button className='last-section-button'>Create account</button> */}
           </Link>
         </div>
         <div className='last-section-img'>
