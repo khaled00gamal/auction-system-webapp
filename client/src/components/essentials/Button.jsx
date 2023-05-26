@@ -3,7 +3,7 @@ import '../styles/Button.css';
 
 /*
 the way a button style is selected is through this naming convention:
-button-size-style
+button-size-style-color
 
 size and style are necessary conditions when using this component
 */
@@ -17,6 +17,10 @@ function Button(props) {
 
   if (props.style) {
     variant = variant + '-' + props.style;
+  }
+
+  if (props.color) {
+    variant = variant + '-' + props.color;
   }
 
   //let variant = "button-" + props.size + "-" + props.style;
