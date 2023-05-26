@@ -11,6 +11,10 @@
   border-radius: 16.8px;
 }
 
+.button-medium-regular:hover {
+  background-color: #a1d0ff;
+}
+
 .button-medium-text {
   border: none;
   color: #0080ff;

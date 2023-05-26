@@ -1,5 +1,6 @@
 import '../styles/NavBar.css';
 import { Link } from 'react-router-dom';
+import Button from '../essentials/Button.jsx';
 
 function NavBar() {
   return (
@@ -9,7 +10,11 @@ function NavBar() {
       </div>
       <div className='navbar-buttons'>
         <Link to='signin'>
-          <button className='navbar-button login'>Connect</button>
+        <Button
+        text='Connect'
+        size='medium'
+        style='regular'
+      />
         </Link>
       </div>
     </nav>
