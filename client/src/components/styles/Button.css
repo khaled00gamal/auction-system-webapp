@@ -9,6 +9,8 @@
   font-size: 18px;
   line-height: 24px;
   border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
 }
 
 .button-medium-regular:hover {
@@ -25,4 +27,6 @@
   font-size: 18px;
   line-height: 24px;
   border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
 }
