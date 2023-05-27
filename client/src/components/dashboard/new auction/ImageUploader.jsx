@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './ImageUploader.css';
-// import fileInputRef from 'react';
+import fileInputRef from 'react';
 
 const ImageUploader = ({ onImageChange }) => {
     const [imageData, setImageData] = useState('');

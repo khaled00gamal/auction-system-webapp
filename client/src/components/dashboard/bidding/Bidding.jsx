@@ -5,7 +5,7 @@ import Item from '../Item';
 import { useState } from 'react';
 import Button from '../../essentials/Button';
 import BiddingItem from './BiddingItem'
-//import './Bidding.css';
+import './Bidding.css';
 
 function Bidding() {
   return (
@@ -22,13 +22,13 @@ function Bidding() {
             onChange={handleBidChange}
           /> */}
         </div>
-        <div className='button'>
+        <div className='button-group'>
           <ul>
             <li>
-              <Button size='medium' text='Back' style='text' link='#' />
+              <Button size='medium' text='Back' style='regular' link='/' />
             </li>
             <li>
-              <Button size='medium' text='Place a bid' style='text' link='#' />
+              <Button size='medium' text='Place a bid' style='regular' link='/' />
             </li>
           </ul>
         </div>

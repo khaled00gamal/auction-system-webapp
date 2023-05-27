@@ -2,3 +2,10 @@
     background-color: blueviolet;
     color: yellow;
 }
+
+.button-group  {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-left: auto;
+}
