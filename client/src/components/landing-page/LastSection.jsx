@@ -24,7 +24,7 @@ function LastSection() {
         </div>
         <div className='last-section-img'>
           <img
-            src={require('./images/placeholder.png')}
+            src={require('./images/placeholder.jpg')}
             alt='placeholder-img'
           />
         </div>
