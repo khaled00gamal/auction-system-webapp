@@ -5,7 +5,7 @@ import LastSection from './LastSection';
 
 function LandingPage() {
   return (
-    <div>
+    <div className='landing-page-content'>
       <FirstSection />
       <HowItWorksSection />
       <LastSection />

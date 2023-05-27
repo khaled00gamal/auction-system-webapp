@@ -1,27 +1,51 @@
-.col-how-it-works-1 {
-  margin-right: 5px;
+.how-it-works-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.col-how-it-works-2 {
-  margin-right: 5px;
+.how-it-works-heading {
+  display: flex;
+  flex-direction: column;
 }
 
-.col-how-it-works-3 {
-  margin-right: 5px;
+.how-it-works-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .how-it-works-section {
-  display: 'flex';
-  justify-content: 'center';
   margin-bottom: 5%;
 }
 
-.arrow {
-  width: 10%;
-  max-width: 10vw;
-  margin-left: 0rem;
+.how-it-works-section,
+.how-it-works-row,
+.how-it-works-heading-row {
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
-.how-it-works-div {
-  margin-top: 2.5%;
+.how-it-works-cards-container {
+  display: flex;
+  justify-content: center;
+}
+
+.how-it-works-card {
+  text-align: center;
+  padding: 10%;
+  margin-right: -5%;
+  /* Adjust the spacing between cards */
+}
+
+.how-it-works-card:last-child {
+  margin-right: 0;
+  /* Remove right margin for the last card */
+}
+
+.how-it-works-heading-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  /* Adjust the margin as desired */
 }
