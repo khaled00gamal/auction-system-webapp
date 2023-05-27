@@ -9,10 +9,15 @@ import DatePicker from "react-datepicker";
 import ImageUploader from './ImageUploader';
 import './dropDown.css';
 import { create, CID, IPFSHTTPClient } from 'ipfs-http-client';
+import { IPFS_BASE_URL } from '../../../contants';
+
+
+// const projectId = process.env.PROJECT_ID;
+// const projectSecret = process.env.PROJECT_SECRET;
 
 const projectId = '2QLhGGUgQODTNGtYY0KiT2xCiqO';
 const projectSecret = 'd4f4cc97d6089911fafdaf2f1fd08339';
-const authorization = 'Basic ' + btoa(projectId + ':' + projectSecret);
+const authorization = 'Basic ' + btoa(`${projectId}:${projectSecret}`);
 
 
 
@@ -44,14 +49,36 @@ function NewAuction() {
       setIpfs(ipfsClient);
     } catch (error) {
       console.error('IPFS error', error);
-      setIpfs(undefined);
+      setIpfs(null);
     }
   }, []);
 
 
   let securityDeposit = minPrice / 2;
 
+  const onImageSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const files = (form[0]).files;
 
+    if (!files || files.length === 0) {
+      return alert("No files selected");
+    }
+
+    const file = files[0];
+    // upload files
+    const result = await ipfs.add(file);
+
+    setImages([
+      ...images,
+      {
+        cid: result.cid,
+        path: result.path,
+      },
+    ]);
+
+    form.reset();
+  };
 
 
   const web3Context = useWeb3();
@@ -136,7 +163,7 @@ function NewAuction() {
   };
 
   const handleImageChange = async (imageData) => {
-    //setImage(imageData);
+    setImage(imageData);
     try {
       if (!ipfs) {
         throw new Error('IPFS not initialized');
@@ -162,45 +189,10 @@ function NewAuction() {
     }
 
 
-    // const ipfs = create({
-    //   url: 'https://ipfs.infura.io:5001/api/v0',
-    //   headers: {
-    //     authorization: `Bearer ${apiKey}`,
-    //   },
-    // });
-
-    // try {
-    //   const options = {
-    //     pin: true,
-    //   };
-
-    //   const ipfsResponse = await ipfs.add(imageData, options);
-    //   const uploadedHash = ipfsResponse.path;
-    //   console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
-    //   return uploadedHash;
-    // } catch (e) {
-    //   console.log('Error uploading image to IPFS', e);
-    //   throw e;
-    // }
-
-    // try {
-    //   const ipfs = create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
-
-    //   const options = {
-    //     pin: true, // Pin the uploaded content to ensure it stays available
-    //   };
-    //   //upload to ipfs 
-    //   const ipfsResponse = await ipfs.add(imageData, options);
-    //   const uploadedHash = ipfsResponse.path;
-    //   setIpfsHash(uploadedHash);
-    //   console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
-
-    // } catch (e) {
-    //   console.log('error uploading image to ipfs', e);
-    // }
   };
 
   const createAuction = async (e) => {
+    e.preventDefault();
     const address = await web3Context.hooks.getAccount();
 
     const info = {
@@ -212,7 +204,7 @@ function NewAuction() {
       signPeriod: getConfirmationDate(),
       itemName: title,
       itemDesc: description,
-      image: ipfsHash
+      image: image ? image.path : '',
     };
 
     console.log(info);
@@ -229,13 +221,16 @@ function NewAuction() {
 
             <div className="item-picture">
               <ImageUploader onImageChange={handleImageChange} />
+
               {image && (
                 <div>
                   <p className='image-text'>Image Preview :</p>
-                  <img src={`https://ipfs.infura.io/ipfs/${image.path}`}
+                  <img src={`${IPFS_BASE_URL}${image.path}`}
                     alt="Selected"
-                    style={{ maxWidth: '400px', margin: '15px' }} />
-
+                    style={{ maxWidth: '400px', margin: '15px' }}
+                    onError={(e) => {
+                      console.log('Failed to load image:', e.target.src);
+                    }} />
                 </div>
               )}
             </div>
