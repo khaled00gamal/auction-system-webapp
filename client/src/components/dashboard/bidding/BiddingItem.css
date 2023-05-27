@@ -1,0 +1,17 @@
+#place-bid-input {
+    border: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #f2f2f2;
+    padding: 12px;
+    border-radius: 3px;
+    width: 250px;
+    font-size: 14px;;
+}
+
+.input-field-group {
+    display: inline-block;
+    margin-right: 10px;
+}
