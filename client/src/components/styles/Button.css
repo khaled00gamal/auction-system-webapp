@@ -9,6 +9,42 @@
   font-size: 18px;
   line-height: 24px;
   border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
+}
+
+.button-medium-regular:hover {
+  background-color: #a1d0ff;
+}
+
+.button-medium-regular-pink {
+  background-color: #ff0055;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 24px;
+  border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
+}
+
+.button-extra-large-regular-pink {
+  background-color: #ff0055;
+  border: none;
+  color: white;
+  padding: 3% 10%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.5rem;
+  line-height: 24px;
+  border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
 }
 
 .button-medium-text {
@@ -21,4 +57,20 @@
   font-size: 18px;
   line-height: 24px;
   border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
+}
+
+.button-medium-text {
+  border: none;
+  color: #0080ff;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  line-height: 24px;
+  border-radius: 16.8px;
+  font-family: 'Montserrat';
+  font-weight: normal;
 }

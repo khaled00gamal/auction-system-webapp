@@ -4,33 +4,30 @@
 
 @font-face {
   font-family: 'Lucida Console';
-  src: url('../landing-page/Fonts/Lucida\ Console\ Regular.ttf')
-    format('truetype');
+  src: url('../landing-page/Fonts/Lucida\ Console\ Regular.ttf') format('truetype');
 }
 
 .brand-name {
   font-family: 'Lucida Console', monospace;
 }
 
-#first-section {
+#first-section-landing {
   background-color: #3298ff;
 }
 
-.heading {
-  margin-left: -40%;
+.heading-landing {
   font-size: 3.5rem;
   font-weight: bold;
   color: #fff;
 }
 
-.sub-heading {
-  margin-left: 5%;
+
+.sub-heading-landing {
   color: #fff;
   font-size: 2rem;
 }
 
-.heading-button {
-  border-radius: 12px;
+.heading-button-landing {
   border: none;
   margin: 5% 30% 5% 0%;
   background-color: #ff0055;
@@ -40,32 +37,34 @@
   padding-right: 10%;
   padding-top: 3%;
   padding-bottom: 3%;
+  border-radius: 22.4px;
 }
 
-.heading-button:hover {
+.heading-button-landing:hover {
   background-color: #d36489;
 }
 
-.row {
+.row-landing {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  margin-left: 3%;
 }
 
-.header-img {
+.header-img-landing {
   max-width: 100%;
   width: 800px;
   position: absolute;
-  left: 50%;
-  top: 10%;
+  left: 55%;
+  top: 3%;
   height: auto;
 }
 
 @media (max-width: 768px) {
   /* Apply these styles when the screen size is less than or equal to 768px */
 
-  .header-img {
+  .header-img-landing {
     width: 500px;
   }
 }
