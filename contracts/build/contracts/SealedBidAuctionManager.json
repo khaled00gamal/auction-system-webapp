@@ -10476,9 +10476,7 @@
   "ast": {
     "absolutePath": "project:/contracts/SealedBidAuctionManager.sol",
     "exportedSymbols": {
-      "SealedBidAuctionManager": [
-        518
-      ]
+      "SealedBidAuctionManager": [518]
     },
     "id": 519,
     "license": "MIT",
@@ -10486,12 +10484,7 @@
     "nodes": [
       {
         "id": 1,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".13"
-        ],
+        "literals": ["solidity", "^", "0.8", ".13"],
         "nodeType": "PragmaDirective",
         "src": "33:24:0"
       },
@@ -10503,9 +10496,7 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "id": 518,
-        "linearizedBaseContracts": [
-          518
-        ],
+        "linearizedBaseContracts": [518],
         "name": "SealedBidAuctionManager",
         "nameLocation": "175:23:0",
         "nodeType": "ContractDefinition",
@@ -11573,10 +11564,7 @@
                         "id": 90,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "1720:6:0",
                         "typeDescriptions": {
@@ -11824,10 +11812,7 @@
                         "id": 110,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "1928:6:0",
                         "typeDescriptions": {
@@ -12067,13 +12052,9 @@
                             "typeString": "literal_string \"Sender is not the seller!\""
                           }
                         ],
-                        "id": 130,
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
                         "referencedDeclaration": 4294967277,
                         "src": "2116:6:0",
                         "typeDescriptions": {
@@ -12246,10 +12227,7 @@
                         "id": 145,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "2267:6:0",
                         "typeDescriptions": {
@@ -13597,8 +13575,7 @@
                               "name": "revert",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [
-                                4294967277,
-                                4294967277
+                                4294967277, 4294967277
                               ],
                               "referencedDeclaration": 4294967277,
                               "src": "3314:6:0",
@@ -13719,8 +13696,7 @@
                               "name": "revert",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [
-                                4294967277,
-                                4294967277
+                                4294967277, 4294967277
                               ],
                               "referencedDeclaration": 4294967277,
                               "src": "3423:6:0",
@@ -14039,8 +14015,7 @@
                               "name": "revert",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [
-                                4294967277,
-                                4294967277
+                                4294967277, 4294967277
                               ],
                               "referencedDeclaration": 4294967277,
                               "src": "3732:6:0",
@@ -14524,9 +14499,7 @@
                   "src": "4509:27:0"
                 },
                 {
-                  "assignments": [
-                    344
-                  ],
+                  "assignments": [344],
                   "declarations": [
                     {
                       "constant": false,
@@ -14733,11 +14706,7 @@
                       "isPure": false,
                       "kind": "structConstructorCall",
                       "lValueRequested": false,
-                      "names": [
-                        "auctionId",
-                        "userSet",
-                        "state"
-                      ],
+                      "names": ["auctionId", "userSet", "state"],
                       "nodeType": "FunctionCall",
                       "src": "4614:141:0",
                       "tryCall": false,
@@ -15249,10 +15218,7 @@
                         "id": 412,
                         "name": "revert",
                         "nodeType": "Identifier",
-                        "overloadedDeclarations": [
-                          4294967277,
-                          4294967277
-                        ],
+                        "overloadedDeclarations": [4294967277, 4294967277],
                         "referencedDeclaration": 4294967277,
                         "src": "5513:6:0",
                         "typeDescriptions": {
@@ -16682,12 +16648,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x9F447a208718a3905aA8F99a77C57a3463e012d9",
-      "transactionHash": "0xad4ed675b9352205ecee74612dbe21a1d0974e3d2beff11d692761df377e77c3"
+      "address": "0xDc1B4C2C76347cBddd31e9840C0631aC47d4A320",
+      "transactionHash": "0x26568a1c02cbbc4d30186452f86e71f3f465d9a0616a2d2db42097eb659bbc6a"
     }
   },
-  "schemaVersion": "3.4.13",
-  "updatedAt": "2023-05-23T22:53:19.518Z",
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2023-05-22T23:54:25.619Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
