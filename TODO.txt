@@ -1,0 +1,16 @@
+//TODO: stylings
+    1- NEW AUCTION:
+        input boxes positions
+        date picker output adjust style
+        validate minimum price input
+
+
+
+
+//TODO: dashboard functionality
+    1- your bids:
+        remove it from dashboard (done)
+    2- in dashboard, view all active auctions {map} (today isa)    
+    3- search for auctions based on name matching
+    4- notifications (notify owner/bidder with auction state)
+    5- put "your bids" in user profile menu (amr making contract function)

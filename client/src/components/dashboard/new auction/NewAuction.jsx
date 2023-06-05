@@ -25,6 +25,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 //TODO: add validation for minimum price field
 //TODO: add style for date picker
+//FIXME: store image on infura only on submit  (not on image change)
+//FIXME: configure security deposit
 
 
 function NewAuction() {
@@ -37,6 +39,7 @@ function NewAuction() {
   const [ipfsHash, setIpfsHash] = useState('');
   // const [error, setError] = useState('');
   const [ipfs, setIpfs] = useState(undefined);
+  const [base64img, setBase64img] = useState('');
 
   React.useEffect(() => {
     try {
@@ -45,6 +48,7 @@ function NewAuction() {
         headers: {
           authorization,
         },
+
       });
       setIpfs(ipfsClient);
     } catch (error) {
@@ -56,29 +60,7 @@ function NewAuction() {
 
   let securityDeposit = minPrice / 2;
 
-  const onImageSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const files = (form[0]).files;
 
-    if (!files || files.length === 0) {
-      return alert("No files selected");
-    }
-
-    const file = files[0];
-    // upload files
-    const result = await ipfs.add(file);
-
-    setImages([
-      ...images,
-      {
-        cid: result.cid,
-        path: result.path,
-      },
-    ]);
-
-    form.reset();
-  };
 
 
   const web3Context = useWeb3();
@@ -162,8 +144,7 @@ function NewAuction() {
 
   };
 
-  const handleImageChange = async (imageData) => {
-    setImage(imageData);
+  const uploadImgToInfura = async (imageData) => {
     try {
       if (!ipfs) {
         throw new Error('IPFS not initialized');
@@ -174,41 +155,52 @@ function NewAuction() {
       };
 
       const ipfsResponse = await ipfs.add(imageData, options);
+
       const uploadedHash = ipfsResponse.path;
       console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
 
-      const newImage = {
-        cid: ipfsResponse.cid,
-        path: uploadedHash
-      };
+      return uploadedHash;
 
-      setImage(newImage);
+
     } catch (e) {
       console.log('Error uploading image to IPFS', e);
       throw e;
     }
 
+  }
+
+  const handleImageChange = async (imageData) => {
+    setImage(imageData);
+    setBase64img(imageData);
 
   };
 
   const createAuction = async (e) => {
     e.preventDefault();
+    if (base64img === '') {
+      alert('Please upload an image');
+      return;
+    };
     const address = await web3Context.hooks.getAccount();
+    const hash = uploadImgToInfura(base64img);
 
     const info = {
       //todo: add auction id
       seller: address,
       securityDeposit: securityDeposit,
-      minPrice: minPrice,
-      endDate: formatEndDate(endDate),
-      signPeriod: getConfirmationDate(),
+      minimumPrice: minPrice,
+      biddingEndDate: formatEndDate(endDate),
+      confirmationEndDate: getConfirmationDate(),
       itemName: title,
       itemDesc: description,
-      image: image ? image.path : '',
+      itemPicture: hash,
     };
 
     console.log(info);
-    //await web3Context.contract.methods.createAuction(info).send({ from: address });
+
+    const res = web3Context.contract.methods.createAuction(info).send({ from: address });
+    res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
+
     console.log("lol");
   };
 
@@ -225,7 +217,7 @@ function NewAuction() {
               {image && (
                 <div>
                   <p className='image-text'>Image Preview :</p>
-                  <img src={`${IPFS_BASE_URL}${image.path}`}
+                  <img src={base64img}
                     alt="Selected"
                     style={{ maxWidth: '400px', margin: '15px' }}
                     onError={(e) => {
@@ -300,6 +292,7 @@ function NewAuction() {
                 text='Confirm and place item for auction'
                 style='regular'
                 link='#'
+                disabled={base64img == ''}
               />
             </li>
           </ul>

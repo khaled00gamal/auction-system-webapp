@@ -180,6 +180,20 @@ contract SealedBidAuctionManager {
         return auctions[auctionId].info;
     }
 
+    function getActiveAuctions()
+        external
+        view
+        returns (PublicAuctionInfo[] memory)
+    {
+        PublicAuctionInfo[] memory activeAuctions;
+        for (uint256 i = 0; i < auctions.length; i++) {
+            if (auctions[i].info.state == AuctionState.Active) {
+                activeAuctions[i] = auctions[i].info;
+            }
+        }
+        return activeAuctions;
+    }
+
     // functions to be called during bidding period
 
     function placeBid(

@@ -19,11 +19,13 @@ const ImageUploader = ({ onImageChange }) => {
 
         if (file) {
             reader.readAsDataURL(file);
+            console.log(file);
         }
     };
 
     const handleClick = () => {
         fileInputRef.current.click(); // Trigger the file input click event
+
     };
 
     return (

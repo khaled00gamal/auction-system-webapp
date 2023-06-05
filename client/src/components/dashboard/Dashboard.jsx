@@ -9,10 +9,25 @@ import { useWeb3 } from '../../high-order components/Web3Provider';
 function Dashboard() {
   const web3Context = useWeb3();
   const [account, setAccount] = useState('');
+  const [activeAuctions, setActiveAuctions] = useState([]);
 
   useEffect(() => {
-    const func = async () => setAccount(await web3Context.hooks.getAccount());
-    func();
+    web3Context.hooks.getAccount().then((res) => {
+      setAccount(res);
+      web3Context.contract.methods
+        .getActiveAuctions()
+        .call({ from: res })
+        .then((res) => {
+          res.forEach((auction) => {
+            return;//auction.img = //call infura on img hash.then((res)=>{auction.img=res})
+
+          })
+
+
+
+          setActiveAuctions(res);
+        });
+    });
   });
 
   return (
@@ -20,9 +35,9 @@ function Dashboard() {
       <NavBar />
       <div className='dashboard-content'>
         <h2>Welcome Back, {account}</h2>
-        <div className='YourBidsSection'>
+        {/* <div className='YourBidsSection'>
           <YourBidsSection />
-        </div>
+        </div> */}
         <div className='TrendingAuctionsSection'>
           <TrendingAuctionsSection />
         </div>
