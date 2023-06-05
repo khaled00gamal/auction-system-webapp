@@ -140,10 +140,11 @@ function NewAuction() {
     return dateUnixTimeStamp;
   }
 
-  const handleMinPriceChange = (e) => {
-    setMinPrice(parseInt(e.target.value));
-    //TODO: Validate if the input is a number
-
+  const handleMinPriceChange = (event) => {
+    const value = event.target.value;
+    if (/^\d*$/.test(value)) {
+      setMinPrice(value);
+    }
   };
 
   const uploadImgToInfura = async (imageData) => {
