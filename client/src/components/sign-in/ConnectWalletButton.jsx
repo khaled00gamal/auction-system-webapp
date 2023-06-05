@@ -1,5 +1,7 @@
 import '../sign-in/sign-in styles/SignIn.css';
 
+import { Button } from "@material-tailwind/react";
+
 const ConnectWalletButton = ({
   onPressLogout,
   onPressConnect,
@@ -21,9 +23,11 @@ const ConnectWalletButton = ({
             <div>Loading...</div>
           </button>
         ) : (
-          <button onClick={onPressConnect} className='connect-metaMask-button'>
-            Connect Wallet
-          </button>
+              
+                <button onClick={onPressConnect} className='connect-metaMask-button'>
+                  Connect Wallet
+                </button>
+
         )}
         {/* {!loading ? (
                     <button onClick={onPressLogout} className="connect-metaMask-button">Disconnect</button>
