@@ -185,12 +185,24 @@ contract SealedBidAuctionManager {
         view
         returns (PublicAuctionInfo[] memory)
     {
-        PublicAuctionInfo[] memory activeAuctions;
+        uint256 activeCount = 0;
         for (uint256 i = 0; i < auctions.length; i++) {
             if (auctions[i].info.state == AuctionState.Active) {
-                activeAuctions[i] = auctions[i].info;
+                activeCount++;
             }
         }
+
+        PublicAuctionInfo[] memory activeAuctions = new PublicAuctionInfo[](
+            activeCount
+        );
+        uint256 currentIndex = 0;
+        for (uint256 i = 0; i < auctions.length; i++) {
+            if (auctions[i].info.state == AuctionState.Active) {
+                activeAuctions[currentIndex] = auctions[i].info;
+                currentIndex++;
+            }
+        }
+
         return activeAuctions;
     }
 

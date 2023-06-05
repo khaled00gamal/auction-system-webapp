@@ -1,7 +1,14 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .dashboard-content {
   margin-left: 53px;
   margin-right: 53px;
   margin-top: 18px;
+  flex: 1;
 }
 
 .dashboard-content .YourBidsSection {
