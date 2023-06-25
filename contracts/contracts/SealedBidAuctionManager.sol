@@ -3,8 +3,7 @@ pragma solidity ^0.8.13;
 
 // NOTE: All currency is wei
 
-// BUG (Hide bidders) or bids?
-// (TODO Use mixing to blind bidders)
+// TODO: compute securityDeposit = minimumPrice * 0.02
 
 contract SealedBidAuctionManager {
     /**
@@ -14,7 +13,7 @@ contract SealedBidAuctionManager {
     struct UserSetAuctionInfo {
         address payable seller;
         // auction rules
-        uint256 securityDeposit;
+        uint256 securityDeposit; // FIXME
         uint256 minimumPrice;
         // dates
         uint256 biddingEndDate;
@@ -22,7 +21,7 @@ contract SealedBidAuctionManager {
         // item
         string itemName;
         string itemDesc;
-        string itemPicture; // FIXME
+        string itemPicture;
     }
 
     enum AuctionState {

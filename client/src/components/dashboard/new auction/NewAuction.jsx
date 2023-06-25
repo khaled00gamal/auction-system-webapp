@@ -17,19 +17,11 @@ import { CalendarIcon } from '@heroicons/react/outline';
 // const projectId = process.env.PROJECT_ID;
 // const projectSecret = process.env.PROJECT_SECRET;
 
-const projectId = '2QLhGGUgQODTNGtYY0KiT2xCiqO';
-const projectSecret = 'd4f4cc97d6089911fafdaf2f1fd08339';
-const authorization = 'Basic ' + btoa(`${projectId}:${projectSecret}`);
-
-
-
 import "react-datepicker/dist/react-datepicker.css";
 
-//TODO: add validation for minimum price field
-//TODO: add style for date picker
-//FIXME: store image on infura only on submit  (not on image change)
-//FIXME: configure security deposit
-
+//FIXME: styling
+//FIXME: use .env
+//FIXME: remove securityDeposit computation
 
 function NewAuction() {
   const [title, setTitle] = useState('');
@@ -48,7 +40,7 @@ function NewAuction() {
       const ipfsClient = create({
         url: 'https://ipfs.infura.io:5001/api/v0',
         headers: {
-          authorization,
+          authorization: process.env.REACT_APP_INFURA_AUTHORIZATION,
         },
 
       });
@@ -58,11 +50,6 @@ function NewAuction() {
       setIpfs(null);
     }
   }, []);
-
-
-  let securityDeposit = minPrice / 2;
-
-
 
 
   const web3Context = useWeb3();
@@ -190,7 +177,7 @@ function NewAuction() {
     const info = {
       //todo: add auction id
       seller: address,
-      securityDeposit: securityDeposit,
+      securityDeposit: minPrice * 0.02,
       minimumPrice: minPrice,
       biddingEndDate: formatEndDate(endDate),
       confirmationEndDate: getConfirmationDate(),
