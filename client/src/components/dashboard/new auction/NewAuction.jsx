@@ -277,7 +277,7 @@ function NewAuction() {
                     </div>
                   </div>
 
-                  <div className="max-w-sm relative">
+                  {/* <div className="max-w-sm relative">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <CalendarIcon className="w-5 h-5 text-blue-500" />
                     </div>
@@ -288,6 +288,21 @@ function NewAuction() {
                       selected={endDate}
                       onChange={handleEndDateChange}
                     />
+                  </div> */}
+
+                  <div className='date-picker'>
+                    <DatePicker
+                      selected={endDate}
+                      onChange={handleEndDateChange}
+                      dateFormat="Pp"
+                      placeholderText="Select date"
+                      minDate={new Date()}
+                      className="custom-datepicker"
+                    />
+                    {endDate && (
+                      <p>Selected Date and Time: {endDate.toString()}</p>
+                    )}
+
                   </div>
 
 
@@ -314,7 +329,7 @@ function NewAuction() {
               </form>
 
 
-
+                
 
 
 
