@@ -11,7 +11,7 @@ function Dashboard() {
   const [account, setAccount] = useState('');
   const [activeAuctions, setActiveAuctions] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
     web3Context.hooks.getAccount().then((acc) => {
       setAccount(acc);
       web3Context.contract.methods
@@ -26,10 +26,10 @@ function Dashboard() {
           //     console.log(e);
           //   } //call infura on img hash.then((res)=>{auction.img=res})
           // })
-          setActiveAuctions(auctions);
+          // setActiveAuctions(auctions);
         });
     });
-  });
+  // });
 
   // console.log("printing active auctions");
   // console.log(activeAuctions);

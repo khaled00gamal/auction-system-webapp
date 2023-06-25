@@ -21,9 +21,9 @@ function App() {
           <Route path='/Support' element={<Support />}></Route>
           <Route path='/Dashboard/' element={<Dashboard />}></Route>
           <Route path='/Dashboard/NewAuction' element={<NewAuction />}></Route>
-          <Route path='/Dashboard/ViewAuction' element={<ViewAuction />}></Route>
-          <Route path='/Bidding' element={<Bidding />}></Route>
-          <Route path='/ViewAuction' element={<ViewAuction />}></Route>
+          <Route path='/Dashboard/ViewAuction/:auctionId' element={<ViewAuction />}></Route>
+          {/* <Route path='/Bidding' element={<Bidding />}></Route> */}
+          {/* <Route path='/ViewAuction' element={<ViewAuction />}></Route> */}
         </Routes>
       </Router>
     </Web3Provider>
