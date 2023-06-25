@@ -8,6 +8,9 @@ import './ViewAuction.css';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
 import { useParams } from 'react-router-dom';
 
+
+
+
 function ViewAuction() {
   const [bid, setBid] = useState('');
   const { auctionId } = useParams();
@@ -24,29 +27,28 @@ function ViewAuction() {
         
       })
     })
-  }, [web3Context])
-
-    const handleBidChange = (e) => {
-      setBid(e.target.value);
-    };
-
     
-    const placeBid = async (e) => {
-      
+   
+  }, [web3Context])
+  const currentDate = new Date(auctionInfo.biddingEndDate * 1000)
+  const dateString = currentDate.toUTCString();
+  const handleBidChange = (e) => {
+    setBid(e.target.value);
+  };
   
-      const info = {
-        auctionId:auctionId,
-        bid:bid
-      };
-  
-      console.log(info);
-  
-      const res = web3Context.contract.methods.placeBid(info).send({ from: address });
-      res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
-  
-      console.log("lol");
+  const placeBid = async (e) => {
+    const address = await web3Context.hooks.getAccount();
+    const info = {
+      auctionId: auctionId,
+      bid: bid
     };
-  
+    const res = web3Context.contract.methods.placeBid(auctionId, bid).send({ from: address });
+    res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
+    console.log("lol");
+  };
+ 
+
+
   return (
     <div>
       <NavBar />
@@ -61,10 +63,10 @@ function ViewAuction() {
             </div>
             <div className='item-info-wrapper'>
               <div className='item-name'>
-                <h3>{auctionInfo.itemName}</h3>
+                <h3>Auction Name:{auctionInfo.itemName}</h3>
               </div>
               <p>{auctionInfo.itemDesc}</p>
-              <p>Auction ends in: {auctionInfo.biddingEndDate}</p>
+              <p>Auction ends in: {dateString}</p>
             </div>
             <div className="input-field-group">
                 <label>Enter bid amount: </label>
@@ -90,6 +92,7 @@ function ViewAuction() {
                 text='Place a bid'
                 style='regular'
                 link='#'
+                onclick={placeBid}
               />
             </li>
           </ul>
