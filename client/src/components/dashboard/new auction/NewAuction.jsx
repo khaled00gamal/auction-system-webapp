@@ -8,8 +8,9 @@ import { useWeb3 } from '../../../high-order components/Web3Provider';
 import DatePicker from "react-datepicker";
 import ImageUploader from './ImageUploader';
 import './dropDown.css';
-import { create, CID, IPFSHTTPClient } from 'ipfs-http-client';
-import { IPFS_BASE_URL } from '../../../contants';
+import { createHelia } from 'helia';
+import { strings } from '@helia/strings';
+// import { create, CID, IPFSHTTPClient } from 'ipfs-http-client';
 import Datepicker from "react-tailwindcss-datepicker";
 import { CalendarIcon } from '@heroicons/react/outline';
 
@@ -22,6 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 //FIXME: styling
 //FIXME: use .env
 //FIXME: remove securityDeposit computation
+//TODO: add navigation links
 
 function NewAuction() {
   const [title, setTitle] = useState('');
@@ -30,29 +32,22 @@ function NewAuction() {
   const [signPeriod, setSignPeriod] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [image, setImage] = useState('');
-  const [ipfsHash, setIpfsHash] = useState('');
-  // const [error, setError] = useState('');
-  const [ipfs, setIpfs] = useState(undefined);
+  // const [ipfs, setIpfs] = useState();
   const [base64img, setBase64img] = useState('');
 
-  React.useEffect(() => {
-    try {
-      const ipfsClient = create({
-        url: 'https://ipfs.infura.io:5001/api/v0',
-        headers: {
-          authorization: process.env.REACT_APP_INFURA_AUTHORIZATION,
-        },
-
-      });
-      setIpfs(ipfsClient);
-    } catch (error) {
-      console.error('IPFS error', error);
-      setIpfs(null);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   try {
+  //     const ipfsClient = IPFS.create();
+  //     setIpfs(ipfsClient);
+  //   } catch (error) {
+  //     console.error('IPFS error', error);
+  //     setIpfs(null);
+  //   }
+  // }, []);
 
 
   const web3Context = useWeb3();
+  console.log('WEB3', web3Context)
 
   const DropdownMenu = () => {
 
@@ -136,20 +131,27 @@ function NewAuction() {
 
   const uploadImgToInfura = async (imageData) => {
     try {
-      if (!ipfs) {
-        throw new Error('IPFS not initialized');
-      }
+      // if (!ipfs) {
+      //   throw new Error('IPFS not initialized');
+      // }
 
-      const options = {
-        pin: true,
-      };
+      const helia = await createHelia('https://ipfs.infura.io:5001/api/v0');
+      const s = strings(helia);
+      const resp = await s.add(imageData);
+      await s.get(resp);
 
-      const ipfsResponse = await ipfs.add(imageData, options);
+      console.log('response', resp);
 
-      const uploadedHash = ipfsResponse.path;
-      console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
+      // const options = {
+      //   pin: true,
+      // };
 
-      return uploadedHash;
+      // const ipfsResponse = (await IPFS.create()).add(imageData, options);
+
+      // const uploadedHash = ipfsResponse.path;
+      // console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
+
+      // return uploadedHash;
 
 
     } catch (e) {
@@ -177,7 +179,7 @@ function NewAuction() {
     const info = {
       //todo: add auction id
       seller: address,
-      securityDeposit: minPrice * 0.02,
+      securityDeposit: minPrice,
       minimumPrice: minPrice,
       biddingEndDate: formatEndDate(endDate),
       confirmationEndDate: getConfirmationDate(),

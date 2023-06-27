@@ -1,0 +1,44 @@
+Approach 1
+
+[bid phase]
+
+bidder =>   x : bid
+            y : ore_enc(x)
+            z : enc_owner(y)
+            p : pedersen_commit(z)  => to smart contract
+
+[reveal phase]
+
+bidder => reveal commitment
+            everyone can access all z's
+            but only owner can access all y's
+
+[security]
+
+- owner sees all bids
+- everyone sees winning bid
+
+=================================================================
+
+Approach 2
+
+[bid phase]
+
+bidder =>   x : bid
+            y : enc_owner(x)
+            p : pedersen_commit(y) => to smart contract
+
+[reveal phase]
+
+bidder => reveal commitment
+            everyone can access all y'sees
+            only owner can see actual bids
+
+owner  => generates zkp that winning bid is valid => to smart contract
+
+bidder => can verify the proof
+
+[security]
+
+- owner sees all bids
+- bidders see nothing

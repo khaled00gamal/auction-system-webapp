@@ -1,24 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './Button';
 import '../styles/Card.css';
 import { propTypes } from 'react-bootstrap/esm/Image';
-import { IPFS_BASE_URL } from '../../contants';
 
-function Card(props) {
+//FIXME: refactor ipfs api
+
+function Card({auctionId, auctionTitle, imgHash}) {
+  const [image, setImage] = useState();
+  useEffect(() => {
+    try {
+      const ipfsClient = create({
+        url: 'https://ipfs.infura.io:5001/api/v0',
+        headers: {
+          authorization: process.env.REACT_APP_INFURA_AUTHORIZATION,
+        },
+
+      });
+
+      const df = ipfsClient.get(imgHash)
+      console.log('got:', df)
+      // .then((img) => {
+      //   console.log('image', img);
+      //   setImage(img);
+      // })
+
+    } catch (error) {
+      console.error('IPFS error', error);
+    }
+  }, []);
   return (
     <div className='card-wrapper'>
       <div className='image-and-caption-wrapper'>
         <div className='image-container'>
-          <img className='image' src={`${IPFS_BASE_URL}${props.itemImageLink}`} alt='' />
+          <img className='image' src={image} alt='' />
         </div>
-        <p>{props.itemName}</p>
+        <p>{auctionTitle}</p>
       </div>
       <Button
         text='View'
         width='276px'
         size='medium'
         style='regular'
-        link={`/item/${props.itemId}`}
+        link={`/Auction/${auctionId}`} //TODO
       />
     </div>
   );

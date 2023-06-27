@@ -12,29 +12,15 @@ function Dashboard() {
   const [activeAuctions, setActiveAuctions] = useState([]);
 
   useEffect(() => {
+
     web3Context.hooks.getAccount().then((acc) => {
       setAccount(acc);
-      web3Context.contract.methods
-        .getActiveAuctions()
-        .call({ from: acc })
-        .then((auctions) => {
-          // auctions.forEach((auction) => {
-          //   try {
-          //     const imgHash = uploadingToInfura(auction.itemPicture);
-          //     auction.img = imgHash;
-          //   } catch (e) {
-          //     console.log(e);
-          //   } //call infura on img hash.then((res)=>{auction.img=res})
-          // })
-          setActiveAuctions(auctions);
-        });
+
+      web3Context.contract.methods.getActiveAuctions().call({ from: acc }).then((auctions) => {
+        setActiveAuctions(auctions);
+      })
     });
-  });
-
-  // console.log("printing active auctions");
-  // console.log(activeAuctions);
-
-
+  }, [web3Context]);
 
   return (
     <div className='dashboard-wrapper'>
@@ -47,9 +33,9 @@ function Dashboard() {
           {activeAuctions.map((auction) => (
             <Card
               key={auction.auctionId}
-              itemImageLink={auction.itemPicture}
-              itemName={auction.itemName}
-              itemId={auction.auctionId}
+              imgHash={auction.itemPicture}
+              auctionTitle={auction.itemName}
+              auctionId={auction.auctionId}
             />
           ))}
         </div>
