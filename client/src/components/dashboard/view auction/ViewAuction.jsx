@@ -38,11 +38,14 @@ function ViewAuction() {
   
   const placeBid = async (e) => {
     const address = await web3Context.hooks.getAccount();
-    const info = {
-      auctionId: auctionId,
-      bid: bid
-    };
-    const res = web3Context.contract.methods.placeBid(auctionId, bid).send({ from: address });
+    // const info = {
+    //   auctionId: auctionId,
+    //   bid: bid
+    // };
+    console.log("this is auction id" , parseInt(auctionId))
+    console.log("this is bid" , parseInt(bid))
+    const res = web3Context.contract.methods.placeBid(parseInt(auctionId), parseInt(bid)).send({ from: address });
+    
     res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
     console.log("lol");
   };
