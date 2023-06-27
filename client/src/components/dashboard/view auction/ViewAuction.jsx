@@ -24,6 +24,7 @@ function ViewAuction() {
         console.log('after calling')
 
         setAuctionInfo(auction.userSet)
+        // NOTE: why send all auction data, if only userSet is used?
         
       })
     })
@@ -44,7 +45,7 @@ function ViewAuction() {
     // };
     console.log("this is auction id" , parseInt(auctionId))
     console.log("this is bid" , parseInt(bid))
-    const res = web3Context.contract.methods.placeBid(parseInt(auctionId), parseInt(bid)).send({ from: address });
+    const res = web3Context.contract.methods.placeBid(parseInt(auctionId), parseInt(bid)).send({ from: address, value: auctionInfo.securityDeposit });
     
     res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
     console.log("lol");

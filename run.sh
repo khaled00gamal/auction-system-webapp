@@ -4,8 +4,9 @@ cd ~/fghdh/auction-system-webapp/client
 npm install
 
 cd ../contracts
-zsh -c 'truffle migrate --reset'
-cp build/contracts/SealedBidAuctionManager.json ../client/src/contract/
+zsh -c 'truffle migrate --reset' # doesn't work; script fails silently here
+# FIXME
+cp --overwrite build/contracts/SealedBidAuctionManager.json ../client/src/contract/
 
 cd ../client
 npm start
