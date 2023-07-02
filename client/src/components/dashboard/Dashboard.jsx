@@ -10,6 +10,7 @@ function Dashboard() {
   const web3Context = useWeb3();
   const [account, setAccount] = useState('');
   const [activeAuctions, setActiveAuctions] = useState([]);
+  
 
   useEffect(() => {
 
@@ -21,6 +22,7 @@ function Dashboard() {
       })
     });
   }, [web3Context]);
+  
 
   return (
     <div className='dashboard-wrapper'>
