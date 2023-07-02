@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '../../essentials/NavBar';
 import Footer from '../../landing-page/Footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './NewAuction.css';
 import Button from '../../essentials/Button';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
@@ -42,6 +42,8 @@ function NewAuction() {
   // const [error, setError] = useState('');
   const [ipfs, setIpfs] = useState(undefined);
   const [base64img, setBase64img] = useState('');
+  
+ 
 
   React.useEffect(() => {
     try {
@@ -64,6 +66,17 @@ function NewAuction() {
 
 
 
+  useEffect(() => {
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+    return () => {
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
+  }, []);
+
+  function handleAccountsChanged(accounts) {
+    window.location.reload();
+  }
 
   const web3Context = useWeb3();
 

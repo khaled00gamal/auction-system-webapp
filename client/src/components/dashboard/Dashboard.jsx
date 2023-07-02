@@ -10,7 +10,17 @@ function Dashboard() {
   const web3Context = useWeb3();
   const [account, setAccount] = useState('');
   const [activeAuctions, setActiveAuctions] = useState([]);
-  
+  useEffect(() => {
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+    return () => {
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
+  }, []);
+
+  function handleAccountsChanged(accounts) {
+    window.location.reload();
+  }
 
   useEffect(() => {
 
@@ -23,7 +33,6 @@ function Dashboard() {
     });
   }, [web3Context]);
   
-
   return (
     <div className='dashboard-wrapper'>
       <NavBar />

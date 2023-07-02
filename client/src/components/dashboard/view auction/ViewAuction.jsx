@@ -17,6 +17,19 @@ function ViewAuction() {
   const [auctionInfo , setAuctionInfo] = useState('');
   const [account, setAccount] = useState('');
   const web3Context = useWeb3();
+
+  useEffect(() => {
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+    return () => {
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
+  }, []);
+
+  function handleAccountsChanged(accounts) {
+    window.location.reload();
+  }
+
   useEffect(() => {
     console.log('WEB3', web3Context)
     web3Context.hooks.getAccount().then((address) => {
@@ -94,7 +107,7 @@ function ViewAuction() {
         <div className='buttons'>
           <ul>
             <li>
-              <Button size='medium' text='Back' style='text' link='#' />
+              <Button size='medium' text='Back' style='text' link={`/Dashboard`} />
             </li>
             <li>
               <Button
