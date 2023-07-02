@@ -22,7 +22,7 @@ function Button(props) {
   if (props.color) {
     variant = variant + '-' + props.color;
   }
-  const href = props.link.startsWith('http') ? props.link : `${window.location.origin}${props.link}`;
+ 
 
   //let variant = "button-" + props.size + "-" + props.style;
   return (
