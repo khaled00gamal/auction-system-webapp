@@ -17,7 +17,7 @@ function NavBar() {
       <ul className='navigation'>
         <Link to='newauction'>
           {' '}
-          <Button size='medium' text='Sell Items' style='regular' link='/' />
+          <Button size='medium' text='Sell Items' style='regular' link={`${window.location.origin}/Dashboard/newauction`} />
         </Link>
         <img src={notification} alt='notifications' />
         <img src={profile} alt='notifications' />

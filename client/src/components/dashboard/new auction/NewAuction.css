@@ -138,6 +138,7 @@
 } */
 
 .date-picker {
+  display: none;
   border: 2px solid black;
   border-radius: 4px;
   padding-top: -5%;
