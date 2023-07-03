@@ -17,6 +17,7 @@ function ViewAuction() {
   const [auctionInfo , setAuctionInfo] = useState('');
   const [account, setAccount] = useState('');
   const web3Context = useWeb3();
+  const currentTime = new Date();
 
   useEffect(() => {
     window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -46,12 +47,11 @@ function ViewAuction() {
     
    
   }, [web3Context])
-  const currentDate = new Date(auctionInfo.biddingEndDate * 1000)
-  const dateString = currentDate.toUTCString();
+  const auctionDate = new Date(auctionInfo.biddingEndDate * 1000)
+  const dateString = auctionDate.toUTCString();
   const handleBidChange = (e) => {
     setBid(e.target.value);
   };
-  
   const placeBid = async (e) => {
     const address = await web3Context.hooks.getAccount();
     // const info = {
@@ -89,7 +89,7 @@ function ViewAuction() {
             </div>
           
             <div>
-              {auctionInfo.seller !== account ? (
+              {auctionDate.getTime() > currentTime.getTime() && auctionInfo.seller !== account ? (
                 <div className="input-field-group">
                   <label>Enter bid amount: </label>
                   <input
@@ -102,6 +102,17 @@ function ViewAuction() {
                 </div>
               ) : null}
             </div>
+            {auctionDate.getTime() < currentTime.getTime() && auctionInfo.seller !== account ?(
+            
+            <div>
+        
+                <form class="file-upload-form">
+                  <label for="file-upload" class="file-upload-label">Select a file to upload:</label>
+                  <input type="file" id="file-upload" name="file-upload" class="file-upload-input" />
+                  <input type="submit" value="Upload" class="file-upload-submit" />
+                </form>
+            </div>
+            ) : null}
           </div>
         </div>
         <div className='buttons'>
