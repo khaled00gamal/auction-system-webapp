@@ -29,7 +29,7 @@ function Button(props) {
   return (
     <a
       className={variant}
-      onClick={() => { window.location.href = href }}
+      onClick={props.onclick}
       href={props.link}
       style={{ minWidth: props.width }}
     >
