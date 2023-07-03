@@ -5,7 +5,7 @@ Approach 1
 bidder =>   x : bid
             y : ore_enc(x)
             z : enc_owner(y)
-            p : pedersen_commit(z)  => to smart contract
+            [ d : commit(z) + c : commit(y) ]  => to smart contract
 
 [reveal phase]
 
@@ -17,6 +17,25 @@ bidder => reveal commitment
 
 - owner sees all bids
 - everyone sees winning bid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 =================================================================
 

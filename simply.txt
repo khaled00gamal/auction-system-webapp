@@ -1,0 +1,63 @@
+Let's briefly review what we want.
+
+We want: 1. A bidder to commit to a bid x (hiding, binding)
+
+    2. At reveal time, to be able to "see" provably who has won.
+
+How to achieve this?
+
+Approach 1:
+
+    Reveal the committed bids only to the owner.
+
+    Have the owner sort them.
+
+    Have the owner publish his result, who the winner is.
+
+    Have the owner prove that he is honest.
+
+Problem with approach 1:
+
+    How to reveal only to the owner?
+        That is, how to send a private message through a public channel?
+
+    - Encrypt to the owner?
+        But then, how to prove that this revelation is honest?
+
+Approach 2:
+
+    Reveal the committed bids to everyone,
+        but in such a way that only the order is revealed, not the value.
+
+Problem with approach 2:
+
+    Order-Revealing Encryptions require a symmetric key.
+        That is, if a bidder encrypts his bid himself,
+        he will be able to decrypt other encrypted bids too.
+
+    - Encrypt the ORE to the owner?
+        But then, how to prove that the published result corresponds to
+        an encrypted ORE?
+
+After some thought, we see that both problems are, in essence, the same!
+
+The problem, abstractly, is this:
+
+    How to prove that a decryption corresponds to an encryption, without
+    revealing the decryption key?
+
+Solution, simply:
+
+    Commit to the decryption!
+
+That means:
+
+    For Approach 1:
+        Have the decryption be committed to beforehand.
+
+    For Approach 2:
+        Encrypt the revelation to the owner, and have the encryption be
+        committed beforehand.
+
+Therefore, both approaches are possible!
+
