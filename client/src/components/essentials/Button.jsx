@@ -23,7 +23,7 @@ function Button(props) {
     variant = variant + '-' + props.color;
   }
 
-  const href = props.link && props.link.startsWith('http') ? props.link : `${window.location.origin}${props.link}`;
+  //const href = props.link && props.link.startsWith('http') ? props.link : `${window.location.origin}${props.link}`;
 
   //let variant = "button-" + props.size + "-" + props.style;
   return (
