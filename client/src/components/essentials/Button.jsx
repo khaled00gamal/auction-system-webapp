@@ -22,14 +22,14 @@ function Button(props) {
   if (props.color) {
     variant = variant + '-' + props.color;
   }
- 
-  const href = props.link.startsWith('http') ? props.link : `${window.location.origin}${props.link}`;
+
+  // const href = props.link && props.link.startsWith('http') ? props.link : `${window.location.origin}${props.link}`;
 
   //let variant = "button-" + props.size + "-" + props.style;
   return (
     <a
       className={variant}
-      onClick={props.link}
+      onClick={props.onclick}
       href={props.link}
       style={{ minWidth: props.width }}
     >
