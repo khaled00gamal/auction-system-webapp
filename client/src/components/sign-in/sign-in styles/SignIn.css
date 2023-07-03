@@ -52,6 +52,7 @@ body {
   margin-top: 15%;
   border: none;
   color: #0080ff;
+  background-color: white;
   padding: 12px 24px;
   text-align: center;
   text-decoration: none;
@@ -60,6 +61,7 @@ body {
   line-height: 24px;
   border-radius: 16.8px;
   position: relative;
+  font-weight: bold;
 }
 
 .text-center {
@@ -67,13 +69,14 @@ body {
 }
 
 .connect-metaMask-button:hover {
-  background-color: #6c9bc9;
+  background-color: #dceeff;
 }
 
 .go-to-dashboard-button {
   margin-top: 15%;
   border: none;
   color: #0080ff;
+  background-color: white;
   padding: 12px 24px;
   text-align: center;
   text-decoration: none;
@@ -82,8 +85,9 @@ body {
   line-height: 24px;
   border-radius: 16.8px;
   position: relative;
+  font-weight: bold;
 }
 
 .go-to-dashboard-button:hover {
-  background-color: #6c9bc9;
+  background-color: #dceeff;
 }
