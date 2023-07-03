@@ -105,7 +105,9 @@ function ViewAuction() {
             {auctionDate.getTime() < currentTime.getTime() && auctionInfo.seller !== account ?(
             
             <div>
-        
+
+
+                <p>Reveal Phase! Auction has ended.</p>
                 <form class="file-upload-form">
                   <label for="file-upload" class="file-upload-label">Select a file to upload:</label>
                   <input type="file" id="file-upload" name="file-upload" class="file-upload-input" />
