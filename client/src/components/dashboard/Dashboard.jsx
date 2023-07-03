@@ -45,41 +45,16 @@ function Dashboard() {
                 <h3 className="text-base md:text-lg leading-tighter tracking-tighter" data-aos="zoom-y-out">Welcome back {account}</h3>
                 <h3 className="text-3xl md:text-4xl font-semibold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">Active Auctions</h3>
                 <div className="flex flex-wrap justify-start">
-                  <div className='w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-5'>
-                    <Card
-                      key={123}
-                      imgHash={123}
-                      auctionTitle={'hamo bika'}
-                      auctionId={123}
-                    />
-                  </div>
-
-                  <div className='w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-5'>
-                    <Card
-                      key={123}
-                      imgHash={123}
-                      auctionTitle={'hamo bika'}
-                      auctionId={123}
-                    />
-                  </div>
-
-                  <div className='w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-5fsh'>
-                    <Card
-                      key={123}
-                      imgHash={123}
-                      auctionTitle={'hamo bika'}
-                      auctionId={123}
-                    />
-                  </div>
-
-                  <div className='w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-9'>
-                    <Card
-                      key={123}
-                      imgHash={123}
-                      auctionTitle={'hamo bika'}
-                      auctionId={123}
-                    />
-                  </div>
+                  {activeAuctions.map((auction) => (
+                    <div key={auction.auctionId} className="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-5">
+                      <Card
+                        key={auction.auctionId}
+                        imgHash={auction.itemPicture}
+                        auctionTitle={auction.itemName}
+                        auctionId={auction.auctionId}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
 

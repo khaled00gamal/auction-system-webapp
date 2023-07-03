@@ -22,10 +22,10 @@ function Card({ auctionId, auctionTitle, imgHash, imgsrc }) {
 
       const df = ipfsClient.get(imgHash)
       console.log('got:', df)
-      // .then((img) => {
-      //   console.log('image', img);
-      //   setImage(img);
-      // })
+      .then((img) => {
+        console.log('image', img);
+        setImage(img);
+      })
 
     } catch (error) {
       console.error('IPFS error', error);
@@ -37,7 +37,7 @@ function Card({ auctionId, auctionTitle, imgHash, imgsrc }) {
       <Link to={`/Dashboard/viewauction/${auctionId}`}>
         <a className="block">
           <div className="aspect-w-4 aspect-h-3 pb-3">
-            <img className="object-cover rounded-t-lg" src="https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="product image" />
+            <img className="object-cover rounded-t-lg" src={image} alt="product image" />
           </div>
         </a>
       </Link>
