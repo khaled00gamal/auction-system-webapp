@@ -1,16 +1,15 @@
 import React from 'react';
 import NavBar from '../../essentials/NavBar';
 import Footer from '../../landing-page/Footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './NewAuction.css';
 import Button from '../../essentials/Button';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
 import DatePicker from "react-datepicker";
 import ImageUploader from './ImageUploader';
 import './dropDown.css';
-import { createHelia } from 'helia';
-import { strings } from '@helia/strings';
-// import { create, CID, IPFSHTTPClient } from 'ipfs-http-client';
+import { create, CID, IPFSHTTPClient } from 'ipfs-http-client';
+// import { IPFS_BASE_URL } from '../../../contants';
 import Datepicker from "react-tailwindcss-datepicker";
 import { CalendarIcon } from '@heroicons/react/outline';
 
@@ -18,12 +17,19 @@ import { CalendarIcon } from '@heroicons/react/outline';
 // const projectId = process.env.PROJECT_ID;
 // const projectSecret = process.env.PROJECT_SECRET;
 
+const projectId = '2QLhGGUgQODTNGtYY0KiT2xCiqO';
+const projectSecret = 'd4f4cc97d6089911fafdaf2f1fd08339';
+const authorization = 'Basic ' + btoa(`${projectId}:${projectSecret}`);
+
+
+
 import "react-datepicker/dist/react-datepicker.css";
 
-//FIXME: styling
-//FIXME: use .env
-//FIXME: remove securityDeposit computation
-//TODO: add navigation links
+//TODO: add validation for minimum price field
+//TODO: add style for date picker
+//FIXME: store image on infura only on submit  (not on image change)
+//FIXME: configure security deposit
+
 
 function NewAuction() {
   const [title, setTitle] = useState('');
@@ -32,22 +38,47 @@ function NewAuction() {
   const [signPeriod, setSignPeriod] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [image, setImage] = useState('');
-  // const [ipfs, setIpfs] = useState();
+  const [ipfsHash, setIpfsHash] = useState('');
+  // const [error, setError] = useState('');
+  const [ipfs, setIpfs] = useState(undefined);
   const [base64img, setBase64img] = useState('');
+  
+ 
 
-  // React.useEffect(() => {
-  //   try {
-  //     const ipfsClient = IPFS.create();
-  //     setIpfs(ipfsClient);
-  //   } catch (error) {
-  //     console.error('IPFS error', error);
-  //     setIpfs(null);
-  //   }
-  // }, []);
+  React.useEffect(() => {
+    try {
+      const ipfsClient = create({
+        url: 'https://ipfs.infura.io:5001/api/v0',
+        headers: {
+          authorization,
+        },
 
+      });
+      setIpfs(ipfsClient);
+    } catch (error) {
+      console.error('IPFS error', error);
+      setIpfs(null);
+    }
+  }, []);
+
+
+  let securityDeposit = minPrice / 2;
+
+
+
+  useEffect(() => {
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+    return () => {
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
+  }, []);
+
+  function handleAccountsChanged(accounts) {
+    window.location.reload();
+  }
 
   const web3Context = useWeb3();
-  console.log('WEB3', web3Context)
 
   const DropdownMenu = () => {
 
@@ -87,6 +118,7 @@ function NewAuction() {
 
   const handleEndDateChange = (date) => {
     setEndDate(date);
+    console.log(date)
   };
 
   const formatEndDate = (date) => {
@@ -100,7 +132,6 @@ function NewAuction() {
 
     const formattedDateObject = new Date(formattedDate);
     const dateUnixTimeStamp = Math.floor(formattedDateObject.getTime() / 1000);
-
     return dateUnixTimeStamp;
   };
 
@@ -131,27 +162,20 @@ function NewAuction() {
 
   const uploadImgToInfura = async (imageData) => {
     try {
-      // if (!ipfs) {
-      //   throw new Error('IPFS not initialized');
-      // }
+      if (!ipfs) {
+        throw new Error('IPFS not initialized');
+      }
 
-      const helia = await createHelia('https://ipfs.infura.io:5001/api/v0');
-      const s = strings(helia);
-      const resp = await s.add(imageData);
-      await s.get(resp);
+      const options = {
+        pin: true,
+      };
 
-      console.log('response', resp);
+      const ipfsResponse = await ipfs.add(imageData, options);
 
-      // const options = {
-      //   pin: true,
-      // };
+      const uploadedHash = ipfsResponse.path;
+      console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
 
-      // const ipfsResponse = (await IPFS.create()).add(imageData, options);
-
-      // const uploadedHash = ipfsResponse.path;
-      // console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
-
-      // return uploadedHash;
+      return uploadedHash;
 
 
     } catch (e) {
@@ -177,9 +201,8 @@ function NewAuction() {
     const hash = uploadImgToInfura(base64img);
 
     const info = {
-      //todo: add auction id
       seller: address,
-      securityDeposit: minPrice,
+      securityDeposit: securityDeposit,
       minimumPrice: minPrice,
       biddingEndDate: formatEndDate(endDate),
       confirmationEndDate: getConfirmationDate(),
@@ -265,8 +288,8 @@ function NewAuction() {
                       </label>
                     </div>
                   </div>
-
-                  {/* <div className="max-w-sm relative">
+{/* 
+                  <div className="max-w-sm relative">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                       <CalendarIcon className="w-5 h-5 text-blue-500" />
                     </div>
@@ -279,6 +302,27 @@ function NewAuction() {
                     />
                   </div> */}
 
+                  <div className="max-w-sm relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <CalendarIcon className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <input
+                      type="date"
+                      className="bg-blue-50 border border-blue-300 text-blue-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+                      placeholder="Select date"
+                      value={endDate ? endDate.toISOString().substr(0, 10) : ''}
+                      onChange={(event) => {
+                        handleEndDateChange(new Date(event.target.value));
+                      }}
+                      min={new Date()}
+                    />
+                    {endDate && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        Selected Date: {endDate.toDateString()}
+                      </p>
+                    )}
+                    
+                  </div>
                   <div className='date-picker'>
                     <DatePicker
                       selected={endDate}
@@ -415,7 +459,7 @@ function NewAuction() {
         <div className='buttons'>
           <ul>
             <li>
-              <Button size='medium' text='Back' style='text' link='#' />
+              <Button size='medium' text='Back' style='text' link={`/Dashboard`}/>
             </li>
             <li>
               <Button
@@ -423,7 +467,7 @@ function NewAuction() {
                 size='medium'
                 text='Confirm and place item for auction'
                 style='regular'
-                link='#'
+                link={`/Dashboard`}
                 disabled={base64img == ''}
               />
             </li>

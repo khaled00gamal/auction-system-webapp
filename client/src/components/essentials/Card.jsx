@@ -7,6 +7,7 @@ import { propTypes } from 'react-bootstrap/esm/Image';
 
 function Card({auctionId, auctionTitle, imgHash}) {
   const [image, setImage] = useState();
+  console.log(auctionTitle)
   useEffect(() => {
     try {
       const ipfsClient = create({
@@ -27,6 +28,7 @@ function Card({auctionId, auctionTitle, imgHash}) {
     } catch (error) {
       console.error('IPFS error', error);
     }
+    
   }, []);
   return (
     <div className='card-wrapper'>
@@ -41,7 +43,7 @@ function Card({auctionId, auctionTitle, imgHash}) {
         width='276px'
         size='medium'
         style='regular'
-        link={`/Auction/${auctionId}`} //TODO
+        link={`/Dashboard/viewauction/${auctionId}`} //TODO
       />
     </div>
   );
