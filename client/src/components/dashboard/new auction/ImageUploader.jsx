@@ -30,8 +30,8 @@ const ImageUploader = ({ onImageChange }) => {
 
     return (
         <div>
-            <div className="custom-file-upload" onClick={handleClick}>
-                Upload Image
+            <div onClick={handleClick}>
+                <button type="submit" className="btn text-white bg-blue-500 hover:bg-blue-400 w-full sm:w-auto sm:mb-0 ml-auto">Choose a file</button>
             </div>
             <input type="file"
                 accept='image/*'

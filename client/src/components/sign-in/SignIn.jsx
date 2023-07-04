@@ -48,8 +48,8 @@ function SignIn() {
       <div className='col text-center'>
         <h1>Connect Now</h1>
         <p>
-          Connect your MetaMask wallet to place bids,set <br />
-          up Auctions and more.
+          Connect your MetaMask wallet to place bids, set <br />
+          up auctions and more.
         </p>
         <ConnectWalletButton
           onPressConnect={onPressConnect}

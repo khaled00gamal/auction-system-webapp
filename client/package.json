@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
     "@helia/strings": "^1.0.0",
     "@heroicons/react": "^1.0.6",
     "@material-tailwind/html": "^2.0.0",
