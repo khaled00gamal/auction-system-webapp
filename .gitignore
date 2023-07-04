@@ -4,7 +4,7 @@
 /client/node_modules
 
 # production
-build/
+/contracts/build/
 
 # misc
 .DS_Store
