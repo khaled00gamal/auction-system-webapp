@@ -7,8 +7,8 @@ contract SealedBidAuctionManager {
     struct UserSetAuctionInfo {
         // administrative
         address payable owner;
-        string params;
-        string owner_pkey;
+        bytes params;
+        bytes owner_pkey;
         // item
         string itemName;
         string itemDesc;
@@ -28,11 +28,11 @@ contract SealedBidAuctionManager {
         bytes32 c;
         bytes32 d;
         // to reveal
-        string z;
+        bytes z;
     }
 
     struct AuctionWinner {
-        string y;
+        bytes y;
         address bidder;
     }
 
@@ -117,17 +117,6 @@ contract SealedBidAuctionManager {
     }
 
     // private functions
-
-    function _stringToBytes32(
-        string memory source
-    ) private pure returns (bytes32 result) {
-        bytes memory b = bytes(source);
-        if (b.length == 0) return 0;
-
-        assembly {
-            result := mload(add(source, 32))
-        }
-    }
 
     function _removeBidder(uint256 auctionId, uint index) internal {
         require(index < auctions[auctionId].bidders.length);
@@ -214,8 +203,8 @@ contract SealedBidAuctionManager {
 
     function placeBid(
         uint256 auctionId,
-        string calldata c,
-        string calldata d
+        bytes calldata c,
+        bytes calldata d
     )
         external
         payable
@@ -227,9 +216,9 @@ contract SealedBidAuctionManager {
     {
         auctions[auctionId].bids[msg.sender] = Bid({
             done: false,
-            c: _stringToBytes32(c),
-            d: _stringToBytes32(d),
-            z: ""
+            c: bytes32(c),
+            d: bytes32(d),
+            z: bytes("")
         });
         auctions[auctionId].bidders[auctions[auctionId].bidders.length] = msg
             .sender;
@@ -238,7 +227,7 @@ contract SealedBidAuctionManager {
 
     function revealBid(
         uint256 auctionId,
-        string calldata z
+        bytes calldata z
     )
         external
         AuctionIDIsValid(auctionId)
@@ -246,7 +235,7 @@ contract SealedBidAuctionManager {
         CheckAuctionState(auctionId, AuctionState.RevealingPhase)
     {
         // verify commitment
-        if (sha256(bytes(z)) != auctions[auctionId].bids[msg.sender].d)
+        if (sha256(z) != auctions[auctionId].bids[msg.sender].d)
             revert("Hash is invalid!");
 
         auctions[auctionId].bids[msg.sender].z = z;
@@ -260,12 +249,12 @@ contract SealedBidAuctionManager {
         AuctionIDIsValid(auctionId)
         SenderIsOwner(auctionId)
         CheckAuctionState(auctionId, AuctionState.SortingPhase)
-        returns (string[] memory)
+        returns (bytes[] memory)
     {
         uint256 count = 0;
         for (uint256 i = 0; i < auctions[auctionId].bidders.length; i++) {
             address bidder = auctions[auctionId].bidders[i];
-            if (bytes(auctions[auctionId].bids[bidder].z).length == 0) {
+            if (auctions[auctionId].bids[bidder].z.length == 0) {
                 // remove them, no refunds
                 _removeBidder(auctionId, i);
                 emit BidderRemoved(auctionId, bidder);
@@ -274,7 +263,7 @@ contract SealedBidAuctionManager {
             }
         }
 
-        string[] memory zs = new string[](count);
+        bytes[] memory zs = new bytes[](count);
         for (uint256 i = 0; i < auctions[auctionId].bidders.length; i++) {
             zs[i] = auctions[auctionId].bids[auctions[auctionId].bidders[i]].z;
         }
@@ -292,9 +281,8 @@ contract SealedBidAuctionManager {
         CheckAuctionState(auctionId, AuctionState.SortingPhase)
     {
         // verify commitment
-        if (
-            sha256(bytes(winner.y)) != auctions[auctionId].bids[winner.bidder].c
-        ) revert("Hash is invalid!");
+        if (sha256(winner.y) != auctions[auctionId].bids[winner.bidder].c)
+            revert("Hash is invalid!");
 
         auctions[auctionId].winner = winner;
         emit WinnerDecided(auctionId);

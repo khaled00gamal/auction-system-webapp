@@ -27,7 +27,7 @@ function Dashboard() {
     web3Context.hooks.getAccount().then((acc) => {
       setAccount(acc);
 
-      web3Context.contract.methods.getActiveAuctions().call({ from: acc }).then((auctions) => {
+      web3Context.contract.methods.getAuctionsByState(0).call({ from: acc }).then((auctions) => {
         setActiveAuctions(auctions);
       })
     });

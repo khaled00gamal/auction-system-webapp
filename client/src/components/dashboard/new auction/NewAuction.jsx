@@ -5,15 +5,14 @@ import { useState, useEffect } from 'react';
 import './NewAuction.css';
 import Button from '../../essentials/Button';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
-import DatePicker from "react-datepicker";
+import DatePicker from 'react-datepicker';
 import ImageUploader from './ImageUploader';
 import './dropDown.css';
 import { create, CID, IPFSHTTPClient } from 'ipfs-http-client';
 // import { IPFS_BASE_URL } from '../../../contants';
-import Datepicker from "react-tailwindcss-datepicker";
+import Datepicker from 'react-tailwindcss-datepicker';
 import { CalendarIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
-
 
 // const projectId = process.env.PROJECT_ID;
 // const projectSecret = process.env.PROJECT_SECRET;
@@ -22,15 +21,12 @@ const projectId = '2QLhGGUgQODTNGtYY0KiT2xCiqO';
 const projectSecret = 'd4f4cc97d6089911fafdaf2f1fd08339';
 const authorization = 'Basic ' + btoa(`${projectId}:${projectSecret}`);
 
-
-
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
 //TODO: add validation for minimum price field
 //TODO: add style for date picker
 //FIXME: store image on infura only on submit  (not on image change)
 //FIXME: configure security deposit
-
 
 function NewAuction() {
   const [title, setTitle] = useState('');
@@ -43,18 +39,26 @@ function NewAuction() {
   // const [error, setError] = useState('');
   const [ipfs, setIpfs] = useState(undefined);
   const [base64img, setBase64img] = useState('');
-  const [selectedFileOne, setSelectedFileOne] = useState(null);
+  const [fileOneContents, setfileOneContents] = useState(null);
   const [selectedFileTwo, setSelectedFileTwo] = useState(null);
 
   useEffect(() => {
-    console.log('Selected file:', selectedFileOne);
-  }, [selectedFileOne]);
+    console.log('Selected file:', fileOneContents);
+  }, [fileOneContents]);
 
   const handleFileChangeOne = (event) => {
-    setSelectedFileOne(event.target.files[0]);
+    const file = event.target.files[0];
+    console.log('jjjj');
+
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      const contents = e.target.result;
+      console.log('data', contents);
+      setfileOneContents(contents);
+    };
+
+    reader.readAsArrayBuffer(file);
   };
-
-
 
   useEffect(() => {
     console.log('Selected file:', selectedFileTwo);
@@ -64,8 +68,6 @@ function NewAuction() {
     setSelectedFileTwo(event.target.files[0]);
   };
 
-
-
   React.useEffect(() => {
     try {
       const ipfsClient = create({
@@ -73,7 +75,6 @@ function NewAuction() {
         headers: {
           authorization,
         },
-
       });
       setIpfs(ipfsClient);
     } catch (error) {
@@ -82,10 +83,7 @@ function NewAuction() {
     }
   }, []);
 
-
   let securityDeposit = minPrice / 2;
-
-
 
   useEffect(() => {
     window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -102,32 +100,34 @@ function NewAuction() {
   const web3Context = useWeb3();
 
   const DropdownMenu = () => {
-
     const handleSignPeriodChange = (e) => {
       setSignPeriod(e.target.value);
-    }
+    };
 
     return (
       <div className='dropdown'>
-        <label htmlFor="dropdown" className="dropdown-label">Select confirmation deadline:    </label>
-        <select id="dropdown"
+        <label htmlFor='dropdown' className='dropdown-label'>
+          Select confirmation deadline:{' '}
+        </label>
+        <select
+          id='dropdown'
           value={signPeriod}
           onChange={handleSignPeriodChange}
-          className='dropdown-select'>
-          <option value="">Select</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
+          className='dropdown-select'
+        >
+          <option value=''>Select</option>
+          <option value='1'>1</option>
+          <option value='2'>2</option>
+          <option value='3'>3</option>
+          <option value='4'>4</option>
+          <option value='5'>5</option>
+          <option value='6'>6</option>
+          <option value='7'>7</option>
         </select>
         {signPeriod && <p>confirmation deadline: {signPeriod} day/s</p>}
       </div>
     );
   };
-
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -139,7 +139,7 @@ function NewAuction() {
 
   const handleEndDateChange = (date) => {
     setEndDate(date);
-    console.log(date)
+    console.log(date);
   };
 
   const formatEndDate = (date) => {
@@ -172,7 +172,7 @@ function NewAuction() {
     const dateUnixTimeStamp = Math.floor(formattedDateObject.getTime() / 1000);
 
     return dateUnixTimeStamp;
-  }
+  };
 
   const handleMinPriceChange = (event) => {
     const value = event.target.value;
@@ -197,32 +197,80 @@ function NewAuction() {
       console.log('Image uploaded to IPFS. IPFS hash:', uploadedHash);
 
       return uploadedHash;
-
-
     } catch (e) {
       console.log('Error uploading image to IPFS', e);
       throw e;
     }
-
-  }
+  };
 
   const handleImageChange = async (imageData) => {
     setImage(imageData);
     setBase64img(imageData);
-
   };
+
+  function downloadStringAsFile(str, filename) {
+    // Create a Blob from the string
+    const blob = new Blob([str], { type: 'text/plain' });
+
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element with the URL
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+
+    // Simulate a click event to trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
+  }
+
+  function encodeFileContentsForContract(contents) {
+    return (
+      '0x' +
+      Array.from(new Uint8Array(contents))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
+    );
+  }
+
+  function downloadContractBytesAsFile(bytes, filename) {
+    bytes = bytes.split('x')[1];
+    bytes = new Uint8Array(
+      bytes.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
+    ).buffer;
+    downloadStringAsFile(bytes, filename);
+
+    // example code
+
+    // const address = await web3Context.hooks.getAccount();
+    // const testme = encodeFileContentsForContract(fileOneContents);
+    // web3Context.contract.methods
+    //   .setTestme(testme)
+    //   .send({ from: address })
+    //   .then(() => {
+    //     web3Context.contract.methods
+    //       .getTestme()
+    //       .call({ from: address })
+    //       .then((r) => downloadContractBytesAsFile(r, 'r.dat'));
+    //   });
+  }
 
   const createAuction = async (e) => {
     e.preventDefault();
     if (base64img === '') {
       alert('Please upload an image');
       return;
-    };
-    const address = await web3Context.hooks.getAccount();
+    }
     const hash = uploadImgToInfura(base64img);
 
     const info = {
-      seller: address,
+      owner: address,
+      // FIXME
       securityDeposit: securityDeposit,
       minimumPrice: minPrice,
       biddingEndDate: formatEndDate(endDate),
@@ -234,105 +282,158 @@ function NewAuction() {
 
     console.log(info);
 
-    const res = web3Context.contract.methods.createAuction(info).send({ from: address });
-    res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
+    res = web3Context.contract.methods
+      .createAuction(info)
+      .send({ from: address });
+    res
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-    console.log("lol");
+    console.log('lol');
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
+    <div className='flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip'>
       <NavBar />
-      <section className="relative">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="pt-32 pb-12 md:pt-28 md:pb-20">
+      <section className='relative'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6'>
+          <div className='max-w-6xl mx-auto px-4 sm:px-6'>
+            <div className='pt-32 pb-12 md:pt-28 md:pb-20'>
               {/* Section header */}
-              <div className="text-left pb-12 md:pb-16">
-                <h3 className="text-3xl md:text-4xl font-semibold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">Create a New Auction</h3>
-                <div className="flex flex-wrap bg-gray-100 rounded-xl p-8">
-                  <form className="flex items-center w-full">
-                    <div className="w-1/3 flex justify-center">
+              <div className='text-left pb-12 md:pb-16'>
+                <h3
+                  className='text-3xl md:text-4xl font-semibold leading-tighter tracking-tighter mb-4'
+                  data-aos='zoom-y-out'
+                >
+                  Create a New Auction
+                </h3>
+                <div className='flex flex-wrap bg-gray-100 rounded-xl p-8'>
+                  <form className='flex items-center w-full'>
+                    <div className='w-1/3 flex justify-center'>
                       {/* First div content */}
-                      <div className="mx-auto flex flex-col items-center">
-                        <label className="block mb-2 text-sm font-medium text-gray-900" htmlFor="user_avatar">Upload picture</label>
+                      <div className='mx-auto flex flex-col items-center'>
+                        <label
+                          className='block mb-2 text-sm font-medium text-gray-900'
+                          htmlFor='user_avatar'
+                        >
+                          Upload picture
+                        </label>
 
                         <ImageUploader onImageChange={handleImageChange} />
 
                         {image && (
                           <div>
-                            <img src={base64img}
-                              alt="Selected"
+                            <img
+                              src={base64img}
+                              alt='Selected'
                               style={{ maxWidth: '400px', margin: '15px' }}
                               onError={(e) => {
-                                console.log('Failed to load image:', e.target.src);
-                              }} />
+                                console.log(
+                                  'Failed to load image:',
+                                  e.target.src,
+                                );
+                              }}
+                            />
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="w-1/2">
+                    <div className='w-1/2'>
                       {/* Second div content */}
-                      <div className="mb-6">
-                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">Item Name</label>
-                        <input type="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5" placeholder="Your item name goes here" required
+                      <div className='mb-6'>
+                        <label
+                          htmlFor='name'
+                          className='block mb-2 text-sm font-medium text-gray-900'
+                        >
+                          Item Name
+                        </label>
+                        <input
+                          type='name'
+                          id='name'
+                          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5'
+                          placeholder='Your item name goes here'
+                          required
                           value={title}
                           onChange={handleTitleChange}
                         />
                       </div>
 
-                      <div className="mb-6">
-                        <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900">Description</label>
-                        <textarea id="message" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your item description goes here"
+                      <div className='mb-6'>
+                        <label
+                          htmlFor='description'
+                          className='block mb-2 text-sm font-medium text-gray-900'
+                        >
+                          Description
+                        </label>
+                        <textarea
+                          id='message'
+                          rows='4'
+                          className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                          placeholder='Your item description goes here'
                           value={description}
-                          onChange={handleDescriptionChange} />
+                          onChange={handleDescriptionChange}
+                        />
                       </div>
 
                       <div className='mb-6'>
-                        <div className="max-w-sm relative">
-                          <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900">Auction End Date</label>
+                        <div className='max-w-sm relative'>
+                          <label
+                            htmlFor='date'
+                            className='block mb-2 text-sm font-medium text-gray-900'
+                          >
+                            Auction End Date
+                          </label>
                           <input
-                            type="date"
-                            className=" border bg-gray-50 border-blue-300 text-blue-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/3 p-2.5"
-                            placeholder="Select date"
-                            value={endDate ? endDate.toISOString().substr(0, 10) : ''}
+                            type='date'
+                            className=' border bg-gray-50 border-blue-300 text-blue-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-2/3 p-2.5'
+                            placeholder='Select date'
+                            value={
+                              endDate ? endDate.toISOString().substr(0, 10) : ''
+                            }
                             onChange={(event) => {
                               handleEndDateChange(new Date(event.target.value));
                             }}
                             min={new Date()}
                           />
                           {endDate && (
-                            <p className="text-sm text-gray-800 mt-1">
+                            <p className='text-sm text-gray-800 mt-1'>
                               Selected End Date: {endDate.toDateString()}
                             </p>
                           )}
-
                         </div>
                         <div className='date-picker'>
                           <DatePicker
                             selected={endDate}
                             onChange={handleEndDateChange}
-                            dateFormat="Pp"
-                            placeholderText="Select date"
+                            dateFormat='Pp'
+                            placeholderText='Select date'
                             minDate={new Date()}
-                            className="custom-datepicker"
+                            className='custom-datepicker'
                           />
                           {endDate && (
                             <p>Selected Date and Time: {endDate.toString()}</p>
                           )}
-
                         </div>
                       </div>
 
                       <div>
-                        <div className="w-72 mb-6">
-                          <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900">Minimum Price</label>
+                        <div className='w-72 mb-6'>
+                          <label
+                            htmlFor='date'
+                            className='block mb-2 text-sm font-medium text-gray-900'
+                          >
+                            Minimum Price
+                          </label>
                           <input
-                            className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-blue-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                            placeholder=" "
+                            className='peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-blue-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50'
+                            placeholder=' '
                             value={minPrice}
                             onChange={handleMinPriceChange}
-                            pattern="\d*"
+                            pattern='\d*'
                           />
                         </div>
                       </div>
@@ -344,7 +445,12 @@ function NewAuction() {
                       <div className='buttons'>
                         <ul className='flex'>
                           <li>
-                            <Button size='medium' text='Back' style='text' link={`/Dashboard`} />
+                            <Button
+                              size='medium'
+                              text='Back'
+                              style='text'
+                              link={`/Dashboard`}
+                            />
                           </li>
                           <li>
                             <Button
@@ -352,33 +458,37 @@ function NewAuction() {
                               size='medium'
                               text='Confirm and place item for auction'
                               style='regular'
-                              link={`/Dashboard`}
+                              // link={`/Dashboard`}
                               disabled={base64img == ''}
                             />
                           </li>
                         </ul>
                       </div>
-
-
                     </div>
                   </form>
                 </div>
                 <div>
-                  <label htmlFor="file" className="file">
-                    <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeOne} />
-                    <span className="file-custom">Choose File</span>
+                  <label htmlFor='file' className='file'>
+                    <input
+                      type='file'
+                      id='file'
+                      aria-label='File browser example'
+                      onChange={handleFileChangeOne}
+                    />
+                    <span className='file-custom'>Choose File</span>
                   </label>
                 </div>
                 <div>
-                  <label htmlFor="file" className="file">
-                    <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeTwo} />
-                    <span className="file-custom">Choose File</span>
+                  <label htmlFor='file' className='file'>
+                    <input
+                      type='file'
+                      id='file'
+                      aria-label='File browser example'
+                      onChange={handleFileChangeTwo}
+                    />
+                    <span className='file-custom'>Choose File</span>
                   </label>
                 </div>
-
-
-
-
               </div>
             </div>
           </div>
@@ -390,9 +500,6 @@ function NewAuction() {
 }
 
 export default NewAuction;
-
-
-
 
 // <div className="page-container">
 //   <NavBar />
@@ -415,7 +522,6 @@ export default NewAuction;
 //             </div>
 //           )}
 //         </div>
-
 
 //         <div className='item-info-wrapper'>
 
@@ -445,9 +551,6 @@ export default NewAuction;
 //                       Description
 //                     </label>
 //                   </div> */}
-
-
-
 
 //               <div className="w-96">
 //                 <div className="relative w-full min-w-[200px]">
@@ -512,8 +615,6 @@ export default NewAuction;
 
 //               </div>
 
-
-
 //               <div className="w-72">
 //                 <div className="relative h-10 w-full min-w-[200px]">
 //                   <input
@@ -528,9 +629,6 @@ export default NewAuction;
 //                   </label>
 //                 </div>
 //               </div>
-
-
-
 
 //             </div>
 //           </form>
