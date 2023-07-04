@@ -1,66 +1,3 @@
-// import React from 'react';
-// import '../styles/Footer.css';
-// import logo from '../icons/logo-navbar-white.svg';
-
-// function Footer() {
-//   return (
-//     <footer>
-//       <div className='content'>
-//         <div className='link-boxes'>
-//           <ul className='box'>
-//             <li className='link_name'>Company</li>
-//             <li>
-//               <a href='#'>Home</a>
-//             </li>
-//             <li>
-//               <a href='#'>News</a>
-//             </li>
-//             <li>
-//               <a href='#'>FAQ</a>
-//             </li>
-//             <li>
-//               <a href='#'>Support</a>
-//             </li>
-//           </ul>
-//           <ul className='box'>
-//             <li className='link_name'>Services</li>
-//           </ul>
-//           <ul className='box'>
-//             <li className='link_name'>Contact Us</li>
-//             <li>email@email.com</li>
-//             <li>telephone</li>
-//           </ul>
-//           <ul className='box'>
-//             <li className='link_name'>Account</li>
-//           </ul>
-//         </div>
-//         <div className='top'>
-//           <div className='logo-details'>
-//             <span className='logo_name'>
-//               <img src={logo} alt='logo' />
-//             </span>
-//           </div>
-//         </div>
-//       </div>
-//       <div className='bottom-details'>
-//         <div className='bottom_text'>
-//           <span>
-//             <a>PRIVACY POLICY</a>
-//           </span>
-//           <span>
-//             <a>SITEMAP</a>
-//           </span>
-//           <span className='copyright_text'>
-//             <a>&copy;{new Date().getFullYear()} CHAINAUCTION</a>
-//           </span>
-//         </div>
-//       </div>
-//     </footer>
-//   );
-// }
-
-// export default Footer;
-
 import Logo from './logo'
 
 export default function Footer() {
@@ -69,7 +6,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
         {/* Top area: Blocks */}
-        <div className="grid sm:grid-cols-12 gap-8 py-8 md:py-12 border-t border-gray-200">
+        <div className="grid sm:grid-cols-10 gap-8 py-8 md:py-12 border-t border-gray-200">
 
           {/* 1st block */}
           <div className="sm:col-span-12 lg:col-span-3">
@@ -81,7 +18,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 2nd block */}
+          {/* 2nd block
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
             <h6 className="text-gray-800 font-medium mb-2">Products</h6>
             <ul className="text-sm">
@@ -101,7 +38,7 @@ export default function Footer() {
                 <a href="#0" className="text-gray-600 hover:text-gray-900 transition duration-150 ease-in-out">Command-line</a>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* 3rd block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
@@ -148,7 +85,7 @@ export default function Footer() {
           </div>
 
           {/* 5th block */}
-          <div className="sm:col-span-6 md:col-span-3 lg:col-span-3">
+          <div className="sm:col-span-6 md:col-span-3 lg:col-span-3 ml-auto">
             <h6 className="text-gray-800 font-medium mb-2">Subscribe</h6>
             <p className="text-sm text-gray-600 mb-4">Get the latest news and articles to your inbox every month.</p>
             <form>
