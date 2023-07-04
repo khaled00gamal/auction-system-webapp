@@ -44,7 +44,10 @@ contract SealedBidAuctionManager {
         AuctionState state;
         AuctionWinner winner;
     }
-
+    struct AuctionByState{
+        uint256 id;
+        UserSetAuctionInfo info;
+    }
     enum AuctionState {
         BiddingPhase,
         RevealingPhase,
@@ -168,7 +171,7 @@ contract SealedBidAuctionManager {
 
     function getAuctionsByState(
         AuctionState state
-    ) external view returns (UserSetAuctionInfo[] memory) {
+    ) external view returns (AuctionByState[] memory) {
         uint256 count = 0;
         for (uint256 i = 0; i < auctions.length; i++) {
             if (auctions[i].state == state) {
@@ -176,11 +179,12 @@ contract SealedBidAuctionManager {
             }
         }
 
-        UserSetAuctionInfo[] memory data = new UserSetAuctionInfo[](count);
+        AuctionByState[] memory data = new AuctionByState[](count);
         uint256 j = 0;
         for (uint256 i = 0; i < auctions.length; i++) {
             if (auctions[i].state == state) {
-                data[j] = auctions[i].info;
+                data[j].info = auctions[i].info;
+                data[j].id = auctions[i].id;
                 j++;
             }
         }
