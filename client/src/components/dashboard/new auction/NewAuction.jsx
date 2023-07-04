@@ -350,9 +350,9 @@ function NewAuction() {
 
     console.log(info);
 
-    res = web3Context.contract.methods
+    const res = web3Context.contract.methods
       .createAuction(info)
-      .send({ from: address });
+      .send({ from: address, value: securityDeposit });
       res
       .then((res) => {
         console.log(res);
