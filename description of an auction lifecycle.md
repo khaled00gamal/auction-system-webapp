@@ -64,23 +64,12 @@
 
 ## [If Sorting Phase ends and owner didn't sort, auction ends, bidders are refunded, but not owner]
 
-## [Verification Phase]
+## [Auction Ends]
 
-## 5. Bidder wants to verify the sort
+## If Bidder wants to verify the sort
 
 ### They request from the contract:
 
     - the winning y
 
 ### Then, they check whether their y is bigger (using auctionhelper.sh)
-
-### If it is, they object to the contract, publishing:
-
-    - their y
-
-### The contract verifies the objection, and if it is valid, a new winner is announced.
-
-## What happens when the verification phase ends?
-
-    * Auction fails if winning bid is less than the minimimum price.
-    * Otherwise, auction succeeds.

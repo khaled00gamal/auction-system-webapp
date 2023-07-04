@@ -20,10 +20,10 @@ contract SealedBidAuctionManager {
         uint256 biddingEndDate;
         uint256 revealingEndDate;
         uint256 sortingEndDate;
-        uint256 verificationEndDate;
     }
 
     struct Bid {
+        bool done;
         // to bid
         bytes32 c;
         bytes32 d;
@@ -49,9 +49,8 @@ contract SealedBidAuctionManager {
         BiddingPhase,
         RevealingPhase,
         SortingPhase,
-        VerificationPhase,
-        Success,
-        Failure
+        Ended,
+        EverythingSettled
     }
 
     Auction[] private auctions;
@@ -63,7 +62,6 @@ contract SealedBidAuctionManager {
     event NewReveal(uint256 auctionId, address by);
     event BidderRemoved(uint256, address who);
     event WinnerDecided(uint256 auctionId);
-    event ObjectionSuccessful(uint256 auctionId, address by);
     event AuctionEnds(uint256 auctionId, bool success);
 
     // modifiers for modularity
@@ -105,9 +103,16 @@ contract SealedBidAuctionManager {
             auctions[auctionId].state = AuctionState.RevealingPhase;
         else if (block.timestamp < auctions[auctionId].info.sortingEndDate)
             auctions[auctionId].state = AuctionState.SortingPhase;
-        else if (block.timestamp < auctions[auctionId].info.verificationEndDate)
-            auctions[auctionId].state = AuctionState.VerificationPhase;
-        // else, state == AuctionState.Success || state == AuctionState.Failure
+        else {
+            auctions[auctionId].state = AuctionState.EverythingSettled;
+            address[] bidders = auctions[auctionId].bidders;
+            for (uint256 i = 0; i < bidders.length; ++i) {
+                if (!auctions[auctionId].bids[bidders[i]].done) {
+                    auctions[auctionId].state = AuctionState.Ended;
+                    break;
+                }
+            }
+        }
 
         // check it
         if (state != auctions[auctionId].state) {
@@ -165,8 +170,8 @@ contract SealedBidAuctionManager {
             );
 
         if (
-            !(info.verificationEndDate > info.sortingEndDate &&
-                info.sortingEndDate > info.revealingEndDate &&
+            !(// info.verificationEndDate > info.sortingEndDate &&
+            info.sortingEndDate > info.revealingEndDate &&
                 info.revealingEndDate > info.biddingEndDate)
         ) revert("Dates are not in the right order.");
 
@@ -231,6 +236,7 @@ contract SealedBidAuctionManager {
         ValueEquals(auctions[auctionId].info.securityDeposit)
     {
         auctions[auctionId].bids[msg.sender] = Bid({
+            done: false,
             c: _stringToBytes32(c),
             d: _stringToBytes32(d),
             z: ""
@@ -310,24 +316,21 @@ contract SealedBidAuctionManager {
         return auctions[auctionId].winner;
     }
 
-    function objectToWinner(
-        uint256 auctionId,
-        string calldata y
+    function returnDeposit(
+        uint256 auctionId
     )
         external
         AuctionIDIsValid(auctionId)
         SenderPlacedABid(auctionId)
-        CheckAuctionState(auctionId, AuctionState.VerificationPhase)
+        CheckAuctionState(auctionId, AuctionState.Done)
     {
-        // verify commitment
-        if (sha256(bytes(y)) != auctions[auctionId].bids[msg.sender].c)
-            revert("Hash is invalid!");
-
-        // verify that it is bigger
-        // TODO have chainauction-helper emit a signed message saying that y > auctions[auctionId].winner.y
-        revert("Not implemented");
-
-        // auctions[auctionId].winner = winner;
-        // emit WinnerDecided(auctionId, winner.bidder);
+        // no re-entrancy attacks!
+        if (
+            auctions[auctionId].bids[msg.sender].done == false &&
+            msg.sender != auctions[auctionId].winner.bidder
+        ) {
+            auctions[auctionId].bids[msg.sender].done = true;
+        }
+        payable(msg.sender).transfer(auctions[auctionId].info.securityDeposit);
     }
 }
