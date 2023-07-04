@@ -325,12 +325,26 @@ contract SealedBidAuctionManager {
         CheckAuctionState(auctionId, AuctionState.Done)
     {
         // no re-entrancy attacks!
-        if (
-            auctions[auctionId].bids[msg.sender].done == false &&
-            msg.sender != auctions[auctionId].winner.bidder
-        ) {
+        if (auctions[auctionId].bids[msg.sender].done == false) {
             auctions[auctionId].bids[msg.sender].done = true;
         }
         payable(msg.sender).transfer(auctions[auctionId].info.securityDeposit);
     }
+
+    // function transferWinningBidToOwner(
+    //     uint256 auctionId
+    // )
+    //     external
+    //     payable
+    //     AuctionIDIsValid(auctionId)
+    //     SenderPlacedABid(auctionId)
+    //     CheckAuctionState(auctionId, AuctionState.Done)
+    // {
+    //     if (
+    //         !(auctions[auctionId].bids[msg.sender].done == false &&
+    //             auctions[auctionId].winner.bidder == msg.sender)
+    //     ) revert("Sender is not the auction winner!");
+    //      // TODO how to know the plain bid if ore decryption is not possible in solidity?
+    //     if (msg.value + auctions[auctionId].securityDeposit)
+    // }
 }
