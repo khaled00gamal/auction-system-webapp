@@ -32,7 +32,6 @@ export default function FeaturesBlocks() {
                                 </g>
                             </svg>
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Artwork</h4>
-                            <p className="text-gray-600 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
 
                         {/* 2nd item */}
@@ -48,7 +47,6 @@ export default function FeaturesBlocks() {
                                 </g>
                             </svg>
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Collectibles</h4>
-                            <p className="text-gray-600 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
 
                         {/* 3rd item */}
@@ -65,7 +63,6 @@ export default function FeaturesBlocks() {
                                 </g>
                             </svg>
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Jewelry and Watches</h4>
-                            <p className="text-gray-600 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
 
                         {/* 4th item */}
@@ -82,7 +79,6 @@ export default function FeaturesBlocks() {
                                 </g>
                             </svg>
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Electronics</h4>
-                            <p className="text-gray-600 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
 
                         {/* 5th item */}
@@ -98,7 +94,6 @@ export default function FeaturesBlocks() {
                                 </g>
                             </svg>
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Vehicles</h4>
-                            <p className="text-gray-600 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
 
                         {/* 6th item */}
@@ -113,7 +108,6 @@ export default function FeaturesBlocks() {
                                 </g>
                             </svg>
                             <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Real Estate</h4>
-                            <p className="text-gray-600 text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
 
                     </div>
