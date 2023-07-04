@@ -49,8 +49,7 @@ contract SealedBidAuctionManager {
         BiddingPhase,
         RevealingPhase,
         SortingPhase,
-        Ended,
-        EverythingSettled
+        Ended
     }
 
     Auction[] private auctions;
@@ -103,16 +102,7 @@ contract SealedBidAuctionManager {
             auctions[auctionId].state = AuctionState.RevealingPhase;
         else if (block.timestamp < auctions[auctionId].info.sortingEndDate)
             auctions[auctionId].state = AuctionState.SortingPhase;
-        else {
-            auctions[auctionId].state = AuctionState.EverythingSettled;
-            address[] bidders = auctions[auctionId].bidders;
-            for (uint256 i = 0; i < bidders.length; ++i) {
-                if (!auctions[auctionId].bids[bidders[i]].done) {
-                    auctions[auctionId].state = AuctionState.Ended;
-                    break;
-                }
-            }
-        }
+        else auctions[auctionId].state = AuctionState.Ended;
 
         // check it
         if (state != auctions[auctionId].state) {
@@ -322,29 +312,15 @@ contract SealedBidAuctionManager {
         external
         AuctionIDIsValid(auctionId)
         SenderPlacedABid(auctionId)
-        CheckAuctionState(auctionId, AuctionState.Done)
+        CheckAuctionState(auctionId, AuctionState.Ended)
     {
         // no re-entrancy attacks!
-        if (auctions[auctionId].bids[msg.sender].done == false) {
+        if (
+            auctions[auctionId].bids[msg.sender].done == false &&
+            msg.sender != auctions[auctionId].winner.bidder
+        ) {
             auctions[auctionId].bids[msg.sender].done = true;
         }
         payable(msg.sender).transfer(auctions[auctionId].info.securityDeposit);
     }
-
-    // function transferWinningBidToOwner(
-    //     uint256 auctionId
-    // )
-    //     external
-    //     payable
-    //     AuctionIDIsValid(auctionId)
-    //     SenderPlacedABid(auctionId)
-    //     CheckAuctionState(auctionId, AuctionState.Done)
-    // {
-    //     if (
-    //         !(auctions[auctionId].bids[msg.sender].done == false &&
-    //             auctions[auctionId].winner.bidder == msg.sender)
-    //     ) revert("Sender is not the auction winner!");
-    //      // TODO how to know the plain bid if ore decryption is not possible in solidity?
-    //     if (msg.value + auctions[auctionId].securityDeposit)
-    // }
 }
