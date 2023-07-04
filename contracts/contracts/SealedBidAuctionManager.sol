@@ -324,7 +324,8 @@ contract SealedBidAuctionManager {
             revert("Hash is invalid!");
 
         // verify that it is bigger
-        revert("Not implemented"); // FIXME
+        // TODO have chainauction-helper emit a signed message saying that y > auctions[auctionId].winner.y
+        revert("Not implemented");
 
         // auctions[auctionId].winner = winner;
         // emit WinnerDecided(auctionId, winner.bidder);
