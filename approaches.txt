@@ -18,10 +18,17 @@ bidder => reveal commitment
 - owner sees all bids
 - everyone sees winning bid
 
+-------- steps
+creating an auction:    owner generates params file (sk, params, his public key) + decryption file (his private key)
+                        owner uploads params file
 
+bidding:                bidder decides on x
+                        bidder downloads params file
+                        bidder runs program with x + params file
+                        bidder generates commitments file + reveal file
+                        bidder uploads commitments file
 
-
-
+revealing:              bidder uploads reveal file
 
 
 
