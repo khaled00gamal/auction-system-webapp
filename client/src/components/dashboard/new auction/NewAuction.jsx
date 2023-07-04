@@ -322,7 +322,7 @@ function NewAuction() {
                         <button type="submit" className="btn text-white bg-blue-500 hover:bg-blue-400 w-full sm:w-auto sm:mb-0 ml-auto" onclick={createAuction} >Submit</button>
                       </Link> */}
                       <div className='buttons'>
-                        <ul>
+                        <ul className='flex'>
                           <li>
                             <Button size='medium' text='Back' style='text' link={`/Dashboard`} />
                           </li>
