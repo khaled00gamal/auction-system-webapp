@@ -16,7 +16,27 @@ function ViewAuction() {
   const { auctionId } = useParams();
   const [auctionInfo , setAuctionInfo] = useState('');
   const [account, setAccount] = useState('');
+  const [selectedFileBidding1 , setSelectedFileBidding1] = useState(null);
+  const [selectedFileBidding2 , setSelectedFileBidding2] = useState(null);
+  const [selectedFileReveal , setSelectedFileReveal] = useState(null);
+
   const web3Context = useWeb3();
+  const currentTime = new Date();
+
+
+  const handleFileChangeBidding1 = (event) => {
+    setSelectedFileBidding1(event.target.files[0]);
+  };
+
+  const handleFileChangeBidding2 = (event) => {
+    setSelectedFileBidding2(event.target.files[0]);
+  };
+
+
+  const handleFileChangeReveal = (event) => {
+    setSelectedFileReveal(event.target.files[0]);
+  };
+
 
   useEffect(() => {
     window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -46,8 +66,8 @@ function ViewAuction() {
     
    
   }, [web3Context])
-  const currentDate = new Date(auctionInfo.biddingEndDate * 1000)
-  const dateString = currentDate.toUTCString();
+  const auctionDate = new Date(auctionInfo.biddingEndDate * 1000)
+  const dateString = auctionDate.toUTCString();
   const handleBidChange = (e) => {
     setBid(e.target.value);
   };
@@ -107,14 +127,14 @@ function ViewAuction() {
                         </div>
                       </div>
 
-                      <div>
+                      {/* <div>
                         <div className="w-72 mb-6">
                           <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900">Minimum Price</label>
                         </div>
-                      </div>
+                      </div> */}
 
                       <div>
-                        {auctionInfo.seller !== account ? (
+                        {auctionDate.getTime() > currentTime.getTime() && auctionInfo.seller !== account ? (
                           <div className="input-field-group mb-6">
                             <label>Enter bid amount: </label>
                             <input type="number" id="place-bid-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5"
@@ -122,14 +142,40 @@ function ViewAuction() {
                               value={bid}
                               onChange={handleBidChange}
                             />
+                            <div>
+                            <label htmlFor="file" className="file">
+                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeBidding1}/>
+                              <span className="file-custom">Choose File</span>
+                            </label>
+                          </div>
+                          <div>
+                            <label htmlFor="file" className="file">
+                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeBidding2}/>
+                              <span className="file-custom">Choose File</span>
+                            </label>
+                          </div>
                           </div>
                         ) : null}
                       </div>
+                      {auctionDate.getTime() < currentTime.getTime() && auctionInfo.seller !== account ? (
+                        <div>
+                          <p>Reveal Phase! Auction has ended.</p>
+                          <div>
+                            <label htmlFor="file" className="file">
+                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeReveal}/>
+                              <span className="file-custom">Choose File</span>
+                            </label>
+                          </div>
+                        </div>
+                      ) : null}
                       <div>
                         <ul className='flex flex-center'>
+                        
                           <li>
                             <Button size='medium' text='Back' style='text' link={`/Dashboard`} />
                           </li>
+                          
+                          {auctionDate.getTime() > currentTime.getTime()&& auctionInfo.seller !== account ? (
                           <li>
                           <Button
                             size='medium'
@@ -139,6 +185,7 @@ function ViewAuction() {
                             onclick={placeBid}
                           />
                           </li>
+                          ) : null}
                         </ul>
                       </div>
 

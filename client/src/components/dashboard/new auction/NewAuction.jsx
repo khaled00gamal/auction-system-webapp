@@ -43,6 +43,26 @@ function NewAuction() {
   // const [error, setError] = useState('');
   const [ipfs, setIpfs] = useState(undefined);
   const [base64img, setBase64img] = useState('');
+  const [selectedFileOne, setSelectedFileOne] = useState(null);
+  const [selectedFileTwo, setSelectedFileTwo] = useState(null);
+
+  useEffect(() => {
+    console.log('Selected file:', selectedFileOne);
+  }, [selectedFileOne]);
+
+  const handleFileChangeOne = (event) => {
+    setSelectedFileOne(event.target.files[0]);
+  };
+
+
+
+  useEffect(() => {
+    console.log('Selected file:', selectedFileTwo);
+  }, [selectedFileTwo]);
+
+  const handleFileChangeTwo = (event) => {
+    setSelectedFileTwo(event.target.files[0]);
+  };
 
 
 
@@ -342,6 +362,18 @@ function NewAuction() {
 
                     </div>
                   </form>
+                </div>
+                <div>
+                  <label htmlFor="file" className="file">
+                    <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeOne} />
+                    <span className="file-custom">Choose File</span>
+                  </label>
+                </div>
+                <div>
+                  <label htmlFor="file" className="file">
+                    <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeTwo} />
+                    <span className="file-custom">Choose File</span>
+                  </label>
                 </div>
 
 
