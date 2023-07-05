@@ -42,6 +42,7 @@ function NewAuction() {
   const [base64img, setBase64img] = useState('');
   const [fileOneContents, setfileOneContents] = useState(null);
   const [fileTwoContents, setfileTwoContents] = useState(null);
+  const [securityDeposit , setSecurityDeposit] = useState();
 
   useEffect(() => {
     console.log('Selected file:', fileOneContents);
@@ -93,8 +94,6 @@ function NewAuction() {
       setIpfs(null);
     }
   }, []);
-
-  let securityDeposit = minPrice / 2;
 
   useEffect(() => {
     window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -178,6 +177,10 @@ function NewAuction() {
     setTitle(e.target.value);
   };
 
+  const handleSecurityDepositChange = (e) => {
+    setSecurityDeposit(e.target.value);
+  };
+
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
@@ -223,7 +226,7 @@ function NewAuction() {
 
   const getSortingEndDate = () => {
     let confirmationDate = new Date(endDate);
-    confirmationDate.setDate(confirmationDate.getDate() + parseInt(sortingEndDate));
+    confirmationDate.setDate(confirmationDate.getDate() + parseInt(revealEndDate) + parseInt(sortingEndDate));
 
     const year = confirmationDate.getFullYear();
     const month = String(confirmationDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -333,9 +336,9 @@ function NewAuction() {
     }
     const hash = uploadImgToInfura(base64img);
     const address = await web3Context.hooks.getAccount();
+    // const current = Math.floor(new Date().getTime() / 1000);
     const info = {
       owner: address,
-      // FIXME
       params: encodeFileContentsForContract(fileOneContents),
       owner_pkey: encodeFileContentsForContract(fileTwoContents),
       itemName: title,
@@ -489,7 +492,7 @@ function NewAuction() {
                       </div>
 
                       <div>
-                        <div className='w-72 mb-6'>
+                      <div className='w-72 mb-6'>
                           <label
                             htmlFor='date'
                             className='block mb-2 text-sm font-medium text-gray-900'
@@ -501,6 +504,21 @@ function NewAuction() {
                             placeholder=' '
                             value={minPrice}
                             onChange={handleMinPriceChange}
+                            pattern='\d*'
+                          />
+                        </div>
+                        <div className='w-72 mb-6'>
+                          <label
+                            htmlFor='date'
+                            className='block mb-2 text-sm font-medium text-gray-900'
+                          >
+                            Security Deposit
+                          </label>
+                          <input
+                            className='peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-blue-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50'
+                            placeholder=' '
+                            value={securityDeposit}
+                            onChange={handleSecurityDepositChange}
                             pattern='\d*'
                           />
                         </div>

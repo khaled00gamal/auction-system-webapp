@@ -8,83 +8,63 @@ import './ViewAuction.css';
 import { useWeb3 } from '../../../high-order components/Web3Provider';
 import { useParams } from 'react-router-dom';
 
-
-
-
 function ViewAuction() {
-  const [bid, setBid] = useState('');
   const { auctionId } = useParams();
   const [auctionInfo , setAuctionInfo] = useState('');
   const [account, setAccount] = useState('');
-  const [fileOneContents, setfileOneContents] = useState(null);
-  const [fileTwoContents, setfileTwoContents] = useState(null);
-  const [selectedFileReveal , setSelectedFileReveal] = useState(null);
+  const [fileCContents, setFileCContents] = useState(null);
+  const [fileDContents, setFileDContents] = useState(null);
+  const [auctionDate, setAuctionDate] = useState();
+  const [dateString, setDateString] = useState();
+  const [fileRevealContents , setFileRevealContents] = useState(null);
+  const [isBidder, setIsBidder] = useState(false);
+  const [revealingDate, setRevealingDate] = useState();
+  const [sortingDate, setSortingDate] = useState();
 
   const web3Context = useWeb3();
   const currentTime = new Date();
 
+  const handleFileChange = (setFileContents) => {
+    return (event) => {
+      const file = event.target.files[0];
 
-  const handleFileChangeOne = (event) => {
-    const file = event.target.files[0];
-    console.log('jjjj');
-
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      const contents = e.target.result;
-      console.log('data', contents);
-      setfileOneContents(contents);
-    };
-
-    reader.readAsArrayBuffer(file);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        const contents = e.target.result;
+        setFileContents(contents);
+      };
+  
+      reader.readAsArrayBuffer(file);  
+    }
   };
 
-  const handleFileChangeTwo = (event) => {
-    const file = event.target.files[0];
-    console.log('jjjj');
-
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      const contents = e.target.result;
-      console.log('data', contents);
-      setfileTwoContents(contents);
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
 
   const handleFileChangeReveal = (event) => {
-    setSelectedFileReveal(event.target.files[0]);
+    setRevealFile(event.target.files[0]);
   };
 
+  // function downloadStringAsFile(str, filename) {
+  //   const blob = new Blob([str], { type: 'text/plain' });
+  //   const url = URL.createObjectURL(blob);
+  //   const link = document.createElement('a');
+  //   link.href = url;
+  //   link.download = filename;
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  //   URL.revokeObjectURL(url);
+  // }
 
-  
+  // for reveal
 
-  function downloadStringAsFile(str, filename) {
-    // Create a Blob from the string
-    const blob = new Blob([str], { type: 'text/plain' });
-
-    // Create a URL for the Blob
-    const url = URL.createObjectURL(blob);
-
-    // Create a link element with the URL
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-
-    // Simulate a click event to trigger the download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Clean up the URL object
-    URL.revokeObjectURL(url);
-  }
-
-
-  
-
-
-  
+  // function downloadContractBytesAsFile(bytes, filename) {
+  //   console.log("auction info" , auctionInfo)
+  //   bytes = bytes.split('x')[1];
+  //   bytes = new Uint8Array(
+  //     bytes.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
+  //   ).buffer;
+  //   downloadStringAsFile(bytes, filename);
+  // };
 
   function encodeFileContentsForContract(contents) {
     return (
@@ -97,70 +77,48 @@ function ViewAuction() {
 
 
   useEffect(() => {
+    // handle account change
     window.ethereum.on('accountsChanged', handleAccountsChanged);
-
     return () => {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     };
   }, []);
 
-  function handleAccountsChanged(accounts) {
+  function handleAccountsChanged() {
     window.location.reload();
   }
 
   useEffect(() => {
-    console.log(auctionId)
-    console.log('WEB3', web3Context)
-    web3Context.hooks.getAccount().then((address) => {
-      setAccount(address)
-      console.log('brefore calling')
-      web3Context.contract.methods.getAuctionInfo(auctionId).call({ from: address }).then((auction) => {
-        console.log('after calling')
-
-        setAuctionInfo(auction.info)
-        // NOTE: why send all auction data, if only userSet is used?
-        
-      })
-    })
-    
-   
-  }, [web3Context])
-  console.log(auctionInfo)
-  const auctionDate = new Date(auctionInfo.info.biddingEndDate * 1000)
-  const dateString = auctionDate.toUTCString();
-  const handleBidChange = (e) => {
-    setBid(e.target.value);
-  };
+    // set account, set auction info
+    // window.ethereum.on('connect', () => {
+      web3Context.hooks.getAccount().then((address) => {
+        setAccount(address);
+        web3Context.contract.methods.getAuctionInfo(auctionId).call({ from: address }).then((info) => {
+          setAuctionInfo(info)
+          const d = new Date(info.biddingEndDate * 1000);
+          const c = new Date(info.revealingEndDate* 1000);
+          const b = new Date(info.sortingEndDate * 1000);
+          setAuctionDate(d);
+          setRevealingDate(c);
+          setSortingDate(b);
+          setDateString(d.toUTCString());
+          web3Context.contract.methods.isABidder(auctionId, address).call({from: address}).then((is) => setIsBidder(is));
+        });
+      // });  
+    });
+  }, [web3Context]);
   
   const placeBid = async (e) => {
-    const address = await web3Context.hooks.getAccount();
-    // const info = {
-    //   auctionId: auctionId,
-    //   bid: bid
-    // };
-    console.log("this is auction id" , parseInt(auctionId))
-    console.log("this is bid" , parseInt(bid))
-    const res = web3Context.contract.methods.placeBid(parseInt(auctionId), encodeFileContentsForContract(fileOneContents) , encodeFileContentsForContract(fileTwoContents)).send({ from: address, value: auctionInfo.securityDeposit });
-    
-    res.then((res) => { console.log(res) }).catch((err) => { console.log(err) });
-    console.log("lol");
+    const res = web3Context.contract.methods.placeBid(parseInt(auctionId), encodeFileContentsForContract(fileCContents) , encodeFileContentsForContract(fileDContents)).send({ from: account, value: auctionInfo.securityDeposit });
   };
-
-  function downloadContractBytesAsFile(bytes, filename) {
-    console.log("auction info" , auctionInfo)
-    bytes = bytes.split('x')[1];
-    bytes = new Uint8Array(
-      bytes.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)),
-    ).buffer;
-    downloadStringAsFile(bytes, filename);
+  const revealBid = async (e) => {
+    const res = web3Context.contract.methods.revealBid(parseInt(auctionId), encodeFileContentsForContract(fileRevealContents)).send({ from: account });
   };
-
-  
-
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
-      <NavBar />
+    <NavBar />
+    {auctionInfo && auctionDate ? (
       <section className="relative">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -193,7 +151,7 @@ function ViewAuction() {
 
                       <div className='mb-6'>
                         <div className="max-w-sm relative">
-                          <p htmlFor="date" className="block mb-2 text-sm font-bold text-gray-900">Auction ends at: <span className='font-normal'>{dateString}</span></p>
+                          <p htmlFor="date" className="block mb-2 text-sm font-bold text-gray-900">Bidding ends at: <span className='font-normal'>{dateString}</span></p>
                         </div>
                       </div>
 
@@ -204,40 +162,34 @@ function ViewAuction() {
                       </div> */}
 
                       <div>
-                        {auctionDate.getTime() > currentTime.getTime() && auctionInfo.seller !== account ? (
+                        {auctionDate.getTime() > currentTime.getTime() && auctionInfo.owner !== account && isBidder? (
                           <div className="input-field-group mb-6">
-                            <label>Enter bid amount: </label>
-                            <input type="number" id="place-bid-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5"
-                              placeholder="place your bid"
-                              value={bid}
-                              onChange={handleBidChange}
-                            />
                             <div>
                             <label htmlFor="file" className="file">
-                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeOne}/>
+                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChange(setFileCContents)}/>
                               <span className="file-custom">Choose File</span>
                             </label>
                           </div>
                           <div>
                             <label htmlFor="file" className="file">
-                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeTwo}/>
+                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChange(setFileDContents)}/>
                               <span className="file-custom">Choose File</span>
                             </label>
                           </div>
+                          {/* <li>
+                            <Button
+                              onclick={placeBid}
+                              size='medium'
+                              text='Submit Files'
+                              style='regular'
+                              // link={`/Dashboard`}
+                            />
+                          </li> */}
                           </div>
+                          
                         ) : null}
+                        
                       </div>
-                      {auctionDate.getTime() < currentTime.getTime() && auctionInfo.onwer !== account ? (
-                        <div>
-                          <p>Reveal Phase! Auction has ended.</p>
-                          <div>
-                            <label htmlFor="file" className="file">
-                              <input type="file" id="file" aria-label="File browser example" onChange={handleFileChangeReveal}/>
-                              <span className="file-custom">Choose File</span>
-                            </label>
-                          </div>
-                        </div>
-                      ) : null}
                       <div>
                         <ul className='flex flex-center'>
                         
@@ -248,7 +200,7 @@ function ViewAuction() {
                             <Button size='medium' text='Download' style='text' link={`/Dashboard`} onclick={downloadContractBytesAsFile(auctionInfo.params, "key")}/>
                           </li>
                            */}
-                          {auctionDate.getTime() > currentTime.getTime()&& auctionInfo.onwer !== account ? (
+                          {auctionDate.getTime() > currentTime.getTime()&& auctionInfo.owner !== account && isBidder ? (
                           <li>
                           <Button
                             size='medium'
@@ -259,6 +211,28 @@ function ViewAuction() {
                           />
                           </li>
                           ) : null}
+                          {auctionDate.getTime() > currentTime.getTime() && revealingDate.getTime() < currentTime.getTime() && isBidder ?(
+                              <div>
+                                <div>
+                                  <p>Reveal Phase! Auction has ended.</p>
+                                  <div>
+                                    <label htmlFor="file" className="file">
+                                      <input type="file" id="file" aria-label="File browser example" onChange={handleFileChange(setFileRevealContents)} />
+                                      <span className="file-custom">Choose File</span>
+                                    </label>
+                                  </div>
+                                </div>
+                                <li>
+                                  <Button
+                                    size='medium'
+                                    text='Place bid'
+                                    style='regular'
+                                    link='#'
+                                    onclick={revealBid}
+                                  />
+                                </li>
+                              </div>
+                          ): null}
                         </ul>
                       </div>
 
@@ -276,6 +250,7 @@ function ViewAuction() {
           <Footer />
         </div>
       </section>
+    ) : (<p>loading...</p>)}
     </div>
   );
 }

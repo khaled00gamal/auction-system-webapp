@@ -45,7 +45,7 @@ contract SealedBidAuctionManager {
         AuctionWinner winner;
         AuctionWinner[] objections;
     }
-    struct AuctionByState {
+    struct AuctionInfoAndId {
         uint256 id;
         UserSetAuctionInfo info;
     }
@@ -82,8 +82,12 @@ contract SealedBidAuctionManager {
         _;
     }
 
+    function isABidder(uint256 auctionId, address acc) external view returns (bool) {
+        return auctions[auctionId].bids[acc].c.length != 0;
+    }
+
     modifier SenderIsOwner(uint256 auctionId) {
-        if (msg.sender != auctions[auctionId].info.owner)
+        if (msg.sender == auctions[auctionId].info.owner)
             revert("Sender is not the owner!");
         _;
     }
@@ -96,6 +100,11 @@ contract SealedBidAuctionManager {
 
     modifier AuctionIDIsValid(uint256 auctionId) {
         if (auctionId >= auctions.length) revert("Auction ID is not valid!");
+        _;
+    }
+
+    modifier AuctionHasNoWinner(uint256 auctionId) {
+        if (auctions[auctionId].winner.y.length != 0) revert("Auction has a winner!");
         _;
     }
 
@@ -162,7 +171,7 @@ contract SealedBidAuctionManager {
         // valid? add it
         Auction storage auction = auctions.push();
 
-        auction.id = auctions.length;
+        auction.id = auctions.length - 1;
         auction.info = info;
         auction.state = AuctionState.BiddingPhase;
 
@@ -172,7 +181,7 @@ contract SealedBidAuctionManager {
 
     function getAuctionsByState(
         AuctionState state
-    ) external view returns (AuctionByState[] memory) {
+    ) external view returns (AuctionInfoAndId[] memory) {
         uint256 count = 0;
         for (uint256 i = 0; i < auctions.length; i++) {
             if (auctions[i].state == state) {
@@ -180,7 +189,7 @@ contract SealedBidAuctionManager {
             }
         }
 
-        AuctionByState[] memory data = new AuctionByState[](count);
+        AuctionInfoAndId[] memory data = new AuctionInfoAndId[](count);
         uint256 j = 0;
         for (uint256 i = 0; i < auctions.length; i++) {
             if (auctions[i].state == state) {
@@ -284,6 +293,7 @@ contract SealedBidAuctionManager {
         AuctionIDIsValid(auctionId)
         SenderIsOwner(auctionId)
         CheckAuctionState(auctionId, AuctionState.SortingPhase)
+        AuctionHasNoWinner(auctionId)
     {
         // verify commitment
         if (sha256(winner.y) != auctions[auctionId].bids[winner.bidder].c)
