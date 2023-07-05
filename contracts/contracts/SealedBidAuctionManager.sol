@@ -45,7 +45,7 @@ contract SealedBidAuctionManager {
         AuctionWinner winner;
         AuctionWinner[] objections;
     }
-    struct AuctionByState{
+    struct AuctionByState {
         uint256 id;
         UserSetAuctionInfo info;
     }
@@ -319,7 +319,7 @@ contract SealedBidAuctionManager {
 
     function objectToTheWinner(
         uint256 auctionId,
-        bytes y
+        bytes calldata y
     )
         external
         AuctionIDIsValid(auctionId)
