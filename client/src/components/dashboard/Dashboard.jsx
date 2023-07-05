@@ -18,6 +18,7 @@ function Dashboard() {
     };
   }, []);
 
+
   function handleAccountsChanged(accounts) {
     window.location.reload();
   }
@@ -27,10 +28,11 @@ function Dashboard() {
     web3Context.hooks.getAccount().then((acc) => {
       setAccount(acc);
 
-      web3Context.contract.methods.getAuctionsByState(0).call({ from: acc }).then((auctions) => {
+      web3Context.contract.methods.getAuctionsByState(0).call({ from: account }).then((auctions) => {
         setActiveAuctions(auctions);
       })
     });
+    console.log(activeAuctions)
   }, [web3Context]);
 
   return (
@@ -46,12 +48,12 @@ function Dashboard() {
                 <h3 className="text-3xl md:text-4xl font-semibold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">Active Auctions</h3>
                 <div className="flex flex-wrap justify-start">
                   {activeAuctions.map((auction) => (
-                    <div key={auction.auctionId} className="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-5">
+                    <div key={auction.id} className="w-full max-w-xs bg-white border border-gray-200 rounded-lg shadow mb-4 mr-5">
                       <Card
-                        key={auction.auctionId}
-                        imgHash={auction.itemPicture}
-                        auctionTitle={auction.itemName}
-                        auctionId={auction.auctionId}
+                        key={auction.id}
+                        imgHash={auction.info.itemPicture}
+                        auctionTitle={auction.info.itemName}
+                        auctionId={auction.id}
                       />
                     </div>
                   ))}

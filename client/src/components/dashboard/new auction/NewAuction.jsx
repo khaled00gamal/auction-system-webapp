@@ -32,7 +32,8 @@ function NewAuction() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [signPeriod, setSignPeriod] = useState('');
+  const [revealEndDate, setRevealEndDate] = useState('');
+  const [sortingEndDate, setSortingEndDate] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [image, setImage] = useState('');
   const [ipfsHash, setIpfsHash] = useState('');
@@ -40,7 +41,7 @@ function NewAuction() {
   const [ipfs, setIpfs] = useState(undefined);
   const [base64img, setBase64img] = useState('');
   const [fileOneContents, setfileOneContents] = useState(null);
-  const [selectedFileTwo, setSelectedFileTwo] = useState(null);
+  const [fileTwoContents, setfileTwoContents] = useState(null);
 
   useEffect(() => {
     console.log('Selected file:', fileOneContents);
@@ -61,11 +62,21 @@ function NewAuction() {
   };
 
   useEffect(() => {
-    console.log('Selected file:', selectedFileTwo);
-  }, [selectedFileTwo]);
+    console.log('Selected file:', fileTwoContents);
+  }, [fileTwoContents]);
 
   const handleFileChangeTwo = (event) => {
-    setSelectedFileTwo(event.target.files[0]);
+    const file = event.target.files[0];
+    console.log('jjjj');
+
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      const contents = e.target.result;
+      console.log('data', contents);
+      setfileTwoContents(contents);
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
   React.useEffect(() => {
@@ -99,20 +110,20 @@ function NewAuction() {
 
   const web3Context = useWeb3();
 
-  const DropdownMenu = () => {
-    const handleSignPeriodChange = (e) => {
-      setSignPeriod(e.target.value);
+  const DropdownMenuRevealEndDate = () => {
+    const handleRevealEndDateChange = (e) => {
+      setRevealEndDate(e.target.value);
     };
 
     return (
       <div className='dropdown'>
         <label htmlFor='dropdown' className='dropdown-label'>
-          Select confirmation deadline:{' '}
+          Select reveal deadline:{' '}
         </label>
         <select
           id='dropdown'
-          value={signPeriod}
-          onChange={handleSignPeriodChange}
+          value={revealEndDate}
+          onChange={handleRevealEndDateChange}
           className='dropdown-select'
         >
           <option value=''>Select</option>
@@ -124,10 +135,44 @@ function NewAuction() {
           <option value='6'>6</option>
           <option value='7'>7</option>
         </select>
-        {signPeriod && <p>confirmation deadline: {signPeriod} day/s</p>}
+        {revealEndDate && <p>confirmation deadline: {revealEndDate} day/s</p>}
       </div>
     );
   };
+
+
+  const DropdownMenuSortingEndDate = () => {
+    const handleSortingEndDateChange = (e) => {
+      setSortingEndDate(e.target.value);
+    };
+
+    return (
+      <div className='dropdown'>
+        <label htmlFor='dropdown' className='dropdown-label'>
+          Select sorting deadline:{' '}
+        </label>
+        <select
+          id='dropdown'
+          value={sortingEndDate}
+          onChange={handleSortingEndDateChange}
+          className='dropdown-select'
+        >
+          <option value=''>Select</option>
+          <option value='1'>1</option>
+          <option value='2'>2</option>
+          <option value='3'>3</option>
+          <option value='4'>4</option>
+          <option value='5'>5</option>
+          <option value='6'>6</option>
+          <option value='7'>7</option>
+        </select>
+        {sortingEndDate && <p>confirmation deadline: {sortingEndDate} day/s</p>}
+      </div>
+    );
+  };
+
+
+
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -156,9 +201,29 @@ function NewAuction() {
     return dateUnixTimeStamp;
   };
 
-  const getConfirmationDate = () => {
+  const getRevealingEndDate = () => {
     let confirmationDate = new Date(endDate);
-    confirmationDate.setDate(confirmationDate.getDate() + parseInt(signPeriod));
+    confirmationDate.setDate(confirmationDate.getDate() + parseInt(revealEndDate));
+
+    const year = confirmationDate.getFullYear();
+    const month = String(confirmationDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(confirmationDate.getDate()).padStart(2, '0');
+    const hours = String(confirmationDate.getHours()).padStart(2, '0');
+    const minutes = String(confirmationDate.getMinutes()).padStart(2, '0');
+    const seconds = String(confirmationDate.getSeconds()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    const formattedDateObject = new Date(formattedDate);
+    const dateUnixTimeStamp = Math.floor(formattedDateObject.getTime() / 1000);
+
+    return dateUnixTimeStamp;
+  };
+
+
+
+  const getSortingEndDate = () => {
+    let confirmationDate = new Date(endDate);
+    confirmationDate.setDate(confirmationDate.getDate() + parseInt(sortingEndDate));
 
     const year = confirmationDate.getFullYear();
     const month = String(confirmationDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -267,25 +332,28 @@ function NewAuction() {
       return;
     }
     const hash = uploadImgToInfura(base64img);
-
+    const address = await web3Context.hooks.getAccount();
     const info = {
       owner: address,
       // FIXME
-      securityDeposit: securityDeposit,
-      minimumPrice: minPrice,
-      biddingEndDate: formatEndDate(endDate),
-      confirmationEndDate: getConfirmationDate(),
+      params: encodeFileContentsForContract(fileOneContents),
+      owner_pkey: encodeFileContentsForContract(fileTwoContents),
       itemName: title,
       itemDesc: description,
       itemPicture: hash,
+      minimumPrice: minPrice,
+      securityDeposit: securityDeposit,
+      biddingEndDate: formatEndDate(endDate),
+      revealingEndDate: getRevealingEndDate(),
+      sortingEndDate: getSortingEndDate(),
     };
 
     console.log(info);
 
-    res = web3Context.contract.methods
+    const res = web3Context.contract.methods
       .createAuction(info)
-      .send({ from: address });
-    res
+      .send({ from: address, value: securityDeposit });
+      res
       .then((res) => {
         console.log(res);
       })
@@ -438,7 +506,8 @@ function NewAuction() {
                         </div>
                       </div>
 
-                      <DropdownMenu />
+                      <DropdownMenuRevealEndDate />
+                      <DropdownMenuSortingEndDate />
                       {/* <Link to="/Dashboard">
                         <button type="submit" className="btn text-white bg-blue-500 hover:bg-blue-400 w-full sm:w-auto sm:mb-0 ml-auto" onclick={createAuction} >Submit</button>
                       </Link> */}
