@@ -43,6 +43,7 @@ contract SealedBidAuctionManager {
         address[] bidders;
         AuctionState state;
         AuctionWinner winner;
+        AuctionWinner[] objections;
     }
 
     enum AuctionState {
@@ -60,7 +61,8 @@ contract SealedBidAuctionManager {
     event NewBid(uint256 auctionId, address by);
     event NewReveal(uint256 auctionId, address by);
     event BidderRemoved(uint256, address who);
-    event WinnerDecided(uint256 auctionId);
+    event WinnerDecided(uint256 auctionId, address who);
+    event ObjectionPlaced(uint256 auctionId, address by);
     event AuctionEnds(uint256 auctionId, bool success);
 
     // modifiers for modularity
@@ -160,7 +162,6 @@ contract SealedBidAuctionManager {
         auction.id = auctions.length;
         auction.info = info;
         auction.state = AuctionState.BiddingPhase;
-        auction.winner = AuctionWinner({y: "", bidder: address(0)});
 
         emit NewAuction(auction.id);
         return auction.id;
@@ -285,7 +286,7 @@ contract SealedBidAuctionManager {
             revert("Hash is invalid!");
 
         auctions[auctionId].winner = winner;
-        emit WinnerDecided(auctionId);
+        emit WinnerDecided(auctionId, winner.bidder);
     }
 
     function getWinner(
@@ -310,5 +311,23 @@ contract SealedBidAuctionManager {
             auctions[auctionId].bids[msg.sender].done = true;
         }
         payable(msg.sender).transfer(auctions[auctionId].info.securityDeposit);
+    }
+
+    function objectToTheWinner(
+        uint256 auctionId,
+        bytes y
+    )
+        external
+        AuctionIDIsValid(auctionId)
+        SenderPlacedABid(auctionId)
+        CheckAuctionState(auctionId, AuctionState.Ended)
+    {
+        if (sha256(y) != auctions[auctionId].bids[msg.sender].c)
+            revert("Hash is invalid!");
+
+        AuctionWinner storage objection = auctions[auctionId].objections.push();
+        objection.y = y;
+        objection.bidder = msg.sender;
+        emit ObjectionPlaced(auctionId, msg.sender);
     }
 }
