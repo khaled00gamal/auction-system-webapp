@@ -334,4 +334,15 @@ contract SealedBidAuctionManager {
         objection.bidder = msg.sender;
         emit ObjectionPlaced(auctionId, msg.sender);
     }
+
+    function getObjections(
+        uint256 auctionId
+    )
+        external
+        AuctionIDIsValid(auctionId)
+        CheckAuctionState(auctionId, AuctionState.Ended)
+        returns (AuctionWinner[] memory)
+    {
+        return auctions[auctionId].objections;
+    }
 }
