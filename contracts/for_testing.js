@@ -1,6 +1,6 @@
 const accounts = await web3.eth.getAccounts();
 const contract = await SealedBidAuctionManager.deployed();
-const view = await contract.getAuctionData(1);
+const view = await contract.getAuctionsByState(0);
 const auctionInfo = {
   owner: accounts[1],
   securityDeposit: 1,

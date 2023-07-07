@@ -71,23 +71,34 @@ contract SealedBidAuctionManager {
     // modifiers for modularity
 
     modifier SenderDidNotPlaceABid(uint256 auctionId) {
-        if (auctions[auctionId].bids[msg.sender].c.length != 0)
+        if (auctions[auctionId].bids[msg.sender].c != bytes32(0))
             revert("Sender has already placed a bid!");
         _;
     }
 
     modifier SenderPlacedABid(uint256 auctionId) {
-        if (auctions[auctionId].bids[msg.sender].c.length == 0)
+        if (auctions[auctionId].bids[msg.sender].c == bytes32(0))
             revert("Sender has not placed a bid!");
         _;
     }
 
-    function isABidder(
+    function didNotPlaceABid(
         uint256 auctionId,
         address acc
     ) external view returns (bool) {
-        return auctions[auctionId].bids[acc].c.length != 0;
+        return auctions[auctionId].bids[acc].c == bytes32(0);
     }
+
+    function placedABid(
+        uint256 auctionId,
+        address acc
+    ) external view returns (bool) {
+        return auctions[auctionId].bids[acc].c != bytes32(0);
+    }
+
+    // function getBid(uint256 auctionId) external view returns (uint8 len) {
+    //     return auctions[auctionId].bids[msg.sender].c.length;
+    // }
 
     modifier SenderIsOwner(uint256 auctionId) {
         if (msg.sender != auctions[auctionId].info.owner)
@@ -238,8 +249,9 @@ contract SealedBidAuctionManager {
             d: bytes32(d),
             z: bytes("")
         });
-        auctions[auctionId].bidders[auctions[auctionId].bidders.length] = msg
-            .sender;
+        auctions[auctionId].bidders[
+            auctions[auctionId].bidders.length - 1
+        ] = msg.sender;
         emit NewBid(auctionId, msg.sender);
     }
 

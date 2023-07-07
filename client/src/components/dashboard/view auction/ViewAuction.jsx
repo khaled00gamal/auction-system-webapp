@@ -104,7 +104,7 @@ function ViewAuction() {
           setSortingDate(b);
           setDateString(d.toUTCString());
           web3Context.contract.methods
-            .isABidder(auctionId, address)
+            .didNotPlaceABid(auctionId, address)
             .call({ from: address })
             .then((is) => setIsBidder(is));
         });
