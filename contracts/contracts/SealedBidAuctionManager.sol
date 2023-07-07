@@ -82,18 +82,21 @@ contract SealedBidAuctionManager {
         _;
     }
 
-    function isABidder(uint256 auctionId, address acc) external view returns (bool) {
+    function isABidder(
+        uint256 auctionId,
+        address acc
+    ) external view returns (bool) {
         return auctions[auctionId].bids[acc].c.length != 0;
     }
 
     modifier SenderIsOwner(uint256 auctionId) {
-        if (msg.sender == auctions[auctionId].info.owner)
+        if (msg.sender != auctions[auctionId].info.owner)
             revert("Sender is not the owner!");
         _;
     }
 
     modifier SenderIsNotOwner(uint256 auctionId) {
-        if (msg.sender != auctions[auctionId].info.owner)
+        if (msg.sender == auctions[auctionId].info.owner)
             revert("Sender is the owner!");
         _;
     }
@@ -104,7 +107,8 @@ contract SealedBidAuctionManager {
     }
 
     modifier AuctionHasNoWinner(uint256 auctionId) {
-        if (auctions[auctionId].winner.y.length != 0) revert("Auction has a winner!");
+        if (auctions[auctionId].winner.y.length != 0)
+            revert("Auction has a winner!");
         _;
     }
 
